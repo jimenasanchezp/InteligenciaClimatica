@@ -15,804 +15,1265 @@
 
         private void InitializeComponent()
         {
-            // ── Controles principales ────────────────────────────────────────────
-            this.tabControl = new System.Windows.Forms.TabControl();
-
-            // ── Tab: Consulta Individual ─────────────────────────────────────────
-            this.tabConsulta = new System.Windows.Forms.TabPage();
-            this.grpBusqueda = new System.Windows.Forms.GroupBox();
-            this.lblEstado = new System.Windows.Forms.Label();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.lblMunicipio = new System.Windows.Forms.Label();
-            this.cmbMunicipio = new System.Windows.Forms.ComboBox();
-            this.lblAnio = new System.Windows.Forms.Label();
-            this.cmbAnio = new System.Windows.Forms.ComboBox();
-            this.lblEstacion = new System.Windows.Forms.Label();
-            this.cmbEstacion = new System.Windows.Forms.ComboBox();
-            this.btnConsultar = new System.Windows.Forms.Button();
-            this.btnLimpiar = new System.Windows.Forms.Button();
-            this.lblHintMunicipio = new System.Windows.Forms.Label();
-
-            this.grpDatosActuales = new System.Windows.Forms.GroupBox();
-            this.lblFuenteAPI = new System.Windows.Forms.Label();
-            this.lblTempActualVal = new System.Windows.Forms.Label();
-            this.lblTempActualSub = new System.Windows.Forms.Label();
-            this.lblMunicipioKey = new System.Windows.Forms.Label();
-            this.lblMunicipioVal = new System.Windows.Forms.Label();
-            this.lblEstadoActKey = new System.Windows.Forms.Label();
-            this.lblEstadoActVal = new System.Windows.Forms.Label();
-            this.lblMinActKey = new System.Windows.Forms.Label();
-            this.lblMinActVal = new System.Windows.Forms.Label();
-            this.lblMaxActKey = new System.Windows.Forms.Label();
-            this.lblMaxActVal = new System.Windows.Forms.Label();
-            this.lblCoordsVal = new System.Windows.Forms.Label();
-
-            this.grpHistorico = new System.Windows.Forms.GroupBox();
-            this.lblFuenteCSV = new System.Windows.Forms.Label();
-            this.lblTempHistVal = new System.Windows.Forms.Label();
-            this.lblTempHistSub = new System.Windows.Forms.Label();
-            this.lblEstadoHistKey = new System.Windows.Forms.Label();
-            this.lblEstadoHistVal = new System.Windows.Forms.Label();
-            this.lblFiltroKey = new System.Windows.Forms.Label();
-            this.lblFiltroVal = new System.Windows.Forms.Label();
-            this.lblMinHistKey = new System.Windows.Forms.Label();
-            this.lblMinHistVal = new System.Windows.Forms.Label();
-            this.lblMaxHistKey = new System.Windows.Forms.Label();
-            this.lblMaxHistVal = new System.Windows.Forms.Label();
-            this.lblRegistrosVal = new System.Windows.Forms.Label();
-
-            this.grpAnomalia = new System.Windows.Forms.GroupBox();
-            this.lblDesviacionKey = new System.Windows.Forms.Label();
-            this.lblDesviacionVal = new System.Windows.Forms.Label();
-            this.lblDescAnomalia = new System.Windows.Forms.Label();
-            this.lblNivelKey = new System.Windows.Forms.Label();
-            this.pnlSemaforoVerde = new System.Windows.Forms.Panel();
-            this.pnlSemaforoAmarillo = new System.Windows.Forms.Panel();
-            this.pnlSemaforoRojo = new System.Windows.Forms.Panel();
-            this.lblSemaforoTexto = new System.Windows.Forms.Label();
-            this.btnGuardarAlerta = new System.Windows.Forms.Button();
-
-            // ── Tab: Análisis Global ─────────────────────────────────────────────
-            this.tabAnalisis = new System.Windows.Forms.TabPage();
-            this.grpFiltrosGlobal = new System.Windows.Forms.GroupBox();
-            this.lblFiltroAnio = new System.Windows.Forms.Label();
-            this.cmbFiltroAnio = new System.Windows.Forms.ComboBox();
-            this.lblFiltroEstacion = new System.Windows.Forms.Label();
-            this.cmbFiltroEstacion = new System.Windows.Forms.ComboBox();
-            this.lblBuscarEstado = new System.Windows.Forms.Label();
-            this.txtBuscarEstado = new System.Windows.Forms.TextBox();
-            this.btnFiltrar = new System.Windows.Forms.Button();
-            this.btnLimpiarFiltro = new System.Windows.Forms.Button();
-            this.dgvHistorico = new System.Windows.Forms.DataGridView();
-            this.grpRanking = new System.Windows.Forms.GroupBox();
-            this.lblRankingCaliente = new System.Windows.Forms.Label();
-            this.lstCalientes = new System.Windows.Forms.ListBox();
-            this.lblRankingFrio = new System.Windows.Forms.Label();
-            this.lstFrios = new System.Windows.Forms.ListBox();
-
-            // ── Tab: Favoritos ───────────────────────────────────────────────────
-            this.tabFavoritos = new System.Windows.Forms.TabPage();
-            this.dgvFavoritos = new System.Windows.Forms.DataGridView();
-            this.grpAgregarFav = new System.Windows.Forms.GroupBox();
-            this.lblNuevoFavEstado = new System.Windows.Forms.Label();
-            this.cmbNuevoFavEstado = new System.Windows.Forms.ComboBox();
-            this.lblNuevoFavMun = new System.Windows.Forms.Label();
-            this.cmbNuevoFavMun = new System.Windows.Forms.ComboBox();
-            this.btnAgregarFav = new System.Windows.Forms.Button();
-            this.btnEliminarFav = new System.Windows.Forms.Button();
-
-            // ── Tab: Configuración ───────────────────────────────────────────────
-            this.tabConfig = new System.Windows.Forms.TabPage();
-            this.grpConexion = new System.Windows.Forms.GroupBox();
-            this.lblCadenaConexion = new System.Windows.Forms.Label();
-            this.txtCadenaConexion = new System.Windows.Forms.TextBox();
-            this.btnProbarConexion = new System.Windows.Forms.Button();
-            this.lblEstadoConexion = new System.Windows.Forms.Label();
-            this.grpArchivos = new System.Windows.Forms.GroupBox();
-            this.lblRutaCSV = new System.Windows.Forms.Label();
-            this.txtRutaCSV = new System.Windows.Forms.TextBox();
-            this.btnExplorarCSV = new System.Windows.Forms.Button();
-            this.lblRutaJSON = new System.Windows.Forms.Label();
-            this.txtRutaJSON = new System.Windows.Forms.TextBox();
-            this.btnExplorarJSON = new System.Windows.Forms.Button();
-            this.grpPreferencias = new System.Windows.Forms.GroupBox();
-            this.lblUmbral = new System.Windows.Forms.Label();
-            this.nudUmbral = new System.Windows.Forms.NumericUpDown();
-            this.lblUmbralSufijo = new System.Windows.Forms.Label();
-            this.lblUnidades = new System.Windows.Forms.Label();
-            this.rbCelsius = new System.Windows.Forms.RadioButton();
-            this.rbFahrenheit = new System.Windows.Forms.RadioButton();
-            this.btnGuardarConfig = new System.Windows.Forms.Button();
-
-            // ── StatusStrip ─────────────────────────────────────────────────────
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.tssSQLite = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tssSQLServer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tssAPI = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tssRegistros = new System.Windows.Forms.ToolStripStatusLabel();
-
-            // ════════════════════════════════════════════════════════════════════
-            this.tabControl.SuspendLayout();
-            this.tabConsulta.SuspendLayout();
-            this.tabAnalisis.SuspendLayout();
-            this.tabFavoritos.SuspendLayout();
-            this.tabConfig.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)this.dgvHistorico).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvFavoritos).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.nudUmbral).BeginInit();
-            this.SuspendLayout();
-
-            // ════════════════════════════════════════════════════════════════════
-            // TAB CONTROL
-            // ════════════════════════════════════════════════════════════════════
-            this.tabControl.Controls.Add(this.tabConsulta);
-            this.tabControl.Controls.Add(this.tabAnalisis);
-            this.tabControl.Controls.Add(this.tabFavoritos);
-            this.tabControl.Controls.Add(this.tabConfig);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.Size = new System.Drawing.Size(900, 620);
-            this.tabControl.TabIndex = 0;
-
-            // ════════════════════════════════════════════════════════════════════
-            // TAB 1 — CONSULTA INDIVIDUAL
-            // ════════════════════════════════════════════════════════════════════
-            this.tabConsulta.Controls.Add(this.grpBusqueda);
-            this.tabConsulta.Controls.Add(this.grpDatosActuales);
-            this.tabConsulta.Controls.Add(this.grpHistorico);
-            this.tabConsulta.Controls.Add(this.grpAnomalia);
-            this.tabConsulta.Location = new System.Drawing.Point(4, 24);
-            this.tabConsulta.Name = "tabConsulta";
-            this.tabConsulta.Padding = new System.Windows.Forms.Padding(8);
-            this.tabConsulta.Size = new System.Drawing.Size(892, 592);
-            this.tabConsulta.Text = "Consulta Individual";
-
-            // ── GroupBox Búsqueda ────────────────────────────────────────────────
-            this.grpBusqueda.Controls.Add(this.lblEstado);
-            this.grpBusqueda.Controls.Add(this.cmbEstado);
-            this.grpBusqueda.Controls.Add(this.lblMunicipio);
-            this.grpBusqueda.Controls.Add(this.cmbMunicipio);
-            this.grpBusqueda.Controls.Add(this.lblAnio);
-            this.grpBusqueda.Controls.Add(this.cmbAnio);
-            this.grpBusqueda.Controls.Add(this.lblEstacion);
-            this.grpBusqueda.Controls.Add(this.cmbEstacion);
-            this.grpBusqueda.Controls.Add(this.btnConsultar);
-            this.grpBusqueda.Controls.Add(this.btnLimpiar);
-            this.grpBusqueda.Controls.Add(this.lblHintMunicipio);
-            this.grpBusqueda.Location = new System.Drawing.Point(8, 8);
-            this.grpBusqueda.Name = "grpBusqueda";
-            this.grpBusqueda.Size = new System.Drawing.Size(876, 80);
-            this.grpBusqueda.Text = "Parámetros de consulta";
-
-            this.lblEstado.AutoSize = true;
-            this.lblEstado.Location = new System.Drawing.Point(10, 24);
-            this.lblEstado.Text = "1. Estado:";
-
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.Location = new System.Drawing.Point(10, 42);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(160, 23);
-            this.cmbEstado.TabIndex = 0;
-
-            this.lblMunicipio.AutoSize = true;
-            this.lblMunicipio.Location = new System.Drawing.Point(182, 24);
-            this.lblMunicipio.Text = "2. Municipio:";
-
-            this.cmbMunicipio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMunicipio.Enabled = false;
-            this.cmbMunicipio.Location = new System.Drawing.Point(182, 42);
-            this.cmbMunicipio.Name = "cmbMunicipio";
-            this.cmbMunicipio.Size = new System.Drawing.Size(180, 23);
-            this.cmbMunicipio.TabIndex = 1;
-
-            this.lblAnio.AutoSize = true;
-            this.lblAnio.Location = new System.Drawing.Point(390, 24);
-            this.lblAnio.Text = "Año:";
-
-            this.cmbAnio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAnio.Location = new System.Drawing.Point(390, 42);
-            this.cmbAnio.Name = "cmbAnio";
-            this.cmbAnio.Size = new System.Drawing.Size(80, 23);
-            this.cmbAnio.TabIndex = 2;
-
-            this.lblEstacion.AutoSize = true;
-            this.lblEstacion.Location = new System.Drawing.Point(482, 24);
-            this.lblEstacion.Text = "Estación:";
-
-            this.cmbEstacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstacion.Location = new System.Drawing.Point(482, 42);
-            this.cmbEstacion.Name = "cmbEstacion";
-            this.cmbEstacion.Size = new System.Drawing.Size(110, 23);
-            this.cmbEstacion.TabIndex = 3;
-            this.cmbEstacion.Items.AddRange(new object[] { "Verano", "Invierno", "Primavera", "Otoño" });
-            this.cmbEstacion.SelectedIndex = 0;
-
-            this.btnConsultar.Enabled = false;
-            this.btnConsultar.Location = new System.Drawing.Point(610, 40);
-            this.btnConsultar.Name = "btnConsultar";
-            this.btnConsultar.Size = new System.Drawing.Size(90, 26);
-            this.btnConsultar.TabIndex = 4;
-            this.btnConsultar.Text = "Consultar";
-            this.btnConsultar.UseVisualStyleBackColor = true;
-
-            this.btnLimpiar.Location = new System.Drawing.Point(706, 40);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(80, 26);
-            this.btnLimpiar.TabIndex = 5;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-
-            this.lblHintMunicipio.AutoSize = true;
-            this.lblHintMunicipio.ForeColor = System.Drawing.Color.Gray;
-            this.lblHintMunicipio.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.lblHintMunicipio.Location = new System.Drawing.Point(182, 68);
-            this.lblHintMunicipio.Text = "← Primero selecciona un estado";
-
-            // ── GroupBox Datos Actuales ──────────────────────────────────────────
-            this.grpDatosActuales.Controls.Add(this.lblFuenteAPI);
-            this.grpDatosActuales.Controls.Add(this.lblTempActualVal);
-            this.grpDatosActuales.Controls.Add(this.lblTempActualSub);
-            this.grpDatosActuales.Controls.Add(this.lblMunicipioKey);
-            this.grpDatosActuales.Controls.Add(this.lblMunicipioVal);
-            this.grpDatosActuales.Controls.Add(this.lblEstadoActKey);
-            this.grpDatosActuales.Controls.Add(this.lblEstadoActVal);
-            this.grpDatosActuales.Controls.Add(this.lblMinActKey);
-            this.grpDatosActuales.Controls.Add(this.lblMinActVal);
-            this.grpDatosActuales.Controls.Add(this.lblMaxActKey);
-            this.grpDatosActuales.Controls.Add(this.lblMaxActVal);
-            this.grpDatosActuales.Controls.Add(this.lblCoordsVal);
-            this.grpDatosActuales.Location = new System.Drawing.Point(8, 98);
-            this.grpDatosActuales.Name = "grpDatosActuales";
-            this.grpDatosActuales.Size = new System.Drawing.Size(430, 220);
-            this.grpDatosActuales.Text = "Datos actuales";
-
-            this.lblFuenteAPI.AutoSize = true;
-            this.lblFuenteAPI.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblFuenteAPI.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblFuenteAPI.Location = new System.Drawing.Point(160, 20);
-            this.lblFuenteAPI.Text = "Fuente: Open-Meteo API";
-
-            this.lblTempActualVal.AutoSize = true;
-            this.lblTempActualVal.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblTempActualVal.Font = new System.Drawing.Font("Segoe UI", 28F, System.Drawing.FontStyle.Regular);
-            this.lblTempActualVal.Location = new System.Drawing.Point(150, 38);
-            this.lblTempActualVal.Text = "—";
-
-            this.lblTempActualSub.AutoSize = true;
-            this.lblTempActualSub.ForeColor = System.Drawing.Color.Gray;
-            this.lblTempActualSub.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblTempActualSub.Location = new System.Drawing.Point(155, 82);
-            this.lblTempActualSub.Text = "Temperatura actual del día";
-
-            this.lblMunicipioKey.AutoSize = true;
-            this.lblMunicipioKey.Location = new System.Drawing.Point(10, 108);
-            this.lblMunicipioKey.Text = "Municipio:";
-
-            this.lblMunicipioVal.AutoSize = true;
-            this.lblMunicipioVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMunicipioVal.Location = new System.Drawing.Point(220, 108);
-            this.lblMunicipioVal.Text = "—";
-
-            this.lblEstadoActKey.AutoSize = true;
-            this.lblEstadoActKey.Location = new System.Drawing.Point(10, 132);
-            this.lblEstadoActKey.Text = "Estado:";
-
-            this.lblEstadoActVal.AutoSize = true;
-            this.lblEstadoActVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblEstadoActVal.Location = new System.Drawing.Point(220, 132);
-            this.lblEstadoActVal.Text = "—";
-
-            this.lblMinActKey.AutoSize = true;
-            this.lblMinActKey.Location = new System.Drawing.Point(10, 156);
-            this.lblMinActKey.Text = "Mínima del día:";
-
-            this.lblMinActVal.AutoSize = true;
-            this.lblMinActVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMinActVal.Location = new System.Drawing.Point(220, 156);
-            this.lblMinActVal.Text = "—";
-
-            this.lblMaxActKey.AutoSize = true;
-            this.lblMaxActKey.Location = new System.Drawing.Point(10, 180);
-            this.lblMaxActKey.Text = "Máxima del día:";
-
-            this.lblMaxActVal.AutoSize = true;
-            this.lblMaxActVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMaxActVal.Location = new System.Drawing.Point(220, 180);
-            this.lblMaxActVal.Text = "—";
-
-            this.lblCoordsVal.AutoSize = true;
-            this.lblCoordsVal.ForeColor = System.Drawing.Color.Gray;
-            this.lblCoordsVal.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblCoordsVal.Location = new System.Drawing.Point(10, 200);
-            this.lblCoordsVal.Text = "Lat: — · Lon: —";
-
-            // ── GroupBox Histórico ───────────────────────────────────────────────
-            this.grpHistorico.Controls.Add(this.lblFuenteCSV);
-            this.grpHistorico.Controls.Add(this.lblTempHistVal);
-            this.grpHistorico.Controls.Add(this.lblTempHistSub);
-            this.grpHistorico.Controls.Add(this.lblEstadoHistKey);
-            this.grpHistorico.Controls.Add(this.lblEstadoHistVal);
-            this.grpHistorico.Controls.Add(this.lblFiltroKey);
-            this.grpHistorico.Controls.Add(this.lblFiltroVal);
-            this.grpHistorico.Controls.Add(this.lblMinHistKey);
-            this.grpHistorico.Controls.Add(this.lblMinHistVal);
-            this.grpHistorico.Controls.Add(this.lblMaxHistKey);
-            this.grpHistorico.Controls.Add(this.lblMaxHistVal);
-            this.grpHistorico.Controls.Add(this.lblRegistrosVal);
-            this.grpHistorico.Location = new System.Drawing.Point(446, 98);
-            this.grpHistorico.Name = "grpHistorico";
-            this.grpHistorico.Size = new System.Drawing.Size(438, 220);
-            this.grpHistorico.Text = "Promedio histórico";
-
-            this.lblFuenteCSV.AutoSize = true;
-            this.lblFuenteCSV.ForeColor = System.Drawing.Color.SeaGreen;
-            this.lblFuenteCSV.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblFuenteCSV.Location = new System.Drawing.Point(172, 20);
-            this.lblFuenteCSV.Text = "Fuente: data.csv";
-
-            this.lblTempHistVal.AutoSize = true;
-            this.lblTempHistVal.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblTempHistVal.Font = new System.Drawing.Font("Segoe UI", 28F, System.Drawing.FontStyle.Regular);
-            this.lblTempHistVal.Location = new System.Drawing.Point(158, 38);
-            this.lblTempHistVal.Text = "—";
-
-            this.lblTempHistSub.AutoSize = true;
-            this.lblTempHistSub.ForeColor = System.Drawing.Color.Gray;
-            this.lblTempHistSub.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblTempHistSub.Location = new System.Drawing.Point(148, 82);
-            this.lblTempHistSub.Text = "Promedio histórico del estado";
-
-            this.lblEstadoHistKey.AutoSize = true;
-            this.lblEstadoHistKey.Location = new System.Drawing.Point(10, 108);
-            this.lblEstadoHistKey.Text = "Estado analizado:";
-
-            this.lblEstadoHistVal.AutoSize = true;
-            this.lblEstadoHistVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblEstadoHistVal.Location = new System.Drawing.Point(220, 108);
-            this.lblEstadoHistVal.Text = "—";
-
-            this.lblFiltroKey.AutoSize = true;
-            this.lblFiltroKey.Location = new System.Drawing.Point(10, 132);
-            this.lblFiltroKey.Text = "Estación / Año:";
-
-            this.lblFiltroVal.AutoSize = true;
-            this.lblFiltroVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFiltroVal.Location = new System.Drawing.Point(220, 132);
-            this.lblFiltroVal.Text = "—";
-
-            this.lblMinHistKey.AutoSize = true;
-            this.lblMinHistKey.Location = new System.Drawing.Point(10, 156);
-            this.lblMinHistKey.Text = "Mínima histórica:";
-
-            this.lblMinHistVal.AutoSize = true;
-            this.lblMinHistVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMinHistVal.Location = new System.Drawing.Point(220, 156);
-            this.lblMinHistVal.Text = "—";
-
-            this.lblMaxHistKey.AutoSize = true;
-            this.lblMaxHistKey.Location = new System.Drawing.Point(10, 180);
-            this.lblMaxHistKey.Text = "Máxima histórica:";
-
-            this.lblMaxHistVal.AutoSize = true;
-            this.lblMaxHistVal.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMaxHistVal.Location = new System.Drawing.Point(220, 180);
-            this.lblMaxHistVal.Text = "—";
-
-            this.lblRegistrosVal.AutoSize = true;
-            this.lblRegistrosVal.ForeColor = System.Drawing.Color.Gray;
-            this.lblRegistrosVal.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblRegistrosVal.Location = new System.Drawing.Point(10, 200);
-            this.lblRegistrosVal.Text = "Basado en — registros del CSV";
-
-            // ── GroupBox Anomalía ────────────────────────────────────────────────
-            this.grpAnomalia.Controls.Add(this.lblDesviacionKey);
-            this.grpAnomalia.Controls.Add(this.lblDesviacionVal);
-            this.grpAnomalia.Controls.Add(this.lblDescAnomalia);
-            this.grpAnomalia.Controls.Add(this.lblNivelKey);
-            this.grpAnomalia.Controls.Add(this.pnlSemaforoVerde);
-            this.grpAnomalia.Controls.Add(this.pnlSemaforoAmarillo);
-            this.grpAnomalia.Controls.Add(this.pnlSemaforoRojo);
-            this.grpAnomalia.Controls.Add(this.lblSemaforoTexto);
-            this.grpAnomalia.Controls.Add(this.btnGuardarAlerta);
-            this.grpAnomalia.Location = new System.Drawing.Point(8, 328);
-            this.grpAnomalia.Name = "grpAnomalia";
-            this.grpAnomalia.Size = new System.Drawing.Size(876, 90);
-            this.grpAnomalia.Text = "Detección de anomalía";
-
-            this.lblDesviacionKey.AutoSize = true;
-            this.lblDesviacionKey.Location = new System.Drawing.Point(10, 28);
-            this.lblDesviacionKey.Text = "Desviación detectada:";
-
-            this.lblDesviacionVal.AutoSize = true;
-            this.lblDesviacionVal.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Regular);
-            this.lblDesviacionVal.Location = new System.Drawing.Point(10, 44);
-            this.lblDesviacionVal.Text = "—";
-
-            this.lblDescAnomalia.AutoSize = true;
-            this.lblDescAnomalia.ForeColor = System.Drawing.Color.Gray;
-            this.lblDescAnomalia.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.lblDescAnomalia.Location = new System.Drawing.Point(150, 56);
-            this.lblDescAnomalia.Text = "—";
-
-            this.lblNivelKey.AutoSize = true;
-            this.lblNivelKey.Location = new System.Drawing.Point(440, 28);
-            this.lblNivelKey.Text = "Nivel de alerta:";
-
-            this.pnlSemaforoVerde.BackColor = System.Drawing.Color.LightGray;
-            this.pnlSemaforoVerde.Location = new System.Drawing.Point(440, 50);
-            this.pnlSemaforoVerde.Name = "pnlSemaforoVerde";
-            this.pnlSemaforoVerde.Size = new System.Drawing.Size(18, 18);
-
-            this.pnlSemaforoAmarillo.BackColor = System.Drawing.Color.LightGray;
-            this.pnlSemaforoAmarillo.Location = new System.Drawing.Point(464, 50);
-            this.pnlSemaforoAmarillo.Name = "pnlSemaforoAmarillo";
-            this.pnlSemaforoAmarillo.Size = new System.Drawing.Size(18, 18);
-
-            this.pnlSemaforoRojo.BackColor = System.Drawing.Color.LightGray;
-            this.pnlSemaforoRojo.Location = new System.Drawing.Point(488, 50);
-            this.pnlSemaforoRojo.Name = "pnlSemaforoRojo";
-            this.pnlSemaforoRojo.Size = new System.Drawing.Size(18, 18);
-
-            this.lblSemaforoTexto.AutoSize = true;
-            this.lblSemaforoTexto.Location = new System.Drawing.Point(514, 53);
-            this.lblSemaforoTexto.Text = "—";
-
-            this.btnGuardarAlerta.Enabled = false;
-            this.btnGuardarAlerta.Location = new System.Drawing.Point(740, 48);
-            this.btnGuardarAlerta.Name = "btnGuardarAlerta";
-            this.btnGuardarAlerta.Size = new System.Drawing.Size(126, 26);
-            this.btnGuardarAlerta.Text = "Guardar alerta en BD";
-            this.btnGuardarAlerta.UseVisualStyleBackColor = true;
-
-            // ════════════════════════════════════════════════════════════════════
-            // TAB 2 — ANÁLISIS GLOBAL
-            // ════════════════════════════════════════════════════════════════════
-            this.tabAnalisis.Controls.Add(this.grpFiltrosGlobal);
-            this.tabAnalisis.Controls.Add(this.dgvHistorico);
-            this.tabAnalisis.Controls.Add(this.grpRanking);
-            this.tabAnalisis.Location = new System.Drawing.Point(4, 24);
-            this.tabAnalisis.Name = "tabAnalisis";
-            this.tabAnalisis.Padding = new System.Windows.Forms.Padding(8);
-            this.tabAnalisis.Size = new System.Drawing.Size(892, 592);
-            this.tabAnalisis.Text = "Análisis Global";
-
-            this.grpFiltrosGlobal.Controls.Add(this.lblFiltroAnio);
-            this.grpFiltrosGlobal.Controls.Add(this.cmbFiltroAnio);
-            this.grpFiltrosGlobal.Controls.Add(this.lblFiltroEstacion);
-            this.grpFiltrosGlobal.Controls.Add(this.cmbFiltroEstacion);
-            this.grpFiltrosGlobal.Controls.Add(this.lblBuscarEstado);
-            this.grpFiltrosGlobal.Controls.Add(this.txtBuscarEstado);
-            this.grpFiltrosGlobal.Controls.Add(this.btnFiltrar);
-            this.grpFiltrosGlobal.Controls.Add(this.btnLimpiarFiltro);
-            this.grpFiltrosGlobal.Location = new System.Drawing.Point(8, 8);
-            this.grpFiltrosGlobal.Name = "grpFiltrosGlobal";
-            this.grpFiltrosGlobal.Size = new System.Drawing.Size(876, 60);
-            this.grpFiltrosGlobal.Text = "Filtros";
-
-            this.lblFiltroAnio.AutoSize = true;
-            this.lblFiltroAnio.Location = new System.Drawing.Point(10, 24);
-            this.lblFiltroAnio.Text = "Año:";
-
-            this.cmbFiltroAnio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFiltroAnio.Location = new System.Drawing.Point(40, 20);
-            this.cmbFiltroAnio.Name = "cmbFiltroAnio";
-            this.cmbFiltroAnio.Size = new System.Drawing.Size(80, 23);
-
-            this.lblFiltroEstacion.AutoSize = true;
-            this.lblFiltroEstacion.Location = new System.Drawing.Point(132, 24);
-            this.lblFiltroEstacion.Text = "Estación:";
-
-            this.cmbFiltroEstacion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFiltroEstacion.Location = new System.Drawing.Point(186, 20);
-            this.cmbFiltroEstacion.Name = "cmbFiltroEstacion";
-            this.cmbFiltroEstacion.Size = new System.Drawing.Size(110, 23);
-            this.cmbFiltroEstacion.Items.AddRange(new object[] { "Todas", "Verano", "Invierno", "Primavera", "Otoño" });
-            this.cmbFiltroEstacion.SelectedIndex = 0;
-
-            this.lblBuscarEstado.AutoSize = true;
-            this.lblBuscarEstado.Location = new System.Drawing.Point(310, 24);
-            this.lblBuscarEstado.Text = "Buscar estado:";
-
-            this.txtBuscarEstado.Location = new System.Drawing.Point(398, 20);
-            this.txtBuscarEstado.Name = "txtBuscarEstado";
-            this.txtBuscarEstado.Size = new System.Drawing.Size(160, 23);
-
-            this.btnFiltrar.Location = new System.Drawing.Point(570, 19);
-            this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(80, 26);
-            this.btnFiltrar.Text = "Filtrar";
-            this.btnFiltrar.UseVisualStyleBackColor = true;
-
-            this.btnLimpiarFiltro.Location = new System.Drawing.Point(656, 19);
-            this.btnLimpiarFiltro.Name = "btnLimpiarFiltro";
-            this.btnLimpiarFiltro.Size = new System.Drawing.Size(80, 26);
-            this.btnLimpiarFiltro.Text = "Limpiar";
-            this.btnLimpiarFiltro.UseVisualStyleBackColor = true;
-
-            this.dgvHistorico.AllowUserToAddRows = false;
-            this.dgvHistorico.AllowUserToDeleteRows = false;
-            this.dgvHistorico.ReadOnly = true;
-            this.dgvHistorico.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvHistorico.Location = new System.Drawing.Point(8, 76);
-            this.dgvHistorico.Name = "dgvHistorico";
-            this.dgvHistorico.Size = new System.Drawing.Size(876, 340);
-            this.dgvHistorico.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-
-            this.grpRanking.Controls.Add(this.lblRankingCaliente);
-            this.grpRanking.Controls.Add(this.lstCalientes);
-            this.grpRanking.Controls.Add(this.lblRankingFrio);
-            this.grpRanking.Controls.Add(this.lstFrios);
-            this.grpRanking.Location = new System.Drawing.Point(8, 424);
-            this.grpRanking.Name = "grpRanking";
-            this.grpRanking.Size = new System.Drawing.Size(876, 156);
-            this.grpRanking.Text = "Ranking (derivado del filtro activo)";
-
-            this.lblRankingCaliente.AutoSize = true;
-            this.lblRankingCaliente.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRankingCaliente.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblRankingCaliente.Location = new System.Drawing.Point(10, 22);
-            this.lblRankingCaliente.Text = "Top 5 — más calientes";
-
-            this.lstCalientes.Location = new System.Drawing.Point(10, 42);
-            this.lstCalientes.Name = "lstCalientes";
-            this.lstCalientes.Size = new System.Drawing.Size(418, 100);
-
-            this.lblRankingFrio.AutoSize = true;
-            this.lblRankingFrio.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblRankingFrio.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblRankingFrio.Location = new System.Drawing.Point(448, 22);
-            this.lblRankingFrio.Text = "Top 5 — más fríos";
-
-            this.lstFrios.Location = new System.Drawing.Point(448, 42);
-            this.lstFrios.Name = "lstFrios";
-            this.lstFrios.Size = new System.Drawing.Size(418, 100);
-
-            // ════════════════════════════════════════════════════════════════════
-            // TAB 3 — FAVORITOS
-            // ════════════════════════════════════════════════════════════════════
-            this.tabFavoritos.Controls.Add(this.dgvFavoritos);
-            this.tabFavoritos.Controls.Add(this.grpAgregarFav);
-            this.tabFavoritos.Controls.Add(this.btnEliminarFav);
-            this.tabFavoritos.Location = new System.Drawing.Point(4, 24);
-            this.tabFavoritos.Name = "tabFavoritos";
-            this.tabFavoritos.Padding = new System.Windows.Forms.Padding(8);
-            this.tabFavoritos.Size = new System.Drawing.Size(892, 592);
-            this.tabFavoritos.Text = "Favoritos";
-
-            this.dgvFavoritos.AllowUserToAddRows = false;
-            this.dgvFavoritos.AllowUserToDeleteRows = false;
-            this.dgvFavoritos.ReadOnly = true;
-            this.dgvFavoritos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvFavoritos.Location = new System.Drawing.Point(8, 8);
-            this.dgvFavoritos.Name = "dgvFavoritos";
-            this.dgvFavoritos.Size = new System.Drawing.Size(876, 460);
-            this.dgvFavoritos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-
-            this.btnEliminarFav.Location = new System.Drawing.Point(8, 476);
-            this.btnEliminarFav.Name = "btnEliminarFav";
-            this.btnEliminarFav.Size = new System.Drawing.Size(120, 26);
-            this.btnEliminarFav.Text = "Eliminar seleccionado";
-            this.btnEliminarFav.UseVisualStyleBackColor = true;
-
-            this.grpAgregarFav.Controls.Add(this.lblNuevoFavEstado);
-            this.grpAgregarFav.Controls.Add(this.cmbNuevoFavEstado);
-            this.grpAgregarFav.Controls.Add(this.lblNuevoFavMun);
-            this.grpAgregarFav.Controls.Add(this.cmbNuevoFavMun);
-            this.grpAgregarFav.Controls.Add(this.btnAgregarFav);
-            this.grpAgregarFav.Location = new System.Drawing.Point(8, 510);
-            this.grpAgregarFav.Name = "grpAgregarFav";
-            this.grpAgregarFav.Size = new System.Drawing.Size(876, 60);
-            this.grpAgregarFav.Text = "Agregar municipio a favoritos";
-
-            this.lblNuevoFavEstado.AutoSize = true;
-            this.lblNuevoFavEstado.Location = new System.Drawing.Point(10, 26);
-            this.lblNuevoFavEstado.Text = "Estado:";
-
-            this.cmbNuevoFavEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNuevoFavEstado.Location = new System.Drawing.Point(60, 22);
-            this.cmbNuevoFavEstado.Name = "cmbNuevoFavEstado";
-            this.cmbNuevoFavEstado.Size = new System.Drawing.Size(160, 23);
-
-            this.lblNuevoFavMun.AutoSize = true;
-            this.lblNuevoFavMun.Location = new System.Drawing.Point(234, 26);
-            this.lblNuevoFavMun.Text = "Municipio:";
-
-            this.cmbNuevoFavMun.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNuevoFavMun.Enabled = false;
-            this.cmbNuevoFavMun.Location = new System.Drawing.Point(298, 22);
-            this.cmbNuevoFavMun.Name = "cmbNuevoFavMun";
-            this.cmbNuevoFavMun.Size = new System.Drawing.Size(180, 23);
-
-            this.btnAgregarFav.Location = new System.Drawing.Point(492, 21);
-            this.btnAgregarFav.Name = "btnAgregarFav";
-            this.btnAgregarFav.Size = new System.Drawing.Size(100, 26);
-            this.btnAgregarFav.Text = "Agregar";
-            this.btnAgregarFav.UseVisualStyleBackColor = true;
-
-            // ════════════════════════════════════════════════════════════════════
-            // TAB 4 — CONFIGURACIÓN
-            // ════════════════════════════════════════════════════════════════════
-            this.tabConfig.Controls.Add(this.grpConexion);
-            this.tabConfig.Controls.Add(this.grpArchivos);
-            this.tabConfig.Controls.Add(this.grpPreferencias);
-            this.tabConfig.Controls.Add(this.btnGuardarConfig);
-            this.tabConfig.Location = new System.Drawing.Point(4, 24);
-            this.tabConfig.Name = "tabConfig";
-            this.tabConfig.Padding = new System.Windows.Forms.Padding(8);
-            this.tabConfig.Size = new System.Drawing.Size(892, 592);
-            this.tabConfig.Text = "Configuración";
-
-            this.grpConexion.Controls.Add(this.lblCadenaConexion);
-            this.grpConexion.Controls.Add(this.txtCadenaConexion);
-            this.grpConexion.Controls.Add(this.btnProbarConexion);
-            this.grpConexion.Controls.Add(this.lblEstadoConexion);
-            this.grpConexion.Location = new System.Drawing.Point(8, 8);
-            this.grpConexion.Name = "grpConexion";
-            this.grpConexion.Size = new System.Drawing.Size(876, 80);
-            this.grpConexion.Text = "Base de datos — SQL Server / MariaDB";
-
-            this.lblCadenaConexion.AutoSize = true;
-            this.lblCadenaConexion.Location = new System.Drawing.Point(10, 24);
-            this.lblCadenaConexion.Text = "Cadena de conexión:";
-
-            this.txtCadenaConexion.Location = new System.Drawing.Point(10, 42);
-            this.txtCadenaConexion.Name = "txtCadenaConexion";
-            this.txtCadenaConexion.Size = new System.Drawing.Size(640, 23);
-
-            this.btnProbarConexion.Location = new System.Drawing.Point(660, 41);
-            this.btnProbarConexion.Name = "btnProbarConexion";
-            this.btnProbarConexion.Size = new System.Drawing.Size(110, 26);
-            this.btnProbarConexion.Text = "Probar conexión";
-            this.btnProbarConexion.UseVisualStyleBackColor = true;
-
-            this.lblEstadoConexion.AutoSize = true;
-            this.lblEstadoConexion.ForeColor = System.Drawing.Color.Gray;
-            this.lblEstadoConexion.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Italic);
-            this.lblEstadoConexion.Location = new System.Drawing.Point(780, 46);
-            this.lblEstadoConexion.Text = "—";
-
-            this.grpArchivos.Controls.Add(this.lblRutaCSV);
-            this.grpArchivos.Controls.Add(this.txtRutaCSV);
-            this.grpArchivos.Controls.Add(this.btnExplorarCSV);
-            this.grpArchivos.Controls.Add(this.lblRutaJSON);
-            this.grpArchivos.Controls.Add(this.txtRutaJSON);
-            this.grpArchivos.Controls.Add(this.btnExplorarJSON);
-            this.grpArchivos.Location = new System.Drawing.Point(8, 100);
-            this.grpArchivos.Name = "grpArchivos";
-            this.grpArchivos.Size = new System.Drawing.Size(876, 100);
-            this.grpArchivos.Text = "Archivos de datos";
-
-            this.lblRutaCSV.AutoSize = true;
-            this.lblRutaCSV.Location = new System.Drawing.Point(10, 24);
-            this.lblRutaCSV.Text = "Ruta CSV:";
-
-            this.txtRutaCSV.Location = new System.Drawing.Point(10, 40);
-            this.txtRutaCSV.Name = "txtRutaCSV";
-            this.txtRutaCSV.Size = new System.Drawing.Size(740, 23);
-            this.txtRutaCSV.Text = "Data\\data.csv";
-
-            this.btnExplorarCSV.Location = new System.Drawing.Point(758, 39);
-            this.btnExplorarCSV.Name = "btnExplorarCSV";
-            this.btnExplorarCSV.Size = new System.Drawing.Size(100, 26);
-            this.btnExplorarCSV.Text = "Explorar...";
-            this.btnExplorarCSV.UseVisualStyleBackColor = true;
-
-            this.lblRutaJSON.AutoSize = true;
-            this.lblRutaJSON.Location = new System.Drawing.Point(10, 70);
-            this.lblRutaJSON.Text = "Ruta JSON:";
-
-            this.txtRutaJSON.Location = new System.Drawing.Point(10, 68);
-            this.txtRutaJSON.Name = "txtRutaJSON";
-            this.txtRutaJSON.Size = new System.Drawing.Size(740, 23);
-            this.txtRutaJSON.Text = "Data\\municipios_mx.json";
-
-            this.btnExplorarJSON.Location = new System.Drawing.Point(758, 67);
-            this.btnExplorarJSON.Name = "btnExplorarJSON";
-            this.btnExplorarJSON.Size = new System.Drawing.Size(100, 26);
-            this.btnExplorarJSON.Text = "Explorar...";
-            this.btnExplorarJSON.UseVisualStyleBackColor = true;
-
-            this.grpPreferencias.Controls.Add(this.lblUmbral);
-            this.grpPreferencias.Controls.Add(this.nudUmbral);
-            this.grpPreferencias.Controls.Add(this.lblUmbralSufijo);
-            this.grpPreferencias.Controls.Add(this.lblUnidades);
-            this.grpPreferencias.Controls.Add(this.rbCelsius);
-            this.grpPreferencias.Controls.Add(this.rbFahrenheit);
-            this.grpPreferencias.Location = new System.Drawing.Point(8, 212);
-            this.grpPreferencias.Name = "grpPreferencias";
-            this.grpPreferencias.Size = new System.Drawing.Size(876, 80);
-            this.grpPreferencias.Text = "Preferencias";
-
-            this.lblUmbral.AutoSize = true;
-            this.lblUmbral.Location = new System.Drawing.Point(10, 32);
-            this.lblUmbral.Text = "Umbral de alerta:";
-
-            this.nudUmbral.DecimalPlaces = 1;
-            this.nudUmbral.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-            this.nudUmbral.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            this.nudUmbral.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            this.nudUmbral.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            this.nudUmbral.Location = new System.Drawing.Point(122, 28);
-            this.nudUmbral.Name = "nudUmbral";
-            this.nudUmbral.Size = new System.Drawing.Size(60, 23);
-
-            this.lblUmbralSufijo.AutoSize = true;
-            this.lblUmbralSufijo.Location = new System.Drawing.Point(188, 32);
-            this.lblUmbralSufijo.Text = "°C";
-
-            this.lblUnidades.AutoSize = true;
-            this.lblUnidades.Location = new System.Drawing.Point(280, 32);
-            this.lblUnidades.Text = "Unidades:";
-
-            this.rbCelsius.AutoSize = true;
-            this.rbCelsius.Checked = true;
-            this.rbCelsius.Location = new System.Drawing.Point(350, 30);
-            this.rbCelsius.Name = "rbCelsius";
-            this.rbCelsius.Size = new System.Drawing.Size(66, 19);
-            this.rbCelsius.TabStop = true;
-            this.rbCelsius.Text = "Celsius";
-
-            this.rbFahrenheit.AutoSize = true;
-            this.rbFahrenheit.Location = new System.Drawing.Point(422, 30);
-            this.rbFahrenheit.Name = "rbFahrenheit";
-            this.rbFahrenheit.Size = new System.Drawing.Size(82, 19);
-            this.rbFahrenheit.Text = "Fahrenheit";
-
-            this.btnGuardarConfig.Location = new System.Drawing.Point(8, 304);
-            this.btnGuardarConfig.Name = "btnGuardarConfig";
-            this.btnGuardarConfig.Size = new System.Drawing.Size(130, 28);
-            this.btnGuardarConfig.Text = "Guardar configuración";
-            this.btnGuardarConfig.UseVisualStyleBackColor = true;
-
-            // ════════════════════════════════════════════════════════════════════
-            // STATUS STRIP
-            // ════════════════════════════════════════════════════════════════════
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]{
-            this.tssSQLite, this.tssSQLServer, this.tssAPI, this.tssRegistros
-        });
-            this.statusStrip.Location = new System.Drawing.Point(0, 648);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(900, 22);
-
-            this.tssSQLite.Name = "tssSQLite";
-            this.tssSQLite.Text = "SQLite: —";
-
-            this.tssSQLServer.Name = "tssSQLServer";
-            this.tssSQLServer.Text = "SQL Server: —";
-
-            this.tssAPI.Name = "tssAPI";
-            this.tssAPI.Text = "Open-Meteo: —";
-
-            this.tssRegistros.Name = "tssRegistros";
-            this.tssRegistros.Spring = true;
-            this.tssRegistros.Text = "Registros cargados: —";
-            this.tssRegistros.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-
-            // ════════════════════════════════════════════════════════════════════
-            // FORM
-            // ════════════════════════════════════════════════════════════════════
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 670);
-            this.Controls.Add(this.tabControl);
-            this.Controls.Add(this.statusStrip);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.MinimumSize = new System.Drawing.Size(916, 709);
-            this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sistema de Inteligencia Climática — México";
-
-            this.tabControl.ResumeLayout(false);
-            this.tabConsulta.ResumeLayout(false);
-            this.tabAnalisis.ResumeLayout(false);
-            this.tabFavoritos.ResumeLayout(false);
-            this.tabConfig.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)this.dgvHistorico).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvFavoritos).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.nudUmbral).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            tabControl = new TabControl();
+            tabConsulta = new TabPage();
+            grpBusqueda = new GroupBox();
+            lblEstado = new Label();
+            cmbEstado = new ComboBox();
+            lblMunicipio = new Label();
+            cmbMunicipio = new ComboBox();
+            lblAnio = new Label();
+            cmbAnio = new ComboBox();
+            lblEstacion = new Label();
+            cmbEstacion = new ComboBox();
+            btnConsultar = new Button();
+            btnLimpiar = new Button();
+            lblHintMunicipio = new Label();
+            grpDatosActuales = new GroupBox();
+            lblFuenteAPI = new Label();
+            lblTempActualVal = new Label();
+            lblTempActualSub = new Label();
+            lblMunicipioKey = new Label();
+            lblMunicipioVal = new Label();
+            lblEstadoActKey = new Label();
+            lblEstadoActVal = new Label();
+            lblMinActKey = new Label();
+            lblMinActVal = new Label();
+            lblMaxActKey = new Label();
+            lblMaxActVal = new Label();
+            lblCoordsVal = new Label();
+            grpHistorico = new GroupBox();
+            lblFuenteCSV = new Label();
+            lblTempHistVal = new Label();
+            lblTempHistSub = new Label();
+            lblEstadoHistKey = new Label();
+            lblEstadoHistVal = new Label();
+            lblFiltroKey = new Label();
+            lblFiltroVal = new Label();
+            lblMinHistKey = new Label();
+            lblMinHistVal = new Label();
+            lblMaxHistKey = new Label();
+            lblMaxHistVal = new Label();
+            lblRegistrosVal = new Label();
+            grpAnomalia = new GroupBox();
+            lblDesviacionKey = new Label();
+            lblDesviacionVal = new Label();
+            lblDescAnomalia = new Label();
+            lblNivelKey = new Label();
+            pnlSemaforoVerde = new Panel();
+            pnlSemaforoAmarillo = new Panel();
+            pnlSemaforoRojo = new Panel();
+            lblSemaforoTexto = new Label();
+            btnGuardarAlerta = new Button();
+            tabAnalisis = new TabPage();
+            grpFiltrosGlobal = new GroupBox();
+            lblFiltroAnio = new Label();
+            cmbFiltroAnio = new ComboBox();
+            lblFiltroEstacion = new Label();
+            cmbFiltroEstacion = new ComboBox();
+            lblBuscarEstado = new Label();
+            txtBuscarEstado = new TextBox();
+            btnFiltrar = new Button();
+            btnLimpiarFiltro = new Button();
+            dgvHistorico = new DataGridView();
+            grpRanking = new GroupBox();
+            lblRankingCaliente = new Label();
+            lstCalientes = new ListBox();
+            lblRankingFrio = new Label();
+            lstFrios = new ListBox();
+            tabFavoritos = new TabPage();
+            dgvFavoritos = new DataGridView();
+            grpAgregarFav = new GroupBox();
+            lblNuevoFavEstado = new Label();
+            cmbNuevoFavEstado = new ComboBox();
+            lblNuevoFavMun = new Label();
+            cmbNuevoFavMun = new ComboBox();
+            btnAgregarFav = new Button();
+            btnEliminarFav = new Button();
+            tabConfig = new TabPage();
+            grpConexion = new GroupBox();
+            lblCadenaConexion = new Label();
+            txtCadenaConexion = new TextBox();
+            btnProbarConexion = new Button();
+            lblEstadoConexion = new Label();
+            grpArchivos = new GroupBox();
+            lblRutaCSV = new Label();
+            txtRutaCSV = new TextBox();
+            btnExplorarCSV = new Button();
+            lblRutaJSON = new Label();
+            txtRutaJSON = new TextBox();
+            btnExplorarJSON = new Button();
+            grpPreferencias = new GroupBox();
+            lblUmbral = new Label();
+            nudUmbral = new NumericUpDown();
+            lblUmbralSufijo = new Label();
+            lblUnidades = new Label();
+            rbCelsius = new RadioButton();
+            rbFahrenheit = new RadioButton();
+            btnGuardarConfig = new Button();
+            statusStrip = new StatusStrip();
+            tssSQLite = new ToolStripStatusLabel();
+            tssSQLServer = new ToolStripStatusLabel();
+            tssAPI = new ToolStripStatusLabel();
+            tssRegistros = new ToolStripStatusLabel();
+            tabControl.SuspendLayout();
+            tabConsulta.SuspendLayout();
+            grpBusqueda.SuspendLayout();
+            grpDatosActuales.SuspendLayout();
+            grpHistorico.SuspendLayout();
+            grpAnomalia.SuspendLayout();
+            tabAnalisis.SuspendLayout();
+            grpFiltrosGlobal.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvHistorico).BeginInit();
+            grpRanking.SuspendLayout();
+            tabFavoritos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFavoritos).BeginInit();
+            grpAgregarFav.SuspendLayout();
+            tabConfig.SuspendLayout();
+            grpConexion.SuspendLayout();
+            grpArchivos.SuspendLayout();
+            grpPreferencias.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudUmbral).BeginInit();
+            statusStrip.SuspendLayout();
+            SuspendLayout();
+            // 
+            // tabControl
+            // 
+            tabControl.Controls.Add(tabConsulta);
+            tabControl.Controls.Add(tabAnalisis);
+            tabControl.Controls.Add(tabFavoritos);
+            tabControl.Controls.Add(tabConfig);
+            tabControl.Dock = DockStyle.Fill;
+            tabControl.Location = new Point(0, 0);
+            tabControl.Margin = new Padding(3, 4, 3, 4);
+            tabControl.Name = "tabControl";
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new Size(1029, 867);
+            tabControl.TabIndex = 0;
+            // 
+            // tabConsulta
+            // 
+            tabConsulta.Controls.Add(grpBusqueda);
+            tabConsulta.Controls.Add(grpDatosActuales);
+            tabConsulta.Controls.Add(grpHistorico);
+            tabConsulta.Controls.Add(grpAnomalia);
+            tabConsulta.Location = new Point(4, 29);
+            tabConsulta.Margin = new Padding(3, 4, 3, 4);
+            tabConsulta.Name = "tabConsulta";
+            tabConsulta.Padding = new Padding(9, 11, 9, 11);
+            tabConsulta.Size = new Size(1021, 834);
+            tabConsulta.TabIndex = 0;
+            tabConsulta.Text = "Consulta Individual";
+            // 
+            // grpBusqueda
+            // 
+            grpBusqueda.Controls.Add(lblEstado);
+            grpBusqueda.Controls.Add(cmbEstado);
+            grpBusqueda.Controls.Add(lblMunicipio);
+            grpBusqueda.Controls.Add(cmbMunicipio);
+            grpBusqueda.Controls.Add(lblAnio);
+            grpBusqueda.Controls.Add(cmbAnio);
+            grpBusqueda.Controls.Add(lblEstacion);
+            grpBusqueda.Controls.Add(cmbEstacion);
+            grpBusqueda.Controls.Add(btnConsultar);
+            grpBusqueda.Controls.Add(btnLimpiar);
+            grpBusqueda.Controls.Add(lblHintMunicipio);
+            grpBusqueda.Location = new Point(9, 11);
+            grpBusqueda.Margin = new Padding(3, 4, 3, 4);
+            grpBusqueda.Name = "grpBusqueda";
+            grpBusqueda.Padding = new Padding(3, 4, 3, 4);
+            grpBusqueda.Size = new Size(1001, 107);
+            grpBusqueda.TabIndex = 0;
+            grpBusqueda.TabStop = false;
+            grpBusqueda.Text = "Parámetros de consulta";
+            // 
+            // lblEstado
+            // 
+            lblEstado.AutoSize = true;
+            lblEstado.Location = new Point(11, 32);
+            lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(72, 20);
+            lblEstado.TabIndex = 0;
+            lblEstado.Text = "1. Estado:";
+            // 
+            // cmbEstado
+            // 
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEstado.Location = new Point(11, 56);
+            cmbEstado.Margin = new Padding(3, 4, 3, 4);
+            cmbEstado.Name = "cmbEstado";
+            cmbEstado.Size = new Size(182, 28);
+            cmbEstado.TabIndex = 0;
+            cmbEstado.SelectedIndexChanged += cmbEstado_SelectedIndexChanged_1;
+            // 
+            // lblMunicipio
+            // 
+            lblMunicipio.AutoSize = true;
+            lblMunicipio.Location = new Point(208, 32);
+            lblMunicipio.Name = "lblMunicipio";
+            lblMunicipio.Size = new Size(93, 20);
+            lblMunicipio.TabIndex = 1;
+            lblMunicipio.Text = "2. Municipio:";
+            // 
+            // cmbMunicipio
+            // 
+            cmbMunicipio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMunicipio.Enabled = false;
+            cmbMunicipio.Location = new Point(208, 56);
+            cmbMunicipio.Margin = new Padding(3, 4, 3, 4);
+            cmbMunicipio.Name = "cmbMunicipio";
+            cmbMunicipio.Size = new Size(205, 28);
+            cmbMunicipio.TabIndex = 1;
+            cmbMunicipio.SelectedIndexChanged += cmbMunicipio_SelectedIndexChanged_1;
+            // 
+            // lblAnio
+            // 
+            lblAnio.AutoSize = true;
+            lblAnio.Location = new Point(446, 32);
+            lblAnio.Name = "lblAnio";
+            lblAnio.Size = new Size(39, 20);
+            lblAnio.TabIndex = 2;
+            lblAnio.Text = "Año:";
+            // 
+            // cmbAnio
+            // 
+            cmbAnio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAnio.Location = new Point(446, 56);
+            cmbAnio.Margin = new Padding(3, 4, 3, 4);
+            cmbAnio.Name = "cmbAnio";
+            cmbAnio.Size = new Size(91, 28);
+            cmbAnio.TabIndex = 2;
+            // 
+            // lblEstacion
+            // 
+            lblEstacion.AutoSize = true;
+            lblEstacion.Location = new Point(551, 32);
+            lblEstacion.Name = "lblEstacion";
+            lblEstacion.Size = new Size(67, 20);
+            lblEstacion.TabIndex = 3;
+            lblEstacion.Text = "Estación:";
+            // 
+            // cmbEstacion
+            // 
+            cmbEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEstacion.Items.AddRange(new object[] { "Verano", "Invierno", "Primavera", "Otoño" });
+            cmbEstacion.Location = new Point(551, 56);
+            cmbEstacion.Margin = new Padding(3, 4, 3, 4);
+            cmbEstacion.Name = "cmbEstacion";
+            cmbEstacion.Size = new Size(125, 28);
+            cmbEstacion.TabIndex = 3;
+            // 
+            // btnConsultar
+            // 
+            btnConsultar.Enabled = false;
+            btnConsultar.Location = new Point(697, 53);
+            btnConsultar.Margin = new Padding(3, 4, 3, 4);
+            btnConsultar.Name = "btnConsultar";
+            btnConsultar.Size = new Size(103, 35);
+            btnConsultar.TabIndex = 4;
+            btnConsultar.Text = "Consultar";
+            btnConsultar.UseVisualStyleBackColor = true;
+            btnConsultar.Click += btnConsultar_Click_1;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Location = new Point(807, 53);
+            btnLimpiar.Margin = new Padding(3, 4, 3, 4);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(91, 35);
+            btnLimpiar.TabIndex = 5;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            // 
+            // lblHintMunicipio
+            // 
+            lblHintMunicipio.AutoSize = true;
+            lblHintMunicipio.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            lblHintMunicipio.ForeColor = Color.Gray;
+            lblHintMunicipio.Location = new Point(208, 91);
+            lblHintMunicipio.Name = "lblHintMunicipio";
+            lblHintMunicipio.Size = new Size(208, 19);
+            lblHintMunicipio.TabIndex = 6;
+            lblHintMunicipio.Text = "← Primero selecciona un estado";
+            // 
+            // grpDatosActuales
+            // 
+            grpDatosActuales.Controls.Add(lblFuenteAPI);
+            grpDatosActuales.Controls.Add(lblTempActualVal);
+            grpDatosActuales.Controls.Add(lblTempActualSub);
+            grpDatosActuales.Controls.Add(lblMunicipioKey);
+            grpDatosActuales.Controls.Add(lblMunicipioVal);
+            grpDatosActuales.Controls.Add(lblEstadoActKey);
+            grpDatosActuales.Controls.Add(lblEstadoActVal);
+            grpDatosActuales.Controls.Add(lblMinActKey);
+            grpDatosActuales.Controls.Add(lblMinActVal);
+            grpDatosActuales.Controls.Add(lblMaxActKey);
+            grpDatosActuales.Controls.Add(lblMaxActVal);
+            grpDatosActuales.Controls.Add(lblCoordsVal);
+            grpDatosActuales.Location = new Point(9, 131);
+            grpDatosActuales.Margin = new Padding(3, 4, 3, 4);
+            grpDatosActuales.Name = "grpDatosActuales";
+            grpDatosActuales.Padding = new Padding(3, 4, 3, 4);
+            grpDatosActuales.Size = new Size(491, 293);
+            grpDatosActuales.TabIndex = 1;
+            grpDatosActuales.TabStop = false;
+            grpDatosActuales.Text = "Datos actuales";
+            // 
+            // lblFuenteAPI
+            // 
+            lblFuenteAPI.AutoSize = true;
+            lblFuenteAPI.Font = new Font("Segoe UI", 8F);
+            lblFuenteAPI.ForeColor = Color.SteelBlue;
+            lblFuenteAPI.Location = new Point(183, 27);
+            lblFuenteAPI.Name = "lblFuenteAPI";
+            lblFuenteAPI.Size = new Size(163, 19);
+            lblFuenteAPI.TabIndex = 0;
+            lblFuenteAPI.Text = "Fuente: Open-Meteo API";
+            // 
+            // lblTempActualVal
+            // 
+            lblTempActualVal.AutoSize = true;
+            lblTempActualVal.Font = new Font("Segoe UI", 28F);
+            lblTempActualVal.ForeColor = Color.Firebrick;
+            lblTempActualVal.Location = new Point(171, 51);
+            lblTempActualVal.Name = "lblTempActualVal";
+            lblTempActualVal.Size = new Size(74, 62);
+            lblTempActualVal.TabIndex = 1;
+            lblTempActualVal.Text = "—";
+            // 
+            // lblTempActualSub
+            // 
+            lblTempActualSub.AutoSize = true;
+            lblTempActualSub.Font = new Font("Segoe UI", 8F);
+            lblTempActualSub.ForeColor = Color.Gray;
+            lblTempActualSub.Location = new Point(177, 109);
+            lblTempActualSub.Name = "lblTempActualSub";
+            lblTempActualSub.Size = new Size(170, 19);
+            lblTempActualSub.TabIndex = 2;
+            lblTempActualSub.Text = "Temperatura actual del día";
+            // 
+            // lblMunicipioKey
+            // 
+            lblMunicipioKey.AutoSize = true;
+            lblMunicipioKey.Location = new Point(11, 144);
+            lblMunicipioKey.Name = "lblMunicipioKey";
+            lblMunicipioKey.Size = new Size(78, 20);
+            lblMunicipioKey.TabIndex = 3;
+            lblMunicipioKey.Text = "Municipio:";
+            // 
+            // lblMunicipioVal
+            // 
+            lblMunicipioVal.AutoSize = true;
+            lblMunicipioVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMunicipioVal.Location = new Point(251, 144);
+            lblMunicipioVal.Name = "lblMunicipioVal";
+            lblMunicipioVal.Size = new Size(24, 20);
+            lblMunicipioVal.TabIndex = 4;
+            lblMunicipioVal.Text = "—";
+            // 
+            // lblEstadoActKey
+            // 
+            lblEstadoActKey.AutoSize = true;
+            lblEstadoActKey.Location = new Point(11, 176);
+            lblEstadoActKey.Name = "lblEstadoActKey";
+            lblEstadoActKey.Size = new Size(57, 20);
+            lblEstadoActKey.TabIndex = 5;
+            lblEstadoActKey.Text = "Estado:";
+            // 
+            // lblEstadoActVal
+            // 
+            lblEstadoActVal.AutoSize = true;
+            lblEstadoActVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEstadoActVal.Location = new Point(251, 176);
+            lblEstadoActVal.Name = "lblEstadoActVal";
+            lblEstadoActVal.Size = new Size(24, 20);
+            lblEstadoActVal.TabIndex = 6;
+            lblEstadoActVal.Text = "—";
+            // 
+            // lblMinActKey
+            // 
+            lblMinActKey.AutoSize = true;
+            lblMinActKey.Location = new Point(11, 208);
+            lblMinActKey.Name = "lblMinActKey";
+            lblMinActKey.Size = new Size(112, 20);
+            lblMinActKey.TabIndex = 7;
+            lblMinActKey.Text = "Mínima del día:";
+            // 
+            // lblMinActVal
+            // 
+            lblMinActVal.AutoSize = true;
+            lblMinActVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMinActVal.Location = new Point(251, 208);
+            lblMinActVal.Name = "lblMinActVal";
+            lblMinActVal.Size = new Size(24, 20);
+            lblMinActVal.TabIndex = 8;
+            lblMinActVal.Text = "—";
+            // 
+            // lblMaxActKey
+            // 
+            lblMaxActKey.AutoSize = true;
+            lblMaxActKey.Location = new Point(11, 240);
+            lblMaxActKey.Name = "lblMaxActKey";
+            lblMaxActKey.Size = new Size(115, 20);
+            lblMaxActKey.TabIndex = 9;
+            lblMaxActKey.Text = "Máxima del día:";
+            // 
+            // lblMaxActVal
+            // 
+            lblMaxActVal.AutoSize = true;
+            lblMaxActVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMaxActVal.Location = new Point(251, 240);
+            lblMaxActVal.Name = "lblMaxActVal";
+            lblMaxActVal.Size = new Size(24, 20);
+            lblMaxActVal.TabIndex = 10;
+            lblMaxActVal.Text = "—";
+            // 
+            // lblCoordsVal
+            // 
+            lblCoordsVal.AutoSize = true;
+            lblCoordsVal.Font = new Font("Segoe UI", 7.5F);
+            lblCoordsVal.ForeColor = Color.Gray;
+            lblCoordsVal.Location = new Point(11, 267);
+            lblCoordsVal.Name = "lblCoordsVal";
+            lblCoordsVal.Size = new Size(97, 17);
+            lblCoordsVal.TabIndex = 11;
+            lblCoordsVal.Text = "Lat: — · Lon: —";
+            // 
+            // grpHistorico
+            // 
+            grpHistorico.Controls.Add(lblFuenteCSV);
+            grpHistorico.Controls.Add(lblTempHistVal);
+            grpHistorico.Controls.Add(lblTempHistSub);
+            grpHistorico.Controls.Add(lblEstadoHistKey);
+            grpHistorico.Controls.Add(lblEstadoHistVal);
+            grpHistorico.Controls.Add(lblFiltroKey);
+            grpHistorico.Controls.Add(lblFiltroVal);
+            grpHistorico.Controls.Add(lblMinHistKey);
+            grpHistorico.Controls.Add(lblMinHistVal);
+            grpHistorico.Controls.Add(lblMaxHistKey);
+            grpHistorico.Controls.Add(lblMaxHistVal);
+            grpHistorico.Controls.Add(lblRegistrosVal);
+            grpHistorico.Location = new Point(510, 131);
+            grpHistorico.Margin = new Padding(3, 4, 3, 4);
+            grpHistorico.Name = "grpHistorico";
+            grpHistorico.Padding = new Padding(3, 4, 3, 4);
+            grpHistorico.Size = new Size(501, 293);
+            grpHistorico.TabIndex = 2;
+            grpHistorico.TabStop = false;
+            grpHistorico.Text = "Promedio histórico";
+            // 
+            // lblFuenteCSV
+            // 
+            lblFuenteCSV.AutoSize = true;
+            lblFuenteCSV.Font = new Font("Segoe UI", 8F);
+            lblFuenteCSV.ForeColor = Color.SeaGreen;
+            lblFuenteCSV.Location = new Point(197, 27);
+            lblFuenteCSV.Name = "lblFuenteCSV";
+            lblFuenteCSV.Size = new Size(107, 19);
+            lblFuenteCSV.TabIndex = 0;
+            lblFuenteCSV.Text = "Fuente: data.csv";
+            // 
+            // lblTempHistVal
+            // 
+            lblTempHistVal.AutoSize = true;
+            lblTempHistVal.Font = new Font("Segoe UI", 28F);
+            lblTempHistVal.ForeColor = Color.SteelBlue;
+            lblTempHistVal.Location = new Point(181, 51);
+            lblTempHistVal.Name = "lblTempHistVal";
+            lblTempHistVal.Size = new Size(74, 62);
+            lblTempHistVal.TabIndex = 1;
+            lblTempHistVal.Text = "—";
+            // 
+            // lblTempHistSub
+            // 
+            lblTempHistSub.AutoSize = true;
+            lblTempHistSub.Font = new Font("Segoe UI", 8F);
+            lblTempHistSub.ForeColor = Color.Gray;
+            lblTempHistSub.Location = new Point(169, 109);
+            lblTempHistSub.Name = "lblTempHistSub";
+            lblTempHistSub.Size = new Size(191, 19);
+            lblTempHistSub.TabIndex = 2;
+            lblTempHistSub.Text = "Promedio histórico del estado";
+            // 
+            // lblEstadoHistKey
+            // 
+            lblEstadoHistKey.AutoSize = true;
+            lblEstadoHistKey.Location = new Point(11, 144);
+            lblEstadoHistKey.Name = "lblEstadoHistKey";
+            lblEstadoHistKey.Size = new Size(126, 20);
+            lblEstadoHistKey.TabIndex = 3;
+            lblEstadoHistKey.Text = "Estado analizado:";
+            // 
+            // lblEstadoHistVal
+            // 
+            lblEstadoHistVal.AutoSize = true;
+            lblEstadoHistVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblEstadoHistVal.Location = new Point(251, 144);
+            lblEstadoHistVal.Name = "lblEstadoHistVal";
+            lblEstadoHistVal.Size = new Size(24, 20);
+            lblEstadoHistVal.TabIndex = 4;
+            lblEstadoHistVal.Text = "—";
+            // 
+            // lblFiltroKey
+            // 
+            lblFiltroKey.AutoSize = true;
+            lblFiltroKey.Location = new Point(11, 176);
+            lblFiltroKey.Name = "lblFiltroKey";
+            lblFiltroKey.Size = new Size(108, 20);
+            lblFiltroKey.TabIndex = 5;
+            lblFiltroKey.Text = "Estación / Año:";
+            // 
+            // lblFiltroVal
+            // 
+            lblFiltroVal.AutoSize = true;
+            lblFiltroVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblFiltroVal.Location = new Point(251, 176);
+            lblFiltroVal.Name = "lblFiltroVal";
+            lblFiltroVal.Size = new Size(24, 20);
+            lblFiltroVal.TabIndex = 6;
+            lblFiltroVal.Text = "—";
+            // 
+            // lblMinHistKey
+            // 
+            lblMinHistKey.AutoSize = true;
+            lblMinHistKey.Location = new Point(11, 208);
+            lblMinHistKey.Name = "lblMinHistKey";
+            lblMinHistKey.Size = new Size(122, 20);
+            lblMinHistKey.TabIndex = 7;
+            lblMinHistKey.Text = "Mínima histórica:";
+            // 
+            // lblMinHistVal
+            // 
+            lblMinHistVal.AutoSize = true;
+            lblMinHistVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMinHistVal.Location = new Point(251, 208);
+            lblMinHistVal.Name = "lblMinHistVal";
+            lblMinHistVal.Size = new Size(24, 20);
+            lblMinHistVal.TabIndex = 8;
+            lblMinHistVal.Text = "—";
+            // 
+            // lblMaxHistKey
+            // 
+            lblMaxHistKey.AutoSize = true;
+            lblMaxHistKey.Location = new Point(11, 240);
+            lblMaxHistKey.Name = "lblMaxHistKey";
+            lblMaxHistKey.Size = new Size(125, 20);
+            lblMaxHistKey.TabIndex = 9;
+            lblMaxHistKey.Text = "Máxima histórica:";
+            // 
+            // lblMaxHistVal
+            // 
+            lblMaxHistVal.AutoSize = true;
+            lblMaxHistVal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblMaxHistVal.Location = new Point(251, 240);
+            lblMaxHistVal.Name = "lblMaxHistVal";
+            lblMaxHistVal.Size = new Size(24, 20);
+            lblMaxHistVal.TabIndex = 10;
+            lblMaxHistVal.Text = "—";
+            // 
+            // lblRegistrosVal
+            // 
+            lblRegistrosVal.AutoSize = true;
+            lblRegistrosVal.Font = new Font("Segoe UI", 7.5F);
+            lblRegistrosVal.ForeColor = Color.Gray;
+            lblRegistrosVal.Location = new Point(11, 267);
+            lblRegistrosVal.Name = "lblRegistrosVal";
+            lblRegistrosVal.Size = new Size(191, 17);
+            lblRegistrosVal.TabIndex = 11;
+            lblRegistrosVal.Text = "Basado en — registros del CSV";
+            // 
+            // grpAnomalia
+            // 
+            grpAnomalia.Controls.Add(lblDesviacionKey);
+            grpAnomalia.Controls.Add(lblDesviacionVal);
+            grpAnomalia.Controls.Add(lblDescAnomalia);
+            grpAnomalia.Controls.Add(lblNivelKey);
+            grpAnomalia.Controls.Add(pnlSemaforoVerde);
+            grpAnomalia.Controls.Add(pnlSemaforoAmarillo);
+            grpAnomalia.Controls.Add(pnlSemaforoRojo);
+            grpAnomalia.Controls.Add(lblSemaforoTexto);
+            grpAnomalia.Controls.Add(btnGuardarAlerta);
+            grpAnomalia.Location = new Point(9, 437);
+            grpAnomalia.Margin = new Padding(3, 4, 3, 4);
+            grpAnomalia.Name = "grpAnomalia";
+            grpAnomalia.Padding = new Padding(3, 4, 3, 4);
+            grpAnomalia.Size = new Size(1001, 120);
+            grpAnomalia.TabIndex = 3;
+            grpAnomalia.TabStop = false;
+            grpAnomalia.Text = "Detección de anomalía";
+            // 
+            // lblDesviacionKey
+            // 
+            lblDesviacionKey.AutoSize = true;
+            lblDesviacionKey.Location = new Point(11, 37);
+            lblDesviacionKey.Name = "lblDesviacionKey";
+            lblDesviacionKey.Size = new Size(155, 20);
+            lblDesviacionKey.TabIndex = 0;
+            lblDesviacionKey.Text = "Desviación detectada:";
+            // 
+            // lblDesviacionVal
+            // 
+            lblDesviacionVal.AutoSize = true;
+            lblDesviacionVal.Font = new Font("Segoe UI", 22F);
+            lblDesviacionVal.Location = new Point(11, 59);
+            lblDesviacionVal.Name = "lblDesviacionVal";
+            lblDesviacionVal.Size = new Size(59, 50);
+            lblDesviacionVal.TabIndex = 1;
+            lblDesviacionVal.Text = "—";
+            // 
+            // lblDescAnomalia
+            // 
+            lblDescAnomalia.AutoSize = true;
+            lblDescAnomalia.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            lblDescAnomalia.ForeColor = Color.Gray;
+            lblDescAnomalia.Location = new Point(171, 75);
+            lblDescAnomalia.Name = "lblDescAnomalia";
+            lblDescAnomalia.Size = new Size(23, 19);
+            lblDescAnomalia.TabIndex = 2;
+            lblDescAnomalia.Text = "—";
+            // 
+            // lblNivelKey
+            // 
+            lblNivelKey.AutoSize = true;
+            lblNivelKey.Location = new Point(503, 37);
+            lblNivelKey.Name = "lblNivelKey";
+            lblNivelKey.Size = new Size(109, 20);
+            lblNivelKey.TabIndex = 3;
+            lblNivelKey.Text = "Nivel de alerta:";
+            // 
+            // pnlSemaforoVerde
+            // 
+            pnlSemaforoVerde.BackColor = Color.LightGray;
+            pnlSemaforoVerde.Location = new Point(503, 67);
+            pnlSemaforoVerde.Margin = new Padding(3, 4, 3, 4);
+            pnlSemaforoVerde.Name = "pnlSemaforoVerde";
+            pnlSemaforoVerde.Size = new Size(21, 24);
+            pnlSemaforoVerde.TabIndex = 4;
+            // 
+            // pnlSemaforoAmarillo
+            // 
+            pnlSemaforoAmarillo.BackColor = Color.LightGray;
+            pnlSemaforoAmarillo.Location = new Point(530, 67);
+            pnlSemaforoAmarillo.Margin = new Padding(3, 4, 3, 4);
+            pnlSemaforoAmarillo.Name = "pnlSemaforoAmarillo";
+            pnlSemaforoAmarillo.Size = new Size(21, 24);
+            pnlSemaforoAmarillo.TabIndex = 5;
+            // 
+            // pnlSemaforoRojo
+            // 
+            pnlSemaforoRojo.BackColor = Color.LightGray;
+            pnlSemaforoRojo.Location = new Point(558, 67);
+            pnlSemaforoRojo.Margin = new Padding(3, 4, 3, 4);
+            pnlSemaforoRojo.Name = "pnlSemaforoRojo";
+            pnlSemaforoRojo.Size = new Size(21, 24);
+            pnlSemaforoRojo.TabIndex = 6;
+            // 
+            // lblSemaforoTexto
+            // 
+            lblSemaforoTexto.AutoSize = true;
+            lblSemaforoTexto.Location = new Point(587, 71);
+            lblSemaforoTexto.Name = "lblSemaforoTexto";
+            lblSemaforoTexto.Size = new Size(24, 20);
+            lblSemaforoTexto.TabIndex = 7;
+            lblSemaforoTexto.Text = "—";
+            // 
+            // btnGuardarAlerta
+            // 
+            btnGuardarAlerta.Enabled = false;
+            btnGuardarAlerta.Location = new Point(846, 64);
+            btnGuardarAlerta.Margin = new Padding(3, 4, 3, 4);
+            btnGuardarAlerta.Name = "btnGuardarAlerta";
+            btnGuardarAlerta.Size = new Size(144, 35);
+            btnGuardarAlerta.TabIndex = 8;
+            btnGuardarAlerta.Text = "Guardar alerta en BD";
+            btnGuardarAlerta.UseVisualStyleBackColor = true;
+            // 
+            // tabAnalisis
+            // 
+            tabAnalisis.Controls.Add(grpFiltrosGlobal);
+            tabAnalisis.Controls.Add(dgvHistorico);
+            tabAnalisis.Controls.Add(grpRanking);
+            tabAnalisis.Location = new Point(4, 29);
+            tabAnalisis.Margin = new Padding(3, 4, 3, 4);
+            tabAnalisis.Name = "tabAnalisis";
+            tabAnalisis.Padding = new Padding(9, 11, 9, 11);
+            tabAnalisis.Size = new Size(1021, 834);
+            tabAnalisis.TabIndex = 1;
+            tabAnalisis.Text = "Análisis Global";
+            // 
+            // grpFiltrosGlobal
+            // 
+            grpFiltrosGlobal.Controls.Add(lblFiltroAnio);
+            grpFiltrosGlobal.Controls.Add(cmbFiltroAnio);
+            grpFiltrosGlobal.Controls.Add(lblFiltroEstacion);
+            grpFiltrosGlobal.Controls.Add(cmbFiltroEstacion);
+            grpFiltrosGlobal.Controls.Add(lblBuscarEstado);
+            grpFiltrosGlobal.Controls.Add(txtBuscarEstado);
+            grpFiltrosGlobal.Controls.Add(btnFiltrar);
+            grpFiltrosGlobal.Controls.Add(btnLimpiarFiltro);
+            grpFiltrosGlobal.Location = new Point(9, 11);
+            grpFiltrosGlobal.Margin = new Padding(3, 4, 3, 4);
+            grpFiltrosGlobal.Name = "grpFiltrosGlobal";
+            grpFiltrosGlobal.Padding = new Padding(3, 4, 3, 4);
+            grpFiltrosGlobal.Size = new Size(1001, 80);
+            grpFiltrosGlobal.TabIndex = 0;
+            grpFiltrosGlobal.TabStop = false;
+            grpFiltrosGlobal.Text = "Filtros";
+            // 
+            // lblFiltroAnio
+            // 
+            lblFiltroAnio.AutoSize = true;
+            lblFiltroAnio.Location = new Point(11, 32);
+            lblFiltroAnio.Name = "lblFiltroAnio";
+            lblFiltroAnio.Size = new Size(39, 20);
+            lblFiltroAnio.TabIndex = 0;
+            lblFiltroAnio.Text = "Año:";
+            // 
+            // cmbFiltroAnio
+            // 
+            cmbFiltroAnio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroAnio.Location = new Point(46, 27);
+            cmbFiltroAnio.Margin = new Padding(3, 4, 3, 4);
+            cmbFiltroAnio.Name = "cmbFiltroAnio";
+            cmbFiltroAnio.Size = new Size(91, 28);
+            cmbFiltroAnio.TabIndex = 1;
+            // 
+            // lblFiltroEstacion
+            // 
+            lblFiltroEstacion.AutoSize = true;
+            lblFiltroEstacion.Location = new Point(151, 32);
+            lblFiltroEstacion.Name = "lblFiltroEstacion";
+            lblFiltroEstacion.Size = new Size(67, 20);
+            lblFiltroEstacion.TabIndex = 2;
+            lblFiltroEstacion.Text = "Estación:";
+            // 
+            // cmbFiltroEstacion
+            // 
+            cmbFiltroEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroEstacion.Items.AddRange(new object[] { "Todas", "Verano", "Invierno", "Primavera", "Otoño" });
+            cmbFiltroEstacion.Location = new Point(213, 27);
+            cmbFiltroEstacion.Margin = new Padding(3, 4, 3, 4);
+            cmbFiltroEstacion.Name = "cmbFiltroEstacion";
+            cmbFiltroEstacion.Size = new Size(125, 28);
+            cmbFiltroEstacion.TabIndex = 3;
+            // 
+            // lblBuscarEstado
+            // 
+            lblBuscarEstado.AutoSize = true;
+            lblBuscarEstado.Location = new Point(354, 32);
+            lblBuscarEstado.Name = "lblBuscarEstado";
+            lblBuscarEstado.Size = new Size(104, 20);
+            lblBuscarEstado.TabIndex = 4;
+            lblBuscarEstado.Text = "Buscar estado:";
+            // 
+            // txtBuscarEstado
+            // 
+            txtBuscarEstado.Location = new Point(455, 27);
+            txtBuscarEstado.Margin = new Padding(3, 4, 3, 4);
+            txtBuscarEstado.Name = "txtBuscarEstado";
+            txtBuscarEstado.Size = new Size(182, 27);
+            txtBuscarEstado.TabIndex = 5;
+            // 
+            // btnFiltrar
+            // 
+            btnFiltrar.Location = new Point(651, 25);
+            btnFiltrar.Margin = new Padding(3, 4, 3, 4);
+            btnFiltrar.Name = "btnFiltrar";
+            btnFiltrar.Size = new Size(91, 35);
+            btnFiltrar.TabIndex = 6;
+            btnFiltrar.Text = "Filtrar";
+            btnFiltrar.UseVisualStyleBackColor = true;
+            // 
+            // btnLimpiarFiltro
+            // 
+            btnLimpiarFiltro.Location = new Point(750, 25);
+            btnLimpiarFiltro.Margin = new Padding(3, 4, 3, 4);
+            btnLimpiarFiltro.Name = "btnLimpiarFiltro";
+            btnLimpiarFiltro.Size = new Size(91, 35);
+            btnLimpiarFiltro.TabIndex = 7;
+            btnLimpiarFiltro.Text = "Limpiar";
+            btnLimpiarFiltro.UseVisualStyleBackColor = true;
+            // 
+            // dgvHistorico
+            // 
+            dgvHistorico.AllowUserToAddRows = false;
+            dgvHistorico.AllowUserToDeleteRows = false;
+            dgvHistorico.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvHistorico.ColumnHeadersHeight = 29;
+            dgvHistorico.Location = new Point(9, 101);
+            dgvHistorico.Margin = new Padding(3, 4, 3, 4);
+            dgvHistorico.Name = "dgvHistorico";
+            dgvHistorico.ReadOnly = true;
+            dgvHistorico.RowHeadersWidth = 51;
+            dgvHistorico.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvHistorico.Size = new Size(1001, 453);
+            dgvHistorico.TabIndex = 1;
+            // 
+            // grpRanking
+            // 
+            grpRanking.Controls.Add(lblRankingCaliente);
+            grpRanking.Controls.Add(lstCalientes);
+            grpRanking.Controls.Add(lblRankingFrio);
+            grpRanking.Controls.Add(lstFrios);
+            grpRanking.Location = new Point(9, 565);
+            grpRanking.Margin = new Padding(3, 4, 3, 4);
+            grpRanking.Name = "grpRanking";
+            grpRanking.Padding = new Padding(3, 4, 3, 4);
+            grpRanking.Size = new Size(1001, 208);
+            grpRanking.TabIndex = 2;
+            grpRanking.TabStop = false;
+            grpRanking.Text = "Ranking (derivado del filtro activo)";
+            // 
+            // lblRankingCaliente
+            // 
+            lblRankingCaliente.AutoSize = true;
+            lblRankingCaliente.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblRankingCaliente.ForeColor = Color.Firebrick;
+            lblRankingCaliente.Location = new Point(11, 29);
+            lblRankingCaliente.Name = "lblRankingCaliente";
+            lblRankingCaliente.Size = new Size(165, 20);
+            lblRankingCaliente.TabIndex = 0;
+            lblRankingCaliente.Text = "Top 5 — más calientes";
+            // 
+            // lstCalientes
+            // 
+            lstCalientes.Location = new Point(11, 56);
+            lstCalientes.Margin = new Padding(3, 4, 3, 4);
+            lstCalientes.Name = "lstCalientes";
+            lstCalientes.Size = new Size(477, 124);
+            lstCalientes.TabIndex = 1;
+            // 
+            // lblRankingFrio
+            // 
+            lblRankingFrio.AutoSize = true;
+            lblRankingFrio.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblRankingFrio.ForeColor = Color.SteelBlue;
+            lblRankingFrio.Location = new Point(512, 29);
+            lblRankingFrio.Name = "lblRankingFrio";
+            lblRankingFrio.Size = new Size(136, 20);
+            lblRankingFrio.TabIndex = 2;
+            lblRankingFrio.Text = "Top 5 — más fríos";
+            // 
+            // lstFrios
+            // 
+            lstFrios.Location = new Point(512, 56);
+            lstFrios.Margin = new Padding(3, 4, 3, 4);
+            lstFrios.Name = "lstFrios";
+            lstFrios.Size = new Size(477, 124);
+            lstFrios.TabIndex = 3;
+            // 
+            // tabFavoritos
+            // 
+            tabFavoritos.Controls.Add(dgvFavoritos);
+            tabFavoritos.Controls.Add(grpAgregarFav);
+            tabFavoritos.Controls.Add(btnEliminarFav);
+            tabFavoritos.Location = new Point(4, 29);
+            tabFavoritos.Margin = new Padding(3, 4, 3, 4);
+            tabFavoritos.Name = "tabFavoritos";
+            tabFavoritos.Padding = new Padding(9, 11, 9, 11);
+            tabFavoritos.Size = new Size(1021, 834);
+            tabFavoritos.TabIndex = 2;
+            tabFavoritos.Text = "Favoritos";
+            // 
+            // dgvFavoritos
+            // 
+            dgvFavoritos.AllowUserToAddRows = false;
+            dgvFavoritos.AllowUserToDeleteRows = false;
+            dgvFavoritos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvFavoritos.ColumnHeadersHeight = 29;
+            dgvFavoritos.Location = new Point(9, 11);
+            dgvFavoritos.Margin = new Padding(3, 4, 3, 4);
+            dgvFavoritos.Name = "dgvFavoritos";
+            dgvFavoritos.ReadOnly = true;
+            dgvFavoritos.RowHeadersWidth = 51;
+            dgvFavoritos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvFavoritos.Size = new Size(1001, 613);
+            dgvFavoritos.TabIndex = 0;
+            // 
+            // grpAgregarFav
+            // 
+            grpAgregarFav.Controls.Add(lblNuevoFavEstado);
+            grpAgregarFav.Controls.Add(cmbNuevoFavEstado);
+            grpAgregarFav.Controls.Add(lblNuevoFavMun);
+            grpAgregarFav.Controls.Add(cmbNuevoFavMun);
+            grpAgregarFav.Controls.Add(btnAgregarFav);
+            grpAgregarFav.Location = new Point(9, 680);
+            grpAgregarFav.Margin = new Padding(3, 4, 3, 4);
+            grpAgregarFav.Name = "grpAgregarFav";
+            grpAgregarFav.Padding = new Padding(3, 4, 3, 4);
+            grpAgregarFav.Size = new Size(1001, 80);
+            grpAgregarFav.TabIndex = 1;
+            grpAgregarFav.TabStop = false;
+            grpAgregarFav.Text = "Agregar municipio a favoritos";
+            // 
+            // lblNuevoFavEstado
+            // 
+            lblNuevoFavEstado.AutoSize = true;
+            lblNuevoFavEstado.Location = new Point(11, 35);
+            lblNuevoFavEstado.Name = "lblNuevoFavEstado";
+            lblNuevoFavEstado.Size = new Size(57, 20);
+            lblNuevoFavEstado.TabIndex = 0;
+            lblNuevoFavEstado.Text = "Estado:";
+            // 
+            // cmbNuevoFavEstado
+            // 
+            cmbNuevoFavEstado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbNuevoFavEstado.Location = new Point(69, 29);
+            cmbNuevoFavEstado.Margin = new Padding(3, 4, 3, 4);
+            cmbNuevoFavEstado.Name = "cmbNuevoFavEstado";
+            cmbNuevoFavEstado.Size = new Size(182, 28);
+            cmbNuevoFavEstado.TabIndex = 1;
+            // 
+            // lblNuevoFavMun
+            // 
+            lblNuevoFavMun.AutoSize = true;
+            lblNuevoFavMun.Location = new Point(267, 35);
+            lblNuevoFavMun.Name = "lblNuevoFavMun";
+            lblNuevoFavMun.Size = new Size(78, 20);
+            lblNuevoFavMun.TabIndex = 2;
+            lblNuevoFavMun.Text = "Municipio:";
+            // 
+            // cmbNuevoFavMun
+            // 
+            cmbNuevoFavMun.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbNuevoFavMun.Enabled = false;
+            cmbNuevoFavMun.Location = new Point(341, 29);
+            cmbNuevoFavMun.Margin = new Padding(3, 4, 3, 4);
+            cmbNuevoFavMun.Name = "cmbNuevoFavMun";
+            cmbNuevoFavMun.Size = new Size(205, 28);
+            cmbNuevoFavMun.TabIndex = 3;
+            // 
+            // btnAgregarFav
+            // 
+            btnAgregarFav.Location = new Point(562, 28);
+            btnAgregarFav.Margin = new Padding(3, 4, 3, 4);
+            btnAgregarFav.Name = "btnAgregarFav";
+            btnAgregarFav.Size = new Size(114, 35);
+            btnAgregarFav.TabIndex = 4;
+            btnAgregarFav.Text = "Agregar";
+            btnAgregarFav.UseVisualStyleBackColor = true;
+            // 
+            // btnEliminarFav
+            // 
+            btnEliminarFav.Location = new Point(9, 635);
+            btnEliminarFav.Margin = new Padding(3, 4, 3, 4);
+            btnEliminarFav.Name = "btnEliminarFav";
+            btnEliminarFav.Size = new Size(137, 35);
+            btnEliminarFav.TabIndex = 2;
+            btnEliminarFav.Text = "Eliminar seleccionado";
+            btnEliminarFav.UseVisualStyleBackColor = true;
+            // 
+            // tabConfig
+            // 
+            tabConfig.Controls.Add(grpConexion);
+            tabConfig.Controls.Add(grpArchivos);
+            tabConfig.Controls.Add(grpPreferencias);
+            tabConfig.Controls.Add(btnGuardarConfig);
+            tabConfig.Location = new Point(4, 29);
+            tabConfig.Margin = new Padding(3, 4, 3, 4);
+            tabConfig.Name = "tabConfig";
+            tabConfig.Padding = new Padding(9, 11, 9, 11);
+            tabConfig.Size = new Size(1021, 834);
+            tabConfig.TabIndex = 3;
+            tabConfig.Text = "Configuración";
+            // 
+            // grpConexion
+            // 
+            grpConexion.Controls.Add(lblCadenaConexion);
+            grpConexion.Controls.Add(txtCadenaConexion);
+            grpConexion.Controls.Add(btnProbarConexion);
+            grpConexion.Controls.Add(lblEstadoConexion);
+            grpConexion.Location = new Point(9, 11);
+            grpConexion.Margin = new Padding(3, 4, 3, 4);
+            grpConexion.Name = "grpConexion";
+            grpConexion.Padding = new Padding(3, 4, 3, 4);
+            grpConexion.Size = new Size(1001, 107);
+            grpConexion.TabIndex = 0;
+            grpConexion.TabStop = false;
+            grpConexion.Text = "Base de datos — SQL Server / MariaDB";
+            // 
+            // lblCadenaConexion
+            // 
+            lblCadenaConexion.AutoSize = true;
+            lblCadenaConexion.Location = new Point(11, 32);
+            lblCadenaConexion.Name = "lblCadenaConexion";
+            lblCadenaConexion.Size = new Size(147, 20);
+            lblCadenaConexion.TabIndex = 0;
+            lblCadenaConexion.Text = "Cadena de conexión:";
+            // 
+            // txtCadenaConexion
+            // 
+            txtCadenaConexion.Location = new Point(11, 56);
+            txtCadenaConexion.Margin = new Padding(3, 4, 3, 4);
+            txtCadenaConexion.Name = "txtCadenaConexion";
+            txtCadenaConexion.Size = new Size(731, 27);
+            txtCadenaConexion.TabIndex = 1;
+            // 
+            // btnProbarConexion
+            // 
+            btnProbarConexion.Location = new Point(754, 55);
+            btnProbarConexion.Margin = new Padding(3, 4, 3, 4);
+            btnProbarConexion.Name = "btnProbarConexion";
+            btnProbarConexion.Size = new Size(126, 35);
+            btnProbarConexion.TabIndex = 2;
+            btnProbarConexion.Text = "Probar conexión";
+            btnProbarConexion.UseVisualStyleBackColor = true;
+            // 
+            // lblEstadoConexion
+            // 
+            lblEstadoConexion.AutoSize = true;
+            lblEstadoConexion.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            lblEstadoConexion.ForeColor = Color.Gray;
+            lblEstadoConexion.Location = new Point(891, 61);
+            lblEstadoConexion.Name = "lblEstadoConexion";
+            lblEstadoConexion.Size = new Size(23, 19);
+            lblEstadoConexion.TabIndex = 3;
+            lblEstadoConexion.Text = "—";
+            // 
+            // grpArchivos
+            // 
+            grpArchivos.Controls.Add(lblRutaCSV);
+            grpArchivos.Controls.Add(txtRutaCSV);
+            grpArchivos.Controls.Add(btnExplorarCSV);
+            grpArchivos.Controls.Add(lblRutaJSON);
+            grpArchivos.Controls.Add(txtRutaJSON);
+            grpArchivos.Controls.Add(btnExplorarJSON);
+            grpArchivos.Location = new Point(9, 133);
+            grpArchivos.Margin = new Padding(3, 4, 3, 4);
+            grpArchivos.Name = "grpArchivos";
+            grpArchivos.Padding = new Padding(3, 4, 3, 4);
+            grpArchivos.Size = new Size(1001, 133);
+            grpArchivos.TabIndex = 1;
+            grpArchivos.TabStop = false;
+            grpArchivos.Text = "Archivos de datos";
+            // 
+            // lblRutaCSV
+            // 
+            lblRutaCSV.AutoSize = true;
+            lblRutaCSV.Location = new Point(11, 32);
+            lblRutaCSV.Name = "lblRutaCSV";
+            lblRutaCSV.Size = new Size(72, 20);
+            lblRutaCSV.TabIndex = 0;
+            lblRutaCSV.Text = "Ruta CSV:";
+            // 
+            // txtRutaCSV
+            // 
+            txtRutaCSV.Location = new Point(11, 53);
+            txtRutaCSV.Margin = new Padding(3, 4, 3, 4);
+            txtRutaCSV.Name = "txtRutaCSV";
+            txtRutaCSV.Size = new Size(845, 27);
+            txtRutaCSV.TabIndex = 1;
+            txtRutaCSV.Text = "Data\\data.csv";
+            // 
+            // btnExplorarCSV
+            // 
+            btnExplorarCSV.Location = new Point(866, 52);
+            btnExplorarCSV.Margin = new Padding(3, 4, 3, 4);
+            btnExplorarCSV.Name = "btnExplorarCSV";
+            btnExplorarCSV.Size = new Size(114, 35);
+            btnExplorarCSV.TabIndex = 2;
+            btnExplorarCSV.Text = "Explorar...";
+            btnExplorarCSV.UseVisualStyleBackColor = true;
+            // 
+            // lblRutaJSON
+            // 
+            lblRutaJSON.AutoSize = true;
+            lblRutaJSON.Location = new Point(11, 93);
+            lblRutaJSON.Name = "lblRutaJSON";
+            lblRutaJSON.Size = new Size(81, 20);
+            lblRutaJSON.TabIndex = 3;
+            lblRutaJSON.Text = "Ruta JSON:";
+            // 
+            // txtRutaJSON
+            // 
+            txtRutaJSON.Location = new Point(11, 91);
+            txtRutaJSON.Margin = new Padding(3, 4, 3, 4);
+            txtRutaJSON.Name = "txtRutaJSON";
+            txtRutaJSON.Size = new Size(845, 27);
+            txtRutaJSON.TabIndex = 4;
+            txtRutaJSON.Text = "Data\\municipios_mx.json";
+            // 
+            // btnExplorarJSON
+            // 
+            btnExplorarJSON.Location = new Point(866, 89);
+            btnExplorarJSON.Margin = new Padding(3, 4, 3, 4);
+            btnExplorarJSON.Name = "btnExplorarJSON";
+            btnExplorarJSON.Size = new Size(114, 35);
+            btnExplorarJSON.TabIndex = 5;
+            btnExplorarJSON.Text = "Explorar...";
+            btnExplorarJSON.UseVisualStyleBackColor = true;
+            // 
+            // grpPreferencias
+            // 
+            grpPreferencias.Controls.Add(lblUmbral);
+            grpPreferencias.Controls.Add(nudUmbral);
+            grpPreferencias.Controls.Add(lblUmbralSufijo);
+            grpPreferencias.Controls.Add(lblUnidades);
+            grpPreferencias.Controls.Add(rbCelsius);
+            grpPreferencias.Controls.Add(rbFahrenheit);
+            grpPreferencias.Location = new Point(9, 283);
+            grpPreferencias.Margin = new Padding(3, 4, 3, 4);
+            grpPreferencias.Name = "grpPreferencias";
+            grpPreferencias.Padding = new Padding(3, 4, 3, 4);
+            grpPreferencias.Size = new Size(1001, 107);
+            grpPreferencias.TabIndex = 2;
+            grpPreferencias.TabStop = false;
+            grpPreferencias.Text = "Preferencias";
+            // 
+            // lblUmbral
+            // 
+            lblUmbral.AutoSize = true;
+            lblUmbral.Location = new Point(11, 43);
+            lblUmbral.Name = "lblUmbral";
+            lblUmbral.Size = new Size(124, 20);
+            lblUmbral.TabIndex = 0;
+            lblUmbral.Text = "Umbral de alerta:";
+            // 
+            // nudUmbral
+            // 
+            nudUmbral.DecimalPlaces = 1;
+            nudUmbral.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            nudUmbral.Location = new Point(139, 37);
+            nudUmbral.Margin = new Padding(3, 4, 3, 4);
+            nudUmbral.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            nudUmbral.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudUmbral.Name = "nudUmbral";
+            nudUmbral.Size = new Size(69, 27);
+            nudUmbral.TabIndex = 1;
+            nudUmbral.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // lblUmbralSufijo
+            // 
+            lblUmbralSufijo.AutoSize = true;
+            lblUmbralSufijo.Location = new Point(215, 43);
+            lblUmbralSufijo.Name = "lblUmbralSufijo";
+            lblUmbralSufijo.Size = new Size(24, 20);
+            lblUmbralSufijo.TabIndex = 2;
+            lblUmbralSufijo.Text = "°C";
+            // 
+            // lblUnidades
+            // 
+            lblUnidades.AutoSize = true;
+            lblUnidades.Location = new Point(320, 43);
+            lblUnidades.Name = "lblUnidades";
+            lblUnidades.Size = new Size(74, 20);
+            lblUnidades.TabIndex = 3;
+            lblUnidades.Text = "Unidades:";
+            // 
+            // rbCelsius
+            // 
+            rbCelsius.AutoSize = true;
+            rbCelsius.Checked = true;
+            rbCelsius.Location = new Point(400, 40);
+            rbCelsius.Margin = new Padding(3, 4, 3, 4);
+            rbCelsius.Name = "rbCelsius";
+            rbCelsius.Size = new Size(75, 24);
+            rbCelsius.TabIndex = 4;
+            rbCelsius.TabStop = true;
+            rbCelsius.Text = "Celsius";
+            // 
+            // rbFahrenheit
+            // 
+            rbFahrenheit.AutoSize = true;
+            rbFahrenheit.Location = new Point(482, 40);
+            rbFahrenheit.Margin = new Padding(3, 4, 3, 4);
+            rbFahrenheit.Name = "rbFahrenheit";
+            rbFahrenheit.Size = new Size(98, 24);
+            rbFahrenheit.TabIndex = 5;
+            rbFahrenheit.Text = "Fahrenheit";
+            // 
+            // btnGuardarConfig
+            // 
+            btnGuardarConfig.Location = new Point(9, 405);
+            btnGuardarConfig.Margin = new Padding(3, 4, 3, 4);
+            btnGuardarConfig.Name = "btnGuardarConfig";
+            btnGuardarConfig.Size = new Size(149, 37);
+            btnGuardarConfig.TabIndex = 3;
+            btnGuardarConfig.Text = "Guardar configuración";
+            btnGuardarConfig.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip
+            // 
+            statusStrip.ImageScalingSize = new Size(20, 20);
+            statusStrip.Items.AddRange(new ToolStripItem[] { tssSQLite, tssSQLServer, tssAPI, tssRegistros });
+            statusStrip.Location = new Point(0, 867);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Padding = new Padding(1, 0, 16, 0);
+            statusStrip.Size = new Size(1029, 26);
+            statusStrip.TabIndex = 1;
+            // 
+            // tssSQLite
+            // 
+            tssSQLite.Name = "tssSQLite";
+            tssSQLite.Size = new Size(74, 20);
+            tssSQLite.Text = "SQLite: —";
+            // 
+            // tssSQLServer
+            // 
+            tssSQLServer.Name = "tssSQLServer";
+            tssSQLServer.Size = new Size(102, 20);
+            tssSQLServer.Text = "SQL Server: —";
+            // 
+            // tssAPI
+            // 
+            tssAPI.Name = "tssAPI";
+            tssAPI.Size = new Size(116, 20);
+            tssAPI.Text = "Open-Meteo: —";
+            // 
+            // tssRegistros
+            // 
+            tssRegistros.Name = "tssRegistros";
+            tssRegistros.Size = new Size(720, 20);
+            tssRegistros.Spring = true;
+            tssRegistros.Text = "Registros cargados: —";
+            tssRegistros.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1029, 893);
+            Controls.Add(tabControl);
+            Controls.Add(statusStrip);
+            Font = new Font("Segoe UI", 9F);
+            Margin = new Padding(3, 4, 3, 4);
+            MinimumSize = new Size(1044, 930);
+            Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Sistema de Inteligencia Climática — México";
+            Load += Form1_Load;
+            tabControl.ResumeLayout(false);
+            tabConsulta.ResumeLayout(false);
+            grpBusqueda.ResumeLayout(false);
+            grpBusqueda.PerformLayout();
+            grpDatosActuales.ResumeLayout(false);
+            grpDatosActuales.PerformLayout();
+            grpHistorico.ResumeLayout(false);
+            grpHistorico.PerformLayout();
+            grpAnomalia.ResumeLayout(false);
+            grpAnomalia.PerformLayout();
+            tabAnalisis.ResumeLayout(false);
+            grpFiltrosGlobal.ResumeLayout(false);
+            grpFiltrosGlobal.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvHistorico).EndInit();
+            grpRanking.ResumeLayout(false);
+            grpRanking.PerformLayout();
+            tabFavoritos.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvFavoritos).EndInit();
+            grpAgregarFav.ResumeLayout(false);
+            grpAgregarFav.PerformLayout();
+            tabConfig.ResumeLayout(false);
+            grpConexion.ResumeLayout(false);
+            grpConexion.PerformLayout();
+            grpArchivos.ResumeLayout(false);
+            grpArchivos.PerformLayout();
+            grpPreferencias.ResumeLayout(false);
+            grpPreferencias.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudUmbral).EndInit();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

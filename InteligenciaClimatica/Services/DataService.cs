@@ -43,11 +43,12 @@ namespace InteligenciaClimatica.Services
 
                 try
                 {
+                    // Se extrae la fecha primero para poder calcular la estación
+                    var periodo = DateOnly.ParseExact(cols[0].Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
                     var registro = new RegistroClimatico
                     {
-                        // PERIOD  → "1985-01-01"
-                        Periodo = DateOnly.ParseExact(cols[0].Trim(), "yyyy-MM-dd",
-                                              CultureInfo.InvariantCulture),
+                        Periodo = periodo,
                         EstadoId = int.Parse(cols[1].Trim()),
                         Estado = cols[2].Trim(),
                         MinC = double.Parse(cols[3].Trim(), CultureInfo.InvariantCulture),
@@ -57,7 +58,10 @@ namespace InteligenciaClimatica.Services
                         MinF = double.Parse(cols[7].Trim(), CultureInfo.InvariantCulture),
                         PromedioF = double.Parse(cols[8].Trim(), CultureInfo.InvariantCulture),
                         MaxF = double.Parse(cols[9].Trim(), CultureInfo.InvariantCulture),
-                        PrecipitacionIN = double.Parse(cols[10].Trim(), CultureInfo.InvariantCulture)
+                        PrecipitacionIN = double.Parse(cols[10].Trim(), CultureInfo.InvariantCulture),
+
+                        // Aquí se asigna la estación dinámicamente
+                        Estacion = DeterminarEstacion(periodo.Month)
                     };
 
                     RegistrosHistoricos.Add(registro);
@@ -82,13 +86,27 @@ namespace InteligenciaClimatica.Services
             var lista = JsonSerializer.Deserialize<List<Municipio>>(json)
                         ?? throw new InvalidDataException("El JSON no contiene una lista válida.");
 
-            // Clave = nombre del municipio en minúsculas para búsqueda sin distinción de mayúsculas
-            Municipios = lista.ToDictionary(
-                m => m.Nombre.ToLowerInvariant(),
-                m => m
-            );
+            Municipios = new Dictionary<string, Municipio>();
+
+            foreach (var m in lista)
+            {
+                // Creamos una llave única combinando municipio y estado
+                string llaveUnica = $"{m.Nombre.ToLowerInvariant()}|{m.Estado.ToLowerInvariant()}";
+
+                // TryAdd evita que el programa colapse si hay datos duplicados en el JSON
+                Municipios.TryAdd(llaveUnica, m);
+            }
 
             Console.WriteLine($"[JSON] {Municipios.Count} municipios cargados.");
+        }
+
+        // ── Helpers de consulta ──────────────────────────────────────────────
+
+        /// Busca un municipio por nombre y estado (llave única).
+        public Municipio? BuscarMunicipio(string nombre, string estado)
+        {
+            string llaveUnica = $"{nombre.ToLowerInvariant()}|{estado.ToLowerInvariant()}";
+            return Municipios.TryGetValue(llaveUnica, out var m) ? m : null;
         }
 
         // ── Helpers de consulta ──────────────────────────────────────────────
@@ -118,5 +136,20 @@ namespace InteligenciaClimatica.Services
                 .Select(r => r.PromedioC)
                 .DefaultIfEmpty(0)
                 .Average();
+
+        // ── Lógica interna para estaciones ──────────────────────────────────
+
+        /// Determina la estación del año basándose en el mes
+        private string DeterminarEstacion(int mes)
+        {
+            return mes switch
+            {
+                12 or 1 or 2 => "Invierno",
+                >= 3 and <= 5 => "Primavera",
+                >= 6 and <= 8 => "Verano",
+                >= 9 and <= 11 => "Otoño",
+                _ => "Desconocida"
+            };
+        }
     }
 }
