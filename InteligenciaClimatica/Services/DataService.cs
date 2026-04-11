@@ -100,13 +100,52 @@ namespace InteligenciaClimatica.Services
             Console.WriteLine($"[JSON] {Municipios.Count} municipios cargados.");
         }
 
-        // ── Helpers de consulta ──────────────────────────────────────────────
-
         /// Busca un municipio por nombre y estado (llave única).
         public Municipio? BuscarMunicipio(string nombre, string estado)
         {
-            string llaveUnica = $"{nombre.ToLowerInvariant()}|{estado.ToLowerInvariant()}";
-            return Municipios.TryGetValue(llaveUnica, out var m) ? m : null;
+            return Municipios.Values
+                .FirstOrDefault(m =>
+                    NormalizarTexto(m.Nombre).Equals(NormalizarTexto(nombre),
+                        StringComparison.OrdinalIgnoreCase) &&
+                    NormalizarTexto(m.Estado).Equals(NormalizarTexto(estado),
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// Devuelve la lista de estados únicos tal como están en el CSV
+        public List<string> ObtenerEstados() =>
+            RegistrosHistoricos
+                .Select(r => r.Estado)
+                .Distinct()
+                .OrderBy(e => e)
+                .ToList();
+
+        /// Devuelve los municipios que pertenecen a un estado (desde el JSON)
+        public List<string> ObtenerMunicipiosPorEstado(string estado) =>
+            Municipios.Values
+                .Where(m => NormalizarTexto(m.Estado).Equals(NormalizarTexto(estado),
+                            StringComparison.OrdinalIgnoreCase))
+                .Select(m => m.Nombre)
+                .OrderBy(n => n)
+                .ToList();
+
+        /// Filtra el histórico por estado, año y estación
+        public List<RegistroClimatico> FiltrarHistorico(string estado, int anio, string estacion) =>
+            RegistrosHistoricos
+                .Where(r => NormalizarTexto(r.Estado).Equals(NormalizarTexto(estado),
+                                StringComparison.OrdinalIgnoreCase)
+                         && r.Periodo.Year == anio
+                         && r.Estacion.Equals(estacion, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+        /// Normaliza texto eliminando acentos para comparaciones robustas
+        private static string NormalizarTexto(string texto)
+        {
+            var normalizado = texto.Normalize(System.Text.NormalizationForm.FormD);
+            return new string(normalizado
+                .Where(c => System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c)
+                            != System.Globalization.UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .ToUpperInvariant();
         }
 
         // ── Helpers de consulta ──────────────────────────────────────────────

@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using InteligenciaClimatica.Models;
 
 namespace InteligenciaClimatica.Services
@@ -9,33 +7,43 @@ namespace InteligenciaClimatica.Services
     {
         private readonly HttpClient _httpClient;
 
+        private const string UrlBase =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude={0}&longitude={1}" +
+            "&current=temperature_2m,apparent_temperature,precipitation,windspeed_10m" +
+            "&daily=temperature_2m_max,temperature_2m_min" +
+            "&timezone=auto";
+
         public WeatherApiService()
         {
             _httpClient = new HttpClient();
         }
 
-        public async Task<double> ObtenerTemperaturaActualAsync(double latitud, double longitud)
+        public async Task<OpenMeteoResponse> ObtenerClimaAsync(double latitud, double longitud)
         {
-            // Construimos la URL dinámica con las coordenadas del JSON
-            string url = $"https://api.open-meteo.com/v1/forecast?latitude={latitud}&longitude={longitud}&current_weather=true";
+            string url = string.Format(UrlBase,
+                latitud.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                longitud.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
             try
             {
-                // Hacemos la petición a la Nube
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode(); // Verifica que el servidor respondió 200 OK
+                response.EnsureSuccessStatusCode();
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                // Convertimos el JSON de internet a nuestras clases de C#
-                var datosClima = JsonSerializer.Deserialize<OpenMeteoResponse>(jsonResponse);
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var datos = JsonSerializer.Deserialize<OpenMeteoResponse>(jsonResponse, options);
 
-                // Retornamos solo la temperatura
-                return datosClima?.CurrentWeather.Temperatura ?? 0;
+                return datos ?? new OpenMeteoResponse();
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"Error de conexión con la API: {ex.Message}");
+                throw new Exception($"Sin conexión con Open-Meteo: {ex.Message}");
+            }
+            catch (JsonException ex)
+            {
+                throw new Exception($"Error al leer respuesta de la API: {ex.Message}");
             }
         }
     }
