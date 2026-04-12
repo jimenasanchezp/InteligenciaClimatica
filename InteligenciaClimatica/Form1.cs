@@ -20,6 +20,13 @@ namespace InteligenciaClimatica
         public Form1()
         {
             InitializeComponent();
+
+            // Línea separadora inferior del top bar
+            pnlTopBar.Paint += (s, e) =>
+            {
+                using var pen = new Pen(Color.FromArgb(220, 225, 235));
+                e.Graphics.DrawLine(pen, 0, pnlTopBar.Height - 1, pnlTopBar.Width, pnlTopBar.Height - 1);
+            };
         }
 
         // ══════════════════════════════════════════════════════════════════
