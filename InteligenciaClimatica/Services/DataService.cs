@@ -18,6 +18,15 @@ namespace InteligenciaClimatica.Services
             _jsonPath = jsonPath;
         }
 
+        /// Compara estados tolerando nombres parciales:
+        /// "COAHUILA" coincide con "COAHUILA DE ZARAGOZA", etc.
+        private static bool EstadosCoinciden(string estadoJson, string estadoCsv)
+        {
+            string a = NormalizarTexto(estadoJson);
+            string b = NormalizarTexto(estadoCsv);
+            return a.Equals(b) || a.StartsWith(b) || b.StartsWith(a);
+        }
+
         // ── Carga ambos archivos al iniciar el programa ──────────────────────
         public void CargarDatos()
         {
@@ -109,8 +118,7 @@ namespace InteligenciaClimatica.Services
                 .FirstOrDefault(m =>
                     NormalizarTexto(m.Nombre).Equals(NormalizarTexto(nombre),
                         StringComparison.OrdinalIgnoreCase) &&
-                    NormalizarTexto(m.Estado).Equals(NormalizarTexto(estado),
-                        StringComparison.OrdinalIgnoreCase));
+                    EstadosCoinciden(m.Estado, estado));
         }
 
         /// Devuelve la lista de estados únicos tal como están en el CSV
@@ -123,21 +131,19 @@ namespace InteligenciaClimatica.Services
 
         /// Devuelve los municipios que pertenecen a un estado (desde el JSON)
         public List<string> ObtenerMunicipiosPorEstado(string estado) =>
-            Municipios.Values
-                .Where(m => NormalizarTexto(m.Estado).Equals(NormalizarTexto(estado),
-                            StringComparison.OrdinalIgnoreCase))
-                .Select(m => m.Nombre)
-                .OrderBy(n => n)
-                .ToList();
+    Municipios.Values
+        .Where(m => EstadosCoinciden(m.Estado, estado))
+        .Select(m => m.Nombre)
+        .OrderBy(n => n)
+        .ToList();
 
         /// Filtra el histórico por estado, año y estación
         public List<RegistroClimatico> FiltrarHistorico(string estado, int anio, string estacion) =>
-            RegistrosHistoricos
-                .Where(r => NormalizarTexto(r.Estado).Equals(NormalizarTexto(estado),
-                                StringComparison.OrdinalIgnoreCase)
-                         && r.Periodo.Year == anio
-                         && r.Estacion.Equals(estacion, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+     RegistrosHistoricos
+         .Where(r => EstadosCoinciden(r.Estado, estado)
+                  && r.Periodo.Year == anio
+                  && r.Estacion.Equals(estacion, StringComparison.OrdinalIgnoreCase))
+         .ToList();
 
         /// Normaliza texto eliminando acentos para comparaciones robustas
         private static string NormalizarTexto(string texto)
@@ -151,10 +157,6 @@ namespace InteligenciaClimatica.Services
         }
 
         // ── Helpers de consulta ──────────────────────────────────────────────
-
-        /// Busca un municipio por nombre (sin distinción de mayúsculas/minúsculas).
-        public Municipio? BuscarMunicipio(string nombre) =>
-            Municipios.TryGetValue(nombre.ToLowerInvariant(), out var m) ? m : null;
 
         /// Filtra el histórico por estado y año.
         public List<RegistroClimatico> FiltrarPorEstadoYAnio(string estado, int anio) =>

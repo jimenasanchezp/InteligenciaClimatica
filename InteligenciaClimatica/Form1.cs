@@ -13,12 +13,19 @@ namespace InteligenciaClimatica
     {
         private DataService _dataService;
         private WeatherApiService _weatherService;
+
+        // Rastrea el botón de navegación activo
+        private Button _activeNavBtn;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        // ── Evento Load: Ocurre al abrir el programa ───────────────────────
+        // ══════════════════════════════════════════════════════════════════
+        // CARGA INICIAL
+        // ══════════════════════════════════════════════════════════════════
+
         private void Form1_Load(object sender, EventArgs e)
         {
             string csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "data.csv");
@@ -40,10 +47,14 @@ namespace InteligenciaClimatica
             {
                 _dataService.CargarDatos();
 
-                // Estados desde el CSV (con acentos y formato correcto)
+                // Poblar estados desde el CSV
                 var estados = _dataService.ObtenerEstados();
                 cmbEstado.Items.Clear();
                 cmbEstado.Items.AddRange(estados.ToArray<object>());
+
+                // También poblar el combo de favoritos
+                cmbNuevoFavEstado.Items.Clear();
+                cmbNuevoFavEstado.Items.AddRange(estados.ToArray<object>());
 
                 // Años desde el CSV
                 var anios = _dataService.RegistrosHistoricos
@@ -52,14 +63,24 @@ namespace InteligenciaClimatica
                     .OrderByDescending(a => a)
                     .Select(a => a.ToString())
                     .ToArray();
+
                 cmbAnio.Items.AddRange(anios);
+                cmbFiltroAnio.Items.Add("Todos");
+                cmbFiltroAnio.Items.AddRange(anios);
+
                 if (anios.Length > 0) cmbAnio.SelectedIndex = 0;
-
                 cmbEstacion.SelectedIndex = 0;
+                cmbFiltroAnio.SelectedIndex = 0;
+                cmbFiltroEstacion.SelectedIndex = 0;
 
-                tssRegistros.Text = $"Registros cargados: {_dataService.RegistrosHistoricos.Count}";
-                tssSQLite.Text = "SQLite: pendiente";
-                tssAPI.Text = "Open-Meteo: en línea";
+                // Estado inicial de la barra lateral
+                _activeNavBtn = btnNavConsulta;
+                AplicarEstadoActivo(btnNavConsulta);
+
+                // Status strip + barra lateral
+                ActualizarEstadoAPI("Open-Meteo: en línea");
+                ActualizarEstadoSQLite("SQLite: pendiente");
+                ActualizarRegistros(_dataService.RegistrosHistoricos.Count);
             }
             catch (Exception ex)
             {
@@ -68,54 +89,138 @@ namespace InteligenciaClimatica
             }
         }
 
-        // ── Cuando el usuario selecciona un Municipio ──────────────────────
-        private void cmbMunicipio_SelectedIndexChanged_1(object sender, EventArgs e)
+        // ══════════════════════════════════════════════════════════════════
+        // NAVEGACIÓN LATERAL
+        // ══════════════════════════════════════════════════════════════════
+
+        private void btnNavConsulta_Click(object sender, EventArgs e)
+            => NavHacia(btnNavConsulta, tabConsulta,
+                "Consulta climática",
+                "Compara temperatura actual vs. promedio histórico por municipio");
+
+        private void btnNavAnalisis_Click(object sender, EventArgs e)
+            => NavHacia(btnNavAnalisis, tabAnalisis,
+                "Análisis global",
+                "Explora el histórico completo con filtros de año y estación");
+
+        private void btnNavFavoritos_Click(object sender, EventArgs e)
+            => NavHacia(btnNavFavoritos, tabFavoritos,
+                "Municipios favoritos",
+                "Accede rápidamente a tus ubicaciones guardadas");
+
+        private void btnNavConfig_Click(object sender, EventArgs e)
+            => NavHacia(btnNavConfig, tabConfig,
+                "Configuración",
+                "Base de datos, archivos de datos y preferencias del sistema");
+
+        /// Cambia la pestaña activa y actualiza el estado visual del sidebar.
+        private void NavHacia(Button btnDestino, TabPage tabDestino,
+                              string titulo, string descripcion)
         {
-            if (cmbMunicipio.SelectedItem == null || cmbEstado.SelectedItem == null) return;
+            tabControl.SelectedTab = tabDestino;
 
-            string municipio = cmbMunicipio.SelectedItem.ToString()!;
-            string estado = cmbEstado.SelectedItem.ToString()!;
+            // Desactivar botón anterior
+            if (_activeNavBtn != null)
+                AplicarEstadoInactivo(_activeNavBtn);
 
-            var mun = _dataService.BuscarMunicipio(municipio, estado);
-            if (mun != null)
-            {
-                lblMunicipioVal.Text = mun.Nombre;
-                lblEstadoActVal.Text = mun.Estado;
-                lblCoordsVal.Text = $"Lat: {mun.Latitud} · Lon: {mun.Longitud}";
-            }
+            // Activar nuevo botón
+            AplicarEstadoActivo(btnDestino);
+            _activeNavBtn = btnDestino;
+
+            // Actualizar topbar
+            lblTopBarTitle.Text = titulo;
+            lblTopBarCrumb.Text = descripcion;
         }
-        // ── Cuando el usuario selecciona un Estado ──────────────────────
+
+        private static void AplicarEstadoActivo(Button btn)
+        {
+            btn.BackColor = Color.FromArgb(20, 55, 100);
+            btn.ForeColor = Color.FromArgb(133, 183, 235);
+        }
+
+        private static void AplicarEstadoInactivo(Button btn)
+        {
+            btn.BackColor = Color.FromArgb(15, 27, 45);
+            btn.ForeColor = Color.FromArgb(140, 160, 185);
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // HELPERS DE ESTADO (StatusStrip + sidebar sincronizados)
+        // ══════════════════════════════════════════════════════════════════
+
+        private void ActualizarEstadoAPI(string texto)
+        {
+            tssAPI.Text = texto;
+            bool activo = texto.Contains("línea") || texto.Contains("conectado");
+            lblSidebarStatusAPI.Text = $"● {texto}";
+            lblSidebarStatusAPI.ForeColor = activo
+                ? Color.FromArgb(99, 153, 34)
+                : Color.FromArgb(163, 45, 45);
+        }
+
+        private void ActualizarEstadoSQLite(string texto)
+        {
+            tssSQLite.Text = texto;
+            lblSidebarStatusSQLite.Text = $"● {texto}";
+            lblSidebarStatusSQLite.ForeColor = texto.Contains("OK") || texto.Contains("activo")
+                ? Color.FromArgb(99, 153, 34)
+                : Color.FromArgb(186, 117, 23);
+        }
+
+        private void ActualizarRegistros(int cantidad)
+        {
+            tssRegistros.Text = $"Registros cargados: {cantidad:N0}";
+            lblSidebarStatusRegs.Text = $"{cantidad:N0} registros cargados";
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // EVENTOS DE COMBOS
+        // ══════════════════════════════════════════════════════════════════
 
         private void cmbEstado_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (cmbEstado.SelectedItem == null) return;
 
             string estado = cmbEstado.SelectedItem.ToString()!;
-
             var municipios = _dataService.ObtenerMunicipiosPorEstado(estado);
 
             cmbMunicipio.Items.Clear();
             cmbMunicipio.Items.AddRange(municipios.ToArray<object>());
             cmbMunicipio.Enabled = municipios.Count > 0;
             btnConsultar.Enabled = municipios.Count > 0;
-            //lblHintMunicipio.Visible = municipios.Count == 0;
 
             if (municipios.Count > 0)
                 cmbMunicipio.SelectedIndex = 0;
 
-            // Limpiar resultados anteriores
             LimpiarResultados();
         }
 
+        private void cmbMunicipio_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (cmbMunicipio.SelectedItem == null || cmbEstado.SelectedItem == null) return;
 
-        // ── Cuando el usuario hace clic en "Consultar" ───────────────────── 
+            string municipio = cmbMunicipio.SelectedItem.ToString()!;
+            string estado = cmbEstado.SelectedItem.ToString()!;
+            var mun = _dataService.BuscarMunicipio(municipio, estado);
+
+            if (mun != null)
+            {
+                lblMunicipioVal.Text = mun.Nombre;
+                lblEstadoActVal.Text = mun.Estado;
+                lblCoordsVal.Text = $"Lat: {mun.Latitud:F4} · Lon: {mun.Longitud:F4}";
+            }
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // CONSULTA PRINCIPAL
+        // ══════════════════════════════════════════════════════════════════
 
         private async void btnConsultar_Click_1(object sender, EventArgs e)
         {
             if (cmbEstado.SelectedItem == null ||
-               cmbMunicipio.SelectedItem == null ||
-               cmbAnio.SelectedItem == null ||
-               cmbEstacion.SelectedItem == null) return;
+                cmbMunicipio.SelectedItem == null ||
+                cmbAnio.SelectedItem == null ||
+                cmbEstacion.SelectedItem == null) return;
 
             string estado = cmbEstado.SelectedItem.ToString()!;
             string municipio = cmbMunicipio.SelectedItem.ToString()!;
@@ -125,7 +230,7 @@ namespace InteligenciaClimatica
             btnConsultar.Enabled = false;
             btnConsultar.Text = "Consultando...";
 
-            // ── 1. Datos históricos del CSV ──────────────────────────────────
+            // ── 1. Datos históricos del CSV ──────────────────────────────
             var registros = _dataService.FiltrarHistorico(estado, anio, estacion);
 
             if (registros.Any())
@@ -149,7 +254,7 @@ namespace InteligenciaClimatica
                 lblRegistrosVal.Text = "Sin registros para este filtro.";
             }
 
-            // ── 2. Temperatura actual desde la API ───────────────────────────
+            // ── 2. Temperatura actual desde la API ───────────────────────
             var mun = _dataService.BuscarMunicipio(municipio, estado);
             if (mun != null)
             {
@@ -161,9 +266,10 @@ namespace InteligenciaClimatica
                     lblTempActualVal.Text = $"{clima.Temperatura:F1}°C";
                     lblMinActVal.Text = $"{clima.TemperaturaAparente:F1}°C";
                     lblMaxActVal.Text = $"{clima.VelocidadViento:F1} km/h";
-                    tssAPI.Text = "Open-Meteo: conectado ✓";
 
-                    // ── 3. Calcular anomalía ─────────────────────────────────
+                    ActualizarEstadoAPI("Open-Meteo: conectado ✓");
+
+                    // ── 3. Calcular anomalía ─────────────────────────────
                     if (registros.Any())
                     {
                         double promedio = registros.Average(r => r.PromedioC);
@@ -172,33 +278,37 @@ namespace InteligenciaClimatica
 
                         lblDesviacionVal.Text = $"{(desviacion >= 0 ? "+" : "")}{desviacion:F1}°C";
 
-                        // Semáforo
-                        pnlSemaforoVerde.BackColor = Color.LightGray;
-                        pnlSemaforoAmarillo.BackColor = Color.LightGray;
-                        pnlSemaforoRojo.BackColor = Color.LightGray;
+                        // Resetear semáforo
+                        var colorApagado = Color.FromArgb(210, 220, 215);
+                        pnlSemaforoVerde.BackColor = colorApagado;
+                        pnlSemaforoAmarillo.BackColor = colorApagado;
+                        pnlSemaforoRojo.BackColor = colorApagado;
 
                         if (Math.Abs(desviacion) < umbral / 2)
                         {
-                            pnlSemaforoVerde.BackColor = Color.Green;
+                            pnlSemaforoVerde.BackColor = Color.FromArgb(99, 153, 34);
                             lblSemaforoTexto.Text = "Normal";
-                            lblDescAnomalia.Text = "Dentro del rango esperado";
-                            lblDescAnomalia.ForeColor = Color.Green;
+                            lblSemaforoTexto.ForeColor = Color.FromArgb(59, 109, 17);
+                            lblDescAnomalia.Text = "Dentro del rango esperado para la estación";
+                            lblDescAnomalia.ForeColor = Color.FromArgb(59, 109, 17);
                             btnGuardarAlerta.Enabled = false;
                         }
                         else if (Math.Abs(desviacion) < umbral)
                         {
-                            pnlSemaforoAmarillo.BackColor = Color.Orange;
+                            pnlSemaforoAmarillo.BackColor = Color.FromArgb(186, 117, 23);
                             lblSemaforoTexto.Text = "Moderada";
-                            lblDescAnomalia.Text = "Desviación significativa";
-                            lblDescAnomalia.ForeColor = Color.DarkOrange;
+                            lblSemaforoTexto.ForeColor = Color.FromArgb(154, 88, 8);
+                            lblDescAnomalia.Text = "Desviación significativa respecto al histórico";
+                            lblDescAnomalia.ForeColor = Color.FromArgb(154, 88, 8);
                             btnGuardarAlerta.Enabled = false;
                         }
                         else
                         {
-                            pnlSemaforoRojo.BackColor = Color.Red;
-                            lblSemaforoTexto.Text = $"Crítica — supera ±{umbral}°C";
-                            lblDescAnomalia.Text = "Anomalía detectada";
-                            lblDescAnomalia.ForeColor = Color.Firebrick;
+                            pnlSemaforoRojo.BackColor = Color.FromArgb(163, 45, 45);
+                            lblSemaforoTexto.Text = $"Crítica  ±{umbral}°C";
+                            lblSemaforoTexto.ForeColor = Color.FromArgb(130, 30, 30);
+                            lblDescAnomalia.Text = "Anomalía detectada — supera el umbral definido";
+                            lblDescAnomalia.ForeColor = Color.FromArgb(130, 30, 30);
                             btnGuardarAlerta.Enabled = true;
                         }
                     }
@@ -206,7 +316,7 @@ namespace InteligenciaClimatica
                 catch (Exception ex)
                 {
                     lblTempActualVal.Text = "Error";
-                    tssAPI.Text = "Open-Meteo: sin conexión";
+                    ActualizarEstadoAPI("Open-Meteo: sin conexión");
                     MessageBox.Show($"No se pudo obtener el clima actual:\n{ex.Message}",
                         "Error de API", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -216,9 +326,14 @@ namespace InteligenciaClimatica
             btnConsultar.Text = "Consultar";
         }
 
-        // ── Limpiar ─────────────────────────────────────────────────────────
+        // ══════════════════════════════════════════════════════════════════
+        // LIMPIAR RESULTADOS
+        // ══════════════════════════════════════════════════════════════════
+
         private void LimpiarResultados()
         {
+            var apagado = Color.FromArgb(210, 220, 215);
+
             lblTempActualVal.Text = "—";
             lblTempHistVal.Text = "—";
             lblMinActVal.Text = "—";
@@ -229,14 +344,18 @@ namespace InteligenciaClimatica
             lblFiltroVal.Text = "—";
             lblRegistrosVal.Text = "Basado en — registros del CSV";
             lblDesviacionVal.Text = "—";
-            lblDescAnomalia.Text = "—";
+            lblDescAnomalia.Text = "Realiza una consulta para evaluar el riesgo climático.";
+            lblDescAnomalia.ForeColor = Color.FromArgb(140, 155, 175);
             lblSemaforoTexto.Text = "—";
+            lblSemaforoTexto.ForeColor = Color.FromArgb(90, 105, 125);
             lblMunicipioVal.Text = "—";
             lblEstadoActVal.Text = "—";
             lblCoordsVal.Text = "Lat: — · Lon: —";
-            pnlSemaforoVerde.BackColor = Color.LightGray;
-            pnlSemaforoAmarillo.BackColor = Color.LightGray;
-            pnlSemaforoRojo.BackColor = Color.LightGray;
+
+            pnlSemaforoVerde.BackColor = apagado;
+            pnlSemaforoAmarillo.BackColor = apagado;
+            pnlSemaforoRojo.BackColor = apagado;
+
             btnGuardarAlerta.Enabled = false;
         }
     }
