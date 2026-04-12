@@ -83,9 +83,11 @@ namespace InteligenciaClimatica.Services
 
             var json = File.ReadAllText(_jsonPath);
 
-            var lista = JsonSerializer.Deserialize<List<Municipio>>(json)
-                        ?? throw new InvalidDataException("El JSON no contiene una lista válida.");
-
+            var opciones = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var lista = JsonSerializer.Deserialize<List<Municipio>>(json, opciones);
             Municipios = new Dictionary<string, Municipio>();
 
             foreach (var m in lista)

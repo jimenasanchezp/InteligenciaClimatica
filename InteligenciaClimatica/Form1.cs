@@ -98,7 +98,7 @@ namespace InteligenciaClimatica
             cmbMunicipio.Items.AddRange(municipios.ToArray<object>());
             cmbMunicipio.Enabled = municipios.Count > 0;
             btnConsultar.Enabled = municipios.Count > 0;
-            lblHintMunicipio.Visible = municipios.Count == 0;
+            //lblHintMunicipio.Visible = municipios.Count == 0;
 
             if (municipios.Count > 0)
                 cmbMunicipio.SelectedIndex = 0;

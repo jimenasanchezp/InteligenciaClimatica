@@ -15,8 +15,5 @@ namespace InteligenciaClimatica.Models
 
         [JsonPropertyName("Lon")]
         public double Longitud { get; set; }
-
-        public override string ToString() =>
-            $"{Nombre} ({Estado}) — Lat: {Latitud}, Lon: {Longitud}";
     }
 }
