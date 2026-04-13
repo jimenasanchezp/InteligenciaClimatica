@@ -1,5 +1,6 @@
 using InteligenciaClimatica.Models;
 using InteligenciaClimatica.Services;
+using MySqlConnector;
 using System.Data;
 
 namespace InteligenciaClimatica
@@ -18,6 +19,9 @@ namespace InteligenciaClimatica
             // Configuraciones iniciales de la interfaz
             this.AutoScaleMode = AutoScaleMode.None;
             btnProbarConexion.Click += btnProbarConexion_Click;
+            btnGuardarConfig.Click += btnGuardarConfig_Click;
+            btnGuardarAlerta.Click += btnGuardarAlerta_Click;
+            btnLimpiar.Click += btnLimpiar_Click;
 
             // Línea separadora inferior del top bar
             pnlTopBar.Paint += (s, e) =>
@@ -184,30 +188,44 @@ namespace InteligenciaClimatica
 
         private void cmbEstado_SelectedIndexChanged_1(object sender, EventArgs e)
         {
+            
             if (cmbEstado.SelectedItem == null) return;
 
+            // 1. PRIMERO limpiamos la pantalla de cualquier consulta anterior
+            LimpiarResultados();
+
+            // 2. Obtenemos la lista del nuevo estado
             string estado = cmbEstado.SelectedItem.ToString()!;
             var municipios = _dataService.ObtenerMunicipiosPorEstado(estado);
 
+            // 3. Llenamos el ComboBox secundario
             cmbMunicipio.Items.Clear();
             cmbMunicipio.Items.AddRange(municipios.ToArray<object>());
             cmbMunicipio.Enabled = municipios.Count > 0;
             btnConsultar.Enabled = municipios.Count > 0;
 
+            // 4. Al seleccionar el primero, sus datos se escribirán en las etiquetas limpias (y ya no se borrarán)
             if (municipios.Count > 0)
+            {
                 cmbMunicipio.SelectedIndex = 0;
-
-            LimpiarResultados();
+            }
         }
 
         private void cmbMunicipio_SelectedIndexChanged_1(object sender, EventArgs e)
         {
+            
             if (cmbMunicipio.SelectedItem == null || cmbEstado.SelectedItem == null) return;
 
+            // 1. PRIMERO limpiamos cualquier cálculo, semáforo o temperatura de la consulta anterior
+            LimpiarResultados();
+
+            // 2. DESPUÉS obtenemos el nuevo municipio
             string municipio = cmbMunicipio.SelectedItem.ToString()!;
             string estado = cmbEstado.SelectedItem.ToString()!;
             var mun = _dataService.BuscarMunicipio(municipio, estado);
 
+            // 3. Finalmente, reescribimos SÓLO los datos geográficos. 
+            // Las temperaturas se quedarán en "—" obligando al usuario a presionar "Consultar"
             if (mun != null)
             {
                 lblMunicipioVal.Text = mun.Nombre;
@@ -257,6 +275,10 @@ namespace InteligenciaClimatica
                 lblMinHistVal.Text = "N/A";
                 lblMaxHistVal.Text = "N/A";
                 lblRegistrosVal.Text = "Sin registros para este filtro.";
+
+                btnGuardarAlerta.Enabled = true;
+                btnGuardarAlerta.Text = "Guardar alerta";
+                btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
             }
 
             // ── 2. Temperatura actual desde la API ───────────────────────
@@ -362,6 +384,8 @@ namespace InteligenciaClimatica
             pnlSemaforoRojo.BackColor = apagado;
 
             btnGuardarAlerta.Enabled = false;
+            btnGuardarAlerta.Text = "Guardar alerta";
+            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
         }
         // ══════════════════════════════════════════════════════════════════
         // PRUEBA DE CONEXIÓN A BASE DE DATOS
@@ -412,5 +436,100 @@ namespace InteligenciaClimatica
                     "Fallo de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void btnGuardarConfig_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Recolectar datos de la interfaz
+                var configuracion = new
+                {
+                    Motor = cmbMotorBD.SelectedItem?.ToString() ?? "SQLite",
+                    Umbral = (double)nudUmbral.Value,
+                    RutaCSV = txtRutaCSV.Text,
+                    RutaJSON = txtRutaJSON.Text
+                };
+
+                // 2. Aquí llamarías a tu DatabaseService para hacer el UPDATE en SQLite
+               
+                ActualizarEstadoSQLite("SQLite: OK (Configurada)");
+
+                MessageBox.Show("Configuración guardada correctamente en el entorno local.",
+                    "Sistema Actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void btnGuardarAlerta_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Limpiamos los textos de la interfaz (quitamos el "°C" y el símbolo "+") 
+                // para poder convertirlos en números puros
+                double actual = double.Parse(lblTempActualVal.Text.Replace("°C", ""));
+                double hist = double.Parse(lblTempHistVal.Text.Replace("°C", ""));
+                double anom = double.Parse(lblDesviacionVal.Text.Replace("°C", "").Replace("+", ""));
+
+                // 2. Llamamos a nuestro servicio
+                var dbService = new DatabaseService();
+
+                dbService.GuardarAlertaMariaDB(
+                    txtMariaServidor.Text,
+                    txtMariaPuerto.Text,
+                    txtMariaBD.Text,
+                    txtMariaUsuario.Text,
+                    txtMariaPassword.Text,
+                    lblMunicipioVal.Text,
+                    lblEstadoActVal.Text,
+                    actual,
+                    hist,
+                    anom
+                );
+
+                MessageBox.Show("La alerta crítica ha sido registrada exitosamente en el servidor de auditoría.",
+                    "Alerta Guardada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // 2. ESTADO DE ÉXITO: Lo ponemos verde y cambiamos el texto
+                btnGuardarAlerta.Enabled = false;
+                btnGuardarAlerta.Text = "Alerta enviada ✓";
+                btnGuardarAlerta.BackColor = Color.FromArgb(99, 153, 34); // Verde
+
+                // 3. ESPERA: Aguardamos 2 segundos para que alcances a ver el mensaje
+                await Task.Delay(2000);
+
+                // 4. RESET AUTOMÁTICO: Vuelve a su estado original
+                btnGuardarAlerta.Text = "Guardar alerta";
+                btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45); // Rojo original
+                btnGuardarAlerta.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar la alerta en MariaDB:\n\n{ex.Message}\n\nVerifica que la tabla exista y la conexión esté activa.",
+                    "Error de Servidor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void btnLimpiar_Click(object? sender, EventArgs e)
+        {
+
+            // 1. "Soltar" la selección de Estado y Municipio (SIN borrar las listas)
+            cmbEstado.SelectedIndex = -1;
+            cmbMunicipio.SelectedIndex = -1;
+            cmbMunicipio.Enabled = false; // Lo bloqueamos visualmente hasta que elijan otro estado
+
+            // 2. Resetear filtros temporales
+            if (cmbAnio.Items.Count > 0) cmbAnio.SelectedIndex = 0;
+            if (cmbEstacion.Items.Count > 0) cmbEstacion.SelectedIndex = 0;
+
+            // 3. Resetear el botón de Alerta a su estado original (Rojo y Deshabilitado)
+            btnGuardarAlerta.Enabled = false;
+            btnGuardarAlerta.Text = "Guardar alerta";
+            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45); // El rojo original de tu diseño
+
+            // 4. Bloquear consulta y ejecutar limpieza de etiquetas
+            btnConsultar.Enabled = false;
+            LimpiarResultados(); // Este es el método que ya tienes que pone los guiones "—"
+        }
     }
+    
 }

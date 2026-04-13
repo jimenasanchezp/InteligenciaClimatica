@@ -1,4 +1,5 @@
-﻿namespace InteligenciaClimatica
+﻿
+namespace InteligenciaClimatica
 {
     partial class Form1
     {
