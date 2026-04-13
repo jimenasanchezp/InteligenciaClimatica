@@ -23,6 +23,11 @@ namespace InteligenciaClimatica
             btnGuardarAlerta.Click += btnGuardarAlerta_Click;
             btnLimpiar.Click += btnLimpiar_Click;
 
+            //  Pestaña Análisis Global
+            btnFiltrar.Click += btnFiltrar_Click;
+            btnLimpiarFiltro.Click += btnLimpiarFiltro_Click;
+            btnExportarRanking.Click += btnExportarRanking_Click;
+
             // Línea separadora inferior del top bar
             pnlTopBar.Paint += (s, e) =>
             {
@@ -90,6 +95,7 @@ namespace InteligenciaClimatica
                 ActualizarEstadoAPI("Open-Meteo: en línea");
                 ActualizarEstadoSQLite("SQLite: pendiente");
                 ActualizarRegistros(_dataService.RegistrosHistoricos.Count);
+                CargarDatosAnalisis();
             }
             catch (Exception ex)
             {
@@ -529,6 +535,121 @@ namespace InteligenciaClimatica
             // 4. Bloquear consulta y ejecutar limpieza de etiquetas
             btnConsultar.Enabled = false;
             LimpiarResultados(); // Este es el método que ya tienes que pone los guiones "—"
+        }
+        // ══════════════════════════════════════════════════════════════════
+        // PESTAÑA: ANÁLISIS GLOBAL
+        // ══════════════════════════════════════════════════════════════════
+
+        private void CargarDatosAnalisis()
+        {
+            // Verificamos que el CSV/JSON ya se haya cargado en memoria
+            if (_dataService == null || !_dataService.RegistrosHistoricos.Any()) return;
+
+            // Tomamos la sábana completa de datos
+            var query = _dataService.RegistrosHistoricos.AsEnumerable();
+
+            // 1. Filtro por Año
+            if (cmbFiltroAnio.SelectedItem != null && cmbFiltroAnio.SelectedItem.ToString() != "Todos")
+            {
+                int anioSel = int.Parse(cmbFiltroAnio.SelectedItem.ToString()!);
+                query = query.Where(r => r.Periodo.Year == anioSel);
+            }
+
+            // 2. Filtro por Estación
+            if (cmbFiltroEstacion.SelectedItem != null && cmbFiltroEstacion.SelectedItem.ToString() != "Todas")
+            {
+                string estacionSel = cmbFiltroEstacion.SelectedItem.ToString()!;
+                query = query.Where(r => r.Estacion.Equals(estacionSel, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // 3. Filtro por Estado (Texto libre)
+            if (!string.IsNullOrWhiteSpace(txtBuscarEstado.Text))
+            {
+                string busqueda = txtBuscarEstado.Text.Trim().ToLower();
+                query = query.Where(r => r.Estado.ToLower().Contains(busqueda));
+            }
+
+            // Ejecutamos la consulta y la convertimos en lista
+            var datosFiltrados = query.ToList();
+
+            // Actualizamos la tabla central (DataGridView)
+            dgvHistorico.DataSource = null;
+            dgvHistorico.DataSource = datosFiltrados;
+
+            // Llamamos a la función que calcula los Top 5
+            ActualizarRankings(datosFiltrados);
+        }
+
+        private void ActualizarRankings(List<RegistroClimatico> datos)
+        {
+            // Limpiamos las listas visuales
+            lstCalientes.Items.Clear();
+            lstFrios.Items.Clear();
+
+            if (!datos.Any()) return;
+
+            // Top 5 más Calientes (Ordenamos por Temp Máxima de mayor a menor)
+            var topCalientes = datos.OrderByDescending(r => r.MaxC).Take(5).ToList();
+            foreach (var r in topCalientes)
+            {
+                lstCalientes.Items.Add($"{r.Estado} - {r.MaxC:F1}°C [{r.Periodo:yyyy-MM-dd}]");
+            }
+
+            // Top 5 más Fríos (Ordenamos por Temp Mínima de menor a mayor)
+            var topFrios = datos.OrderBy(r => r.MinC).Take(5).ToList();
+            foreach (var r in topFrios)
+            {
+                lstFrios.Items.Add($"{r.Estado} - {r.MinC:F1}°C [{r.Periodo:yyyy-MM-dd}]");
+            }
+        }
+        private void btnFiltrar_Click(object? sender, EventArgs e)
+        {
+            // Ejecuta el motor con los filtros actuales
+            CargarDatosAnalisis();
+        }
+
+        private void btnLimpiarFiltro_Click(object? sender, EventArgs e)
+        {
+            // 1. Regresamos los controles a su estado neutral
+            if (cmbFiltroAnio.Items.Count > 0) cmbFiltroAnio.SelectedIndex = 0;
+            if (cmbFiltroEstacion.Items.Count > 0) cmbFiltroEstacion.SelectedIndex = 0;
+            txtBuscarEstado.Clear();
+
+            // 2. Volvemos a cargar la tabla completa sin filtros
+            CargarDatosAnalisis();
+        }
+        private async void btnExportarRanking_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // Obtenemos los datos actuales que ya están filtrados en la pantalla
+                var datosActuales = dgvHistorico.DataSource as List<RegistroClimatico>;
+                if (datosActuales == null || !datosActuales.Any())
+                {
+                    MessageBox.Show("No hay datos filtrados para exportar.");
+                    return;
+                }
+
+                var topCalientes = datosActuales.OrderByDescending(r => r.MaxC).Take(5).ToList();
+                var topFrios = datosActuales.OrderBy(r => r.MinC).Take(5).ToList();
+
+                var dbService = new DatabaseService();
+                dbService.GuardarRankingMariaDB(
+                    txtMariaServidor.Text, txtMariaPuerto.Text, txtMariaBD.Text,
+                    txtMariaUsuario.Text, txtMariaPassword.Text,
+                    topFrios, topCalientes
+                );
+
+                btnExportarRanking.Text = "¡Ranking Enviado!";
+                btnExportarRanking.BackColor = Color.Green;
+                await Task.Delay(2000);
+                btnExportarRanking.Text = "Exportar Ranking a MariaDB";
+                btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163); // Tu azul original
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al exportar: " + ex.Message);
+            }
         }
     }
     

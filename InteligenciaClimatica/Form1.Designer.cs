@@ -99,6 +99,8 @@ namespace InteligenciaClimatica
         private ListBox lstCalientes;
         private Label lblRankingFrio;
         private ListBox lstFrios;
+        private Button btnExportarRanking;
+
 
         // ── Tab: Favoritos ─────────────────────────────────────────────────
         private DataGridView dgvFavoritos;
@@ -250,6 +252,7 @@ namespace InteligenciaClimatica
             lstCalientes = new ListBox();
             lblRankingFrio = new Label();
             lstFrios = new ListBox();
+            btnExportarRanking = new Button();
 
             // Tab Favoritos
             dgvFavoritos = new DataGridView();
@@ -799,6 +802,22 @@ namespace InteligenciaClimatica
             grpRanking.Controls.Add(lstCalientes);
             grpRanking.Controls.Add(lblRankingFrio);
             grpRanking.Controls.Add(lstFrios);
+
+            // 
+            // btnExportarRanking
+            // 
+            btnExportarRanking.Text = "Exportar Ranking ";
+            btnExportarRanking.Location = new Point(900, 30); // A la derecha del botón Limpiar
+            btnExportarRanking.Size = new Size(130, 34);
+            btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163); // Azul profesional
+            btnExportarRanking.ForeColor = Color.White;
+            btnExportarRanking.FlatStyle = FlatStyle.Flat;
+            btnExportarRanking.FlatAppearance.BorderSize = 0;
+            btnExportarRanking.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnExportarRanking.Cursor = Cursors.Hand;
+
+            // Agregar el botón al contenedor grpRanking
+            grpRanking.Controls.Add(btnExportarRanking);
 
             tabAnalisis.Controls.Add(dgvHistorico);
             tabAnalisis.Controls.Add(grpRanking);

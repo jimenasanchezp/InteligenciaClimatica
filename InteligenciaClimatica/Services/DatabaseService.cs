@@ -1,6 +1,7 @@
-﻿using System;
-using System.Data.SQLite;
+﻿using InteligenciaClimatica.Models;
 using MySqlConnector;
+using System;
+using System.Data.SQLite;
 
 namespace InteligenciaClimatica.Services
 {
@@ -51,23 +52,23 @@ namespace InteligenciaClimatica.Services
             }
         }
         // ── Guardar Alerta en Servidor (MariaDB) ──
-public void GuardarAlertaMariaDB(string servidor, string puerto, string bd, string usuario, string password, 
-                                 string municipio, string estado, double tempActual, double tempHistorica, double anomalia)
-{
-    var builder = new MySqlConnectionStringBuilder
-    {
-        Server = servidor,
-        Port = uint.Parse(puerto),
-        Database = bd,
-        UserID = usuario,
-        Password = password
-    };
+        public void GuardarAlertaMariaDB(string servidor, string puerto, string bd, string usuario, string password,
+                                         string municipio, string estado, double tempActual, double tempHistorica, double anomalia)
+        {
+            var builder = new MySqlConnectionStringBuilder
+            {
+                Server = servidor,
+                Port = uint.Parse(puerto),
+                Database = bd,
+                UserID = usuario,
+                Password = password
+            };
 
-    using var conexion = new MySqlConnection(builder.ConnectionString);
-    conexion.Open();
+            using var conexion = new MySqlConnection(builder.ConnectionString);
+            conexion.Open();
 
-    // 1. Asegurarnos de que la tabla exista (Se ejecuta rápido y no sobreescribe si ya existe)
-    string queryCreacion = @"
+            // 1. Asegurarnos de que la tabla exista (Se ejecuta rápido y no sobreescribe si ya existe)
+            string queryCreacion = @"
         CREATE TABLE IF NOT EXISTS AlertasClimaticas (
             Id INT AUTO_INCREMENT PRIMARY KEY,
             FechaRegistro DATETIME NOT NULL,
@@ -78,26 +79,74 @@ public void GuardarAlertaMariaDB(string servidor, string puerto, string bd, stri
             Anomalia DOUBLE NOT NULL
         );";
 
-    using var cmdCreacion = new MySqlCommand(queryCreacion, conexion);
-    cmdCreacion.ExecuteNonQuery();
+            using var cmdCreacion = new MySqlCommand(queryCreacion, conexion);
+            cmdCreacion.ExecuteNonQuery();
 
-    // 2. Insertar el nuevo registro de alerta
-    string queryInsert = @"
+            // 2. Insertar el nuevo registro de alerta
+            string queryInsert = @"
         INSERT INTO AlertasClimaticas 
         (FechaRegistro, Municipio, Estado, TemperaturaActual, PromedioHistorico, Anomalia) 
         VALUES (@fecha, @mun, @est, @actual, @hist, @anom);";
 
-    using var cmdInsert = new MySqlCommand(queryInsert, conexion);
-    
-    // Pasamos los valores como parámetros seguros para evitar inyecciones SQL
-    cmdInsert.Parameters.AddWithValue("@fecha", DateTime.Now);
-    cmdInsert.Parameters.AddWithValue("@mun", municipio);
-    cmdInsert.Parameters.AddWithValue("@est", estado);
-    cmdInsert.Parameters.AddWithValue("@actual", tempActual);
-    cmdInsert.Parameters.AddWithValue("@hist", tempHistorica);
-    cmdInsert.Parameters.AddWithValue("@anom", anomalia);
+            using var cmdInsert = new MySqlCommand(queryInsert, conexion);
 
-    cmdInsert.ExecuteNonQuery();
-}
+            // Pasamos los valores como parámetros seguros para evitar inyecciones SQL
+            cmdInsert.Parameters.AddWithValue("@fecha", DateTime.Now);
+            cmdInsert.Parameters.AddWithValue("@mun", municipio);
+            cmdInsert.Parameters.AddWithValue("@est", estado);
+            cmdInsert.Parameters.AddWithValue("@actual", tempActual);
+            cmdInsert.Parameters.AddWithValue("@hist", tempHistorica);
+            cmdInsert.Parameters.AddWithValue("@anom", anomalia);
+
+            cmdInsert.ExecuteNonQuery();
+        }
+
+        public void GuardarRankingMariaDB(string host, string puerto, string bd, string usuario, string pass, List<RegistroClimatico> topFrios, List<RegistroClimatico> topCalientes)
+        {
+            string connString = $"Server={host};Port={puerto};Database={bd};Uid={usuario};Pwd={pass};";
+            using (var conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+
+                // Crear la tabla de ranking si no existe
+                string createTable = @"CREATE TABLE IF NOT EXISTS ranking_climatico (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            tipo_ranking VARCHAR(20),
+            estado VARCHAR(100),
+            temperatura DOUBLE,
+            fecha_registro DATE,
+            fecha_reporte DATETIME
+        );";
+                new MySqlCommand(createTable, conn).ExecuteNonQuery();
+
+                // Limpiamos datos viejos para tener un ranking fresco
+                new MySqlCommand("TRUNCATE TABLE ranking_climatico;", conn).ExecuteNonQuery();
+
+                // Insertar Top Calientes
+                foreach (var r in topCalientes)
+                {
+                    string ins = "INSERT INTO ranking_climatico (tipo_ranking, estado, temperatura, fecha_registro, fecha_reporte) " +
+                                 "VALUES ('CALIENTE', @est, @temp, @fReg, NOW());";
+                    var cmd = new MySqlCommand(ins, conn);
+                    cmd.Parameters.AddWithValue("@est", r.Estado);
+                    cmd.Parameters.AddWithValue("@temp", r.MaxC);
+                    cmd.Parameters.AddWithValue("@fReg", r.Periodo);
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Insertar Top Fríos
+                foreach (var r in topFrios)
+                {
+                    string ins = "INSERT INTO ranking_climatico (tipo_ranking, estado, temperatura, fecha_registro, fecha_reporte) " +
+                                 "VALUES ('FRIO', @est, @temp, @fReg, NOW());";
+                    var cmd = new MySqlCommand(ins, conn);
+                    cmd.Parameters.AddWithValue("@est", r.Estado);
+                    cmd.Parameters.AddWithValue("@temp", r.MinC);
+                    cmd.Parameters.AddWithValue("@fReg", r.Periodo);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
+
 }
