@@ -1,11 +1,6 @@
-using System;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using System.IO;
-using System.Drawing;
-using InteligenciaClimatica.Services;
 using InteligenciaClimatica.Models;
+using InteligenciaClimatica.Services;
+using System.Data;
 
 namespace InteligenciaClimatica
 {
@@ -20,6 +15,9 @@ namespace InteligenciaClimatica
         public Form1()
         {
             InitializeComponent();
+            // Configuraciones iniciales de la interfaz
+            this.AutoScaleMode = AutoScaleMode.None;
+            btnProbarConexion.Click += btnProbarConexion_Click;
 
             // Línea separadora inferior del top bar
             pnlTopBar.Paint += (s, e) =>
@@ -364,6 +362,55 @@ namespace InteligenciaClimatica
             pnlSemaforoRojo.BackColor = apagado;
 
             btnGuardarAlerta.Enabled = false;
+        }
+        // ══════════════════════════════════════════════════════════════════
+        // PRUEBA DE CONEXIÓN A BASE DE DATOS
+        // ══════════════════════════════════════════════════════════════════
+
+        private void btnProbarConexion_Click(object? sender, EventArgs e)
+        {
+            // 1. Cambiamos el estado visual a "procesando"
+            lblEstadoConexion.Text = "Estado: Probando conexión...";
+            lblEstadoConexion.ForeColor = Color.FromArgb(186, 117, 23); // Amarillo/Naranja
+            Application.DoEvents(); // Fuerza a la interfaz a dibujar el texto de inmediato
+
+            // 2. Instanciamos nuestra capa de servicios
+            var dbService = new DatabaseService();
+            string resultado = "";
+
+            // 3. Verificamos qué motor seleccionó el usuario en el ComboBox
+            if (cmbMotorBD.SelectedItem != null && cmbMotorBD.SelectedItem.ToString() == "SQLite")
+            {
+                resultado = dbService.ProbarConexionSQLite(txtSQLitePath.Text);
+            }
+            else
+            {
+                resultado = dbService.ProbarConexionMariaDB(
+                    txtMariaServidor.Text,
+                    txtMariaPuerto.Text,
+                    txtMariaBD.Text,
+                    txtMariaUsuario.Text,
+                    txtMariaPassword.Text
+                );
+            }
+
+            // 4. Evaluamos el resultado y actualizamos la interfaz
+            if (resultado == "OK")
+            {
+                lblEstadoConexion.Text = "Estado: Conectado ✓";
+                lblEstadoConexion.ForeColor = Color.FromArgb(99, 153, 34); // Verde éxito
+
+                MessageBox.Show("¡La conexión a la base de datos fue exitosa!",
+                    "Prueba superada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                lblEstadoConexion.Text = "Estado: Error de conexión ✗";
+                lblEstadoConexion.ForeColor = Color.FromArgb(163, 45, 45); // Rojo error
+
+                MessageBox.Show($"No se pudo establecer la conexión. Detalles del error:\n\n{resultado}",
+                    "Fallo de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
