@@ -172,6 +172,7 @@ namespace InteligenciaClimatica
                 ? Color.FromArgb(99, 153, 34)
                 : Color.FromArgb(163, 45, 45);
         }
+        // hola
 
         private void ActualizarEstadoSQLite(string texto)
         {
