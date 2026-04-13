@@ -572,12 +572,44 @@ namespace InteligenciaClimatica
             // Ejecutamos la consulta y la convertimos en lista
             var datosFiltrados = query.ToList();
 
-            // Actualizamos la tabla central (DataGridView)
-            dgvHistorico.DataSource = null;
-            dgvHistorico.DataSource = datosFiltrados;
+            // Generamos gráficos en lugar de DataGridView
+            GenerarGraficos(datosFiltrados);
 
             // Llamamos a la función que calcula los Top 5
             ActualizarRankings(datosFiltrados);
+        }
+
+        private void GenerarGraficos(List<RegistroClimatico> datos)
+        {
+            if (!datos.Any()) return;
+
+            // Agrupar datos por Estado para obtener promedios
+            var datosPorEstado = datos
+                .GroupBy(r => r.Estado)
+                .Select(g => new
+                {
+                    Estado = g.Key,
+                    PromedioMax = g.Average(r => r.MaxC),
+                    PromedioMin = g.Average(r => r.MinC),
+                    PromedioTemp = g.Average(r => r.PromedioC)
+                })
+                .OrderByDescending(d => d.PromedioMax)
+                .Take(10) // Top 10 Estados
+                .ToList();
+
+            // Limpiar controles anteriores
+            dgvHistorico.DataSource = null;
+
+            // Crear tabla con los datos agrupados para mostrar
+            var tablaresumen = datosPorEstado.Select(d => new
+            {
+                Estado = d.Estado,
+                Máxima = $"{d.PromedioMax:F1}°C",
+                Mínima = $"{d.PromedioMin:F1}°C",
+                Promedio = $"{d.PromedioTemp:F1}°C"
+            }).ToList();
+
+            dgvHistorico.DataSource = tablaresumen;
         }
 
         private void ActualizarRankings(List<RegistroClimatico> datos)
