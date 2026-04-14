@@ -101,50 +101,90 @@ namespace InteligenciaClimatica.Services
             cmdInsert.ExecuteNonQuery();
         }
 
-        public void GuardarRankingMariaDB(string host, string puerto, string bd, string usuario, string pass, List<RegistroClimatico> topFrios, List<RegistroClimatico> topCalientes)
+        public void GuardarRankingMariaDB(string host, string puerto, string bd, string usuario, string pass,
+                                   List<RegistroClimatico> topFrios, List<RegistroClimatico> topCalientes)
         {
             string connString = $"Server={host};Port={puerto};Database={bd};Uid={usuario};Pwd={pass};";
-            using (var conn = new MySqlConnection(connString))
+            using var conn = new MySqlConnection(connString);
+            conn.Open();
+
+            // ── Crear tablas si no existen ────────────────────────────────────────
+            string crearCalientes = @"
+    CREATE TABLE IF NOT EXISTS ranking_mas_calientes (
+        id              INT AUTO_INCREMENT PRIMARY KEY,
+        exportacion_id  INT NOT NULL,
+        posicion        INT NOT NULL,
+        estado          VARCHAR(100) NOT NULL,
+        temperatura     DOUBLE NOT NULL,
+        fecha_registro  DATE NOT NULL,
+        fecha_reporte   DATETIME NOT NULL
+    );";
+            new MySqlCommand(crearCalientes, conn).ExecuteNonQuery();
+
+            string crearFrios = @"
+    CREATE TABLE IF NOT EXISTS ranking_mas_frios (
+        id              INT AUTO_INCREMENT PRIMARY KEY,
+        exportacion_id  INT NOT NULL,
+        posicion        INT NOT NULL,
+        estado          VARCHAR(100) NOT NULL,
+        temperatura     DOUBLE NOT NULL,
+        fecha_registro  DATE NOT NULL,
+        fecha_reporte   DATETIME NOT NULL
+    );";
+            new MySqlCommand(crearFrios, conn).ExecuteNonQuery();
+
+            // ── Agregar exportacion_id si la tabla ya existía sin esa columna ─────
+            string agregarColumnaCalientes = @"
+    ALTER TABLE ranking_mas_calientes 
+    ADD COLUMN IF NOT EXISTS exportacion_id INT NOT NULL DEFAULT 0;";
+            new MySqlCommand(agregarColumnaCalientes, conn).ExecuteNonQuery();
+
+            string agregarColumnaFrios = @"
+    ALTER TABLE ranking_mas_frios 
+    ADD COLUMN IF NOT EXISTS exportacion_id INT NOT NULL DEFAULT 0;";
+            new MySqlCommand(agregarColumnaFrios, conn).ExecuteNonQuery();
+
+            // ── Calcular el siguiente exportacion_id ──────────────────────────────
+            // Tomamos el máximo actual de ambas tablas y sumamos 1
+            string queryMaxId = @"
+        SELECT COALESCE(MAX(exportacion_id), 0) 
+        FROM (
+            SELECT exportacion_id FROM ranking_mas_calientes
+            UNION ALL
+            SELECT exportacion_id FROM ranking_mas_frios
+        ) AS combinado;";
+            int nuevoId = Convert.ToInt32(new MySqlCommand(queryMaxId, conn).ExecuteScalar()) + 1;
+
+            // ── Insertar top calientes ────────────────────────────────────────────
+            for (int i = 0; i < topCalientes.Count; i++)
             {
-                conn.Open();
+                var r = topCalientes[i];
+                string ins = @"INSERT INTO ranking_mas_calientes 
+                       (exportacion_id, posicion, estado, temperatura, fecha_registro, fecha_reporte)
+                       VALUES (@expId, @pos, @est, @temp, @fReg, NOW());";
+                using var cmd = new MySqlCommand(ins, conn);
+                cmd.Parameters.AddWithValue("@expId", nuevoId);
+                cmd.Parameters.AddWithValue("@pos", i + 1);
+                cmd.Parameters.AddWithValue("@est", r.Estado);
+                cmd.Parameters.AddWithValue("@temp", r.MaxC);
+                cmd.Parameters.AddWithValue("@fReg", r.Periodo.ToDateTime(TimeOnly.MinValue));
+                cmd.ExecuteNonQuery();
+            }
 
-                // Crear la tabla de ranking si no existe
-                string createTable = @"CREATE TABLE IF NOT EXISTS ranking_climatico (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            tipo_ranking VARCHAR(20),
-            estado VARCHAR(100),
-            temperatura DOUBLE,
-            fecha_registro DATE,
-            fecha_reporte DATETIME
-        );";
-                new MySqlCommand(createTable, conn).ExecuteNonQuery();
-
-                // Limpiamos datos viejos para tener un ranking fresco
-                new MySqlCommand("TRUNCATE TABLE ranking_climatico;", conn).ExecuteNonQuery();
-
-                // Insertar Top Calientes
-                foreach (var r in topCalientes)
-                {
-                    string ins = "INSERT INTO ranking_climatico (tipo_ranking, estado, temperatura, fecha_registro, fecha_reporte) " +
-                                 "VALUES ('CALIENTE', @est, @temp, @fReg, NOW());";
-                    var cmd = new MySqlCommand(ins, conn);
-                    cmd.Parameters.AddWithValue("@est", r.Estado);
-                    cmd.Parameters.AddWithValue("@temp", r.MaxC);
-                    cmd.Parameters.AddWithValue("@fReg", r.Periodo);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Insertar Top Fríos
-                foreach (var r in topFrios)
-                {
-                    string ins = "INSERT INTO ranking_climatico (tipo_ranking, estado, temperatura, fecha_registro, fecha_reporte) " +
-                                 "VALUES ('FRIO', @est, @temp, @fReg, NOW());";
-                    var cmd = new MySqlCommand(ins, conn);
-                    cmd.Parameters.AddWithValue("@est", r.Estado);
-                    cmd.Parameters.AddWithValue("@temp", r.MinC);
-                    cmd.Parameters.AddWithValue("@fReg", r.Periodo);
-                    cmd.ExecuteNonQuery();
-                }
+            // ── Insertar top fríos ────────────────────────────────────────────────
+            for (int i = 0; i < topFrios.Count; i++)
+            {
+                var r = topFrios[i];
+                string ins = @"INSERT INTO ranking_mas_frios 
+                       (exportacion_id, posicion, estado, temperatura, fecha_registro, fecha_reporte)
+                       VALUES (@expId, @pos, @est, @temp, @fReg, NOW());";
+                using var cmd = new MySqlCommand(ins, conn);
+                cmd.Parameters.AddWithValue("@expId", nuevoId);
+                cmd.Parameters.AddWithValue("@pos", i + 1);
+                cmd.Parameters.AddWithValue("@est", r.Estado);
+                cmd.Parameters.AddWithValue("@temp", r.MinC);
+                cmd.Parameters.AddWithValue("@fReg", r.Periodo.ToDateTime(TimeOnly.MinValue));
+                cmd.ExecuteNonQuery();
             }
         }
     }

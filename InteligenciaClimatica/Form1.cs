@@ -7,39 +7,27 @@ namespace InteligenciaClimatica
 {
     public partial class Form1 : Form
     {
+        // ══════════════════════════════════════════════════════════════════
+        // 1. CAMPOS PRIVADOS Y CONSTRUCTOR
+        // ══════════════════════════════════════════════════════════════════
         private DataService _dataService;
         private WeatherApiService _weatherService;
 
         // Rastrea el botón de navegación activo
         private Button _activeNavBtn;
+        private List<RegistroClimatico> _datosFiltradosActuales = new();
 
         public Form1()
         {
             InitializeComponent();
-            // Configuraciones iniciales de la interfaz
             this.AutoScaleMode = AutoScaleMode.None;
-            btnProbarConexion.Click += btnProbarConexion_Click;
-            btnGuardarConfig.Click += btnGuardarConfig_Click;
-            btnGuardarAlerta.Click += btnGuardarAlerta_Click;
-            btnLimpiar.Click += btnLimpiar_Click;
-
-            //  Pestaña Análisis Global
-            btnFiltrar.Click += btnFiltrar_Click;
-            btnLimpiarFiltro.Click += btnLimpiarFiltro_Click;
-            btnExportarRanking.Click += btnExportarRanking_Click;
-
-            // Línea separadora inferior del top bar
-            pnlTopBar.Paint += (s, e) =>
-            {
-                using var pen = new Pen(Color.FromArgb(220, 225, 235));
-                e.Graphics.DrawLine(pen, 0, pnlTopBar.Height - 1, pnlTopBar.Width, pnlTopBar.Height - 1);
-            };
+            SuscribirEventos();
+            DibujarSeparadorTopBar();
         }
 
         // ══════════════════════════════════════════════════════════════════
-        // CARGA INICIAL
+        // 2. INICIALIZACIÓN Y CARGA
         // ══════════════════════════════════════════════════════════════════
-
         private void Form1_Load(object sender, EventArgs e)
         {
             string csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "data.csv");
@@ -102,12 +90,45 @@ namespace InteligenciaClimatica
                 MessageBox.Show($"Error al cargar los datos:\n{ex.Message}",
                     "Error de Inicialización", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            pnlIzq.Width = pnlCharts.Width / 2;
+
+            // Cada vez que el usuario cambie el tamaño de la ventana, recalcular
+            pnlCharts.SizeChanged += (s, ev) =>
+            {
+                pnlIzq.Width = pnlCharts.Width / 2;
+            };
+        }
+
+        private void SuscribirEventos()
+        {
+            // Tab Consulta
+            btnConsultar.Click += btnConsultar_Click_1;  // ← este no estaba en el constructor
+            btnLimpiar.Click += btnLimpiar_Click;
+            btnGuardarAlerta.Click += btnGuardarAlerta_Click;
+
+            // Tab Análisis
+            btnFiltrar.Click += btnFiltrar_Click;
+            btnLimpiarFiltro.Click += btnLimpiarFiltro_Click;
+            btnExportarRanking.Click += btnExportarRanking_Click;
+
+            // Tab Configuración
+            btnProbarConexion.Click += btnProbarConexion_Click;
+            btnGuardarConfig.Click += btnGuardarConfig_Click;
+        }
+
+        private void DibujarSeparadorTopBar()
+        {
+            pnlTopBar.Paint += (s, e) =>
+            {
+                using var pen = new Pen(Color.FromArgb(220, 225, 235));
+                e.Graphics.DrawLine(pen, 0, pnlTopBar.Height - 1, pnlTopBar.Width, pnlTopBar.Height - 1);
+            };
         }
 
         // ══════════════════════════════════════════════════════════════════
-        // NAVEGACIÓN LATERAL
+        // 3. NAVEGACIÓN LATERAL Y TOPBAR
         // ══════════════════════════════════════════════════════════════════
-
         private void btnNavConsulta_Click(object sender, EventArgs e)
             => NavHacia(btnNavConsulta, tabConsulta,
                 "Consulta climática",
@@ -115,7 +136,7 @@ namespace InteligenciaClimatica
 
         private void btnNavAnalisis_Click(object sender, EventArgs e)
             => NavHacia(btnNavAnalisis, tabAnalisis,
-                "Análisis global",
+                "Análisis general",
                 "Explora el histórico completo con filtros de año y estación");
 
         private void btnNavFavoritos_Click(object sender, EventArgs e)
@@ -160,42 +181,11 @@ namespace InteligenciaClimatica
         }
 
         // ══════════════════════════════════════════════════════════════════
-        // HELPERS DE ESTADO (StatusStrip + sidebar sincronizados)
+        // 4. PESTAÑA: CONSULTA PRINCIPAL
         // ══════════════════════════════════════════════════════════════════
-
-        private void ActualizarEstadoAPI(string texto)
-        {
-            tssAPI.Text = texto;
-            bool activo = texto.Contains("línea") || texto.Contains("conectado");
-            lblSidebarStatusAPI.Text = $"● {texto}";
-            lblSidebarStatusAPI.ForeColor = activo
-                ? Color.FromArgb(99, 153, 34)
-                : Color.FromArgb(163, 45, 45);
-        }
-        // hola
-
-        private void ActualizarEstadoSQLite(string texto)
-        {
-            tssSQLite.Text = texto;
-            lblSidebarStatusSQLite.Text = $"● {texto}";
-            lblSidebarStatusSQLite.ForeColor = texto.Contains("OK") || texto.Contains("activo")
-                ? Color.FromArgb(99, 153, 34)
-                : Color.FromArgb(186, 117, 23);
-        }
-
-        private void ActualizarRegistros(int cantidad)
-        {
-            tssRegistros.Text = $"Registros cargados: {cantidad:N0}";
-            lblSidebarStatusRegs.Text = $"{cantidad:N0} registros cargados";
-        }
-
-        // ══════════════════════════════════════════════════════════════════
-        // EVENTOS DE COMBOS
-        // ══════════════════════════════════════════════════════════════════
-
         private void cmbEstado_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            
+
             if (cmbEstado.SelectedItem == null) return;
 
             // 1. PRIMERO limpiamos la pantalla de cualquier consulta anterior
@@ -220,7 +210,7 @@ namespace InteligenciaClimatica
 
         private void cmbMunicipio_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            
+
             if (cmbMunicipio.SelectedItem == null || cmbEstado.SelectedItem == null) return;
 
             // 1. PRIMERO limpiamos cualquier cálculo, semáforo o temperatura de la consulta anterior
@@ -240,10 +230,6 @@ namespace InteligenciaClimatica
                 lblCoordsVal.Text = $"Lat: {mun.Latitud:F4} · Lon: {mun.Longitud:F4}";
             }
         }
-
-        // ══════════════════════════════════════════════════════════════════
-        // CONSULTA PRINCIPAL
-        // ══════════════════════════════════════════════════════════════════
 
         private async void btnConsultar_Click_1(object sender, EventArgs e)
         {
@@ -360,114 +346,6 @@ namespace InteligenciaClimatica
             btnConsultar.Text = "Consultar";
         }
 
-        // ══════════════════════════════════════════════════════════════════
-        // LIMPIAR RESULTADOS
-        // ══════════════════════════════════════════════════════════════════
-
-        private void LimpiarResultados()
-        {
-            var apagado = Color.FromArgb(210, 220, 215);
-
-            lblTempActualVal.Text = "—";
-            lblTempHistVal.Text = "—";
-            lblMinActVal.Text = "—";
-            lblMaxActVal.Text = "—";
-            lblMinHistVal.Text = "—";
-            lblMaxHistVal.Text = "—";
-            lblEstadoHistVal.Text = "—";
-            lblFiltroVal.Text = "—";
-            lblRegistrosVal.Text = "Basado en — registros del CSV";
-            lblDesviacionVal.Text = "—";
-            lblDescAnomalia.Text = "Realiza una consulta para evaluar el riesgo climático.";
-            lblDescAnomalia.ForeColor = Color.FromArgb(140, 155, 175);
-            lblSemaforoTexto.Text = "—";
-            lblSemaforoTexto.ForeColor = Color.FromArgb(90, 105, 125);
-            lblMunicipioVal.Text = "—";
-            lblEstadoActVal.Text = "—";
-            lblCoordsVal.Text = "Lat: — · Lon: —";
-
-            pnlSemaforoVerde.BackColor = apagado;
-            pnlSemaforoAmarillo.BackColor = apagado;
-            pnlSemaforoRojo.BackColor = apagado;
-
-            btnGuardarAlerta.Enabled = false;
-            btnGuardarAlerta.Text = "Guardar alerta";
-            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
-        }
-        // ══════════════════════════════════════════════════════════════════
-        // PRUEBA DE CONEXIÓN A BASE DE DATOS
-        // ══════════════════════════════════════════════════════════════════
-
-        private void btnProbarConexion_Click(object? sender, EventArgs e)
-        {
-            // 1. Cambiamos el estado visual a "procesando"
-            lblEstadoConexion.Text = "Estado: Probando conexión...";
-            lblEstadoConexion.ForeColor = Color.FromArgb(186, 117, 23); // Amarillo/Naranja
-            Application.DoEvents(); // Fuerza a la interfaz a dibujar el texto de inmediato
-
-            // 2. Instanciamos nuestra capa de servicios
-            var dbService = new DatabaseService();
-            string resultado = "";
-
-            // 3. Verificamos qué motor seleccionó el usuario en el ComboBox
-            if (cmbMotorBD.SelectedItem != null && cmbMotorBD.SelectedItem.ToString() == "SQLite")
-            {
-                resultado = dbService.ProbarConexionSQLite(txtSQLitePath.Text);
-            }
-            else
-            {
-                resultado = dbService.ProbarConexionMariaDB(
-                    txtMariaServidor.Text,
-                    txtMariaPuerto.Text,
-                    txtMariaBD.Text,
-                    txtMariaUsuario.Text,
-                    txtMariaPassword.Text
-                );
-            }
-
-            // 4. Evaluamos el resultado y actualizamos la interfaz
-            if (resultado == "OK")
-            {
-                lblEstadoConexion.Text = "Estado: Conectado ✓";
-                lblEstadoConexion.ForeColor = Color.FromArgb(99, 153, 34); // Verde éxito
-
-                MessageBox.Show("¡La conexión a la base de datos fue exitosa!",
-                    "Prueba superada", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                lblEstadoConexion.Text = "Estado: Error de conexión ✗";
-                lblEstadoConexion.ForeColor = Color.FromArgb(163, 45, 45); // Rojo error
-
-                MessageBox.Show($"No se pudo establecer la conexión. Detalles del error:\n\n{resultado}",
-                    "Fallo de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void btnGuardarConfig_Click(object? sender, EventArgs e)
-        {
-            try
-            {
-                // 1. Recolectar datos de la interfaz
-                var configuracion = new
-                {
-                    Motor = cmbMotorBD.SelectedItem?.ToString() ?? "SQLite",
-                    Umbral = (double)nudUmbral.Value,
-                    RutaCSV = txtRutaCSV.Text,
-                    RutaJSON = txtRutaJSON.Text
-                };
-
-                // 2. Aquí llamarías a tu DatabaseService para hacer el UPDATE en SQLite
-               
-                ActualizarEstadoSQLite("SQLite: OK (Configurada)");
-
-                MessageBox.Show("Configuración guardada correctamente en el entorno local.",
-                    "Sistema Actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         private async void btnGuardarAlerta_Click(object? sender, EventArgs e)
         {
             try
@@ -516,9 +394,9 @@ namespace InteligenciaClimatica
                     "Error de Servidor", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void btnLimpiar_Click(object? sender, EventArgs e)
         {
-
             // 1. "Soltar" la selección de Estado y Municipio (SIN borrar las listas)
             cmbEstado.SelectedIndex = -1;
             cmbMunicipio.SelectedIndex = -1;
@@ -537,48 +415,147 @@ namespace InteligenciaClimatica
             btnConsultar.Enabled = false;
             LimpiarResultados(); // Este es el método que ya tienes que pone los guiones "—"
         }
-        // ══════════════════════════════════════════════════════════════════
-        // PESTAÑA: ANÁLISIS GLOBAL
-        // ══════════════════════════════════════════════════════════════════
 
+        private void LimpiarResultados()
+        {
+            var apagado = Color.FromArgb(210, 220, 215);
+
+            lblTempActualVal.Text = "—";
+            lblTempHistVal.Text = "—";
+            lblMinActVal.Text = "—";
+            lblMaxActVal.Text = "—";
+            lblMinHistVal.Text = "—";
+            lblMaxHistVal.Text = "—";
+            lblEstadoHistVal.Text = "—";
+            lblFiltroVal.Text = "—";
+            lblRegistrosVal.Text = "Basado en — registros del CSV";
+            lblDesviacionVal.Text = "—";
+            lblDescAnomalia.Text = "Realiza una consulta para evaluar el riesgo climático.";
+            lblDescAnomalia.ForeColor = Color.FromArgb(140, 155, 175);
+            lblSemaforoTexto.Text = "—";
+            lblSemaforoTexto.ForeColor = Color.FromArgb(90, 105, 125);
+            lblMunicipioVal.Text = "—";
+            lblEstadoActVal.Text = "—";
+            lblCoordsVal.Text = "Lat: — · Lon: —";
+
+            pnlSemaforoVerde.BackColor = apagado;
+            pnlSemaforoAmarillo.BackColor = apagado;
+            pnlSemaforoRojo.BackColor = apagado;
+
+            btnGuardarAlerta.Enabled = false;
+            btnGuardarAlerta.Text = "Guardar alerta";
+            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // 5. PESTAÑA: ANÁLISIS GLOBAL
+        // ══════════════════════════════════════════════════════════════════
         private void CargarDatosAnalisis()
         {
-            // Verificamos que el CSV/JSON ya se haya cargado en memoria
             if (_dataService == null || !_dataService.RegistrosHistoricos.Any()) return;
 
-            // Tomamos la sábana completa de datos
             var query = _dataService.RegistrosHistoricos.AsEnumerable();
 
-            // 1. Filtro por Año
             if (cmbFiltroAnio.SelectedItem != null && cmbFiltroAnio.SelectedItem.ToString() != "Todos")
             {
                 int anioSel = int.Parse(cmbFiltroAnio.SelectedItem.ToString()!);
                 query = query.Where(r => r.Periodo.Year == anioSel);
             }
 
-            // 2. Filtro por Estación
             if (cmbFiltroEstacion.SelectedItem != null && cmbFiltroEstacion.SelectedItem.ToString() != "Todas")
             {
                 string estacionSel = cmbFiltroEstacion.SelectedItem.ToString()!;
                 query = query.Where(r => r.Estacion.Equals(estacionSel, StringComparison.OrdinalIgnoreCase));
             }
 
-            // 3. Filtro por Estado (Texto libre)
             if (!string.IsNullOrWhiteSpace(txtBuscarEstado.Text))
             {
                 string busqueda = txtBuscarEstado.Text.Trim().ToLower();
                 query = query.Where(r => r.Estado.ToLower().Contains(busqueda));
             }
 
-            // Ejecutamos la consulta y la convertimos en lista
-            var datosFiltrados = query.ToList();
+            _datosFiltradosActuales = query.ToList();
 
-            // Actualizamos la tabla central (DataGridView)
-            dgvHistorico.DataSource = null;
-            dgvHistorico.DataSource = datosFiltrados;
+            // YA NO usamos dgvHistorico — graficamos directamente
+            ActualizarRankings(_datosFiltradosActuales);
+            ActualizarGraficas(_datosFiltradosActuales);
+        }
 
-            // Llamamos a la función que calcula los Top 5
-            ActualizarRankings(datosFiltrados);
+        private void btnFiltrar_Click(object? sender, EventArgs e)
+        {
+            CargarDatosAnalisis();
+        }
+
+        private void btnLimpiarFiltro_Click(object? sender, EventArgs e)
+        {
+            // 1. Regresamos los controles a su estado neutral
+            if (cmbFiltroAnio.Items.Count > 0) cmbFiltroAnio.SelectedIndex = 0;
+            if (cmbFiltroEstacion.Items.Count > 0) cmbFiltroEstacion.SelectedIndex = 0;
+            txtBuscarEstado.Clear();
+
+            // 2. Volvemos a cargar la tabla completa sin filtros
+            CargarDatosAnalisis();
+        }
+
+        private async void btnExportarRanking_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (_datosFiltradosActuales == null || !_datosFiltradosActuales.Any())
+                {
+                    MessageBox.Show("No hay datos filtrados para exportar.",
+                        "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var topCalientes = _datosFiltradosActuales
+                    .GroupBy(r => r.Estado)
+                    .Select(g => g.OrderByDescending(r => r.MaxC).First())
+                    .OrderByDescending(r => r.MaxC)
+                    .Take(5)
+                    .ToList();
+
+                var topFrios = _datosFiltradosActuales
+                    .GroupBy(r => r.Estado)
+                    .Select(g => g.OrderBy(r => r.MinC).First())
+                    .OrderBy(r => r.MinC)
+                    .Take(5)
+                    .ToList();
+
+                btnExportarRanking.Enabled = false;
+                btnExportarRanking.Text = "Exportando...";
+
+                var dbService = new DatabaseService();
+                await Task.Run(() => dbService.GuardarRankingMariaDB(
+                    txtMariaServidor.Text, txtMariaPuerto.Text, txtMariaBD.Text,
+                    txtMariaUsuario.Text, txtMariaPassword.Text,
+                    topFrios, topCalientes
+                ));
+
+                btnExportarRanking.Text = "¡Exportado! ✓";
+                btnExportarRanking.BackColor = Color.FromArgb(59, 130, 55);
+
+                MessageBox.Show(
+                    "Se crearon (o actualizaron) las tablas:\n\n" +
+                    "  • ranking_mas_calientes  →  Top 5 más calientes\n" +
+                    "  • ranking_mas_frios      →  Top 5 más fríos\n\n" +
+                    "Puedes verificarlas directamente en MariaDB.",
+                    "Exportación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                await Task.Delay(2000);
+                btnExportarRanking.Text = "Exportar Ranking";
+                btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163);
+                btnExportarRanking.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                btnExportarRanking.Text = "Exportar Ranking";
+                btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163);
+                btnExportarRanking.Enabled = true;
+
+                MessageBox.Show($"Error al exportar:\n\n{ex.Message}\n\nVerifica que MariaDB esté activo y la conexión configurada.",
+                    "Error de exportación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ActualizarRankings(List<RegistroClimatico> datos)
@@ -603,55 +580,166 @@ namespace InteligenciaClimatica
                 lstFrios.Items.Add($"{r.Estado} - {r.MinC:F1}°C [{r.Periodo:yyyy-MM-dd}]");
             }
         }
-        private void btnFiltrar_Click(object? sender, EventArgs e)
+
+        private void ActualizarGraficas(List<RegistroClimatico> registros)
         {
-            // Ejecuta el motor con los filtros actuales
-            CargarDatosAnalisis();
+            // ── Top 5 más calientes ──────────────────────────────────────
+            var calientes = registros
+                .GroupBy(r => r.Estado)
+                .Select(g => (Estado: g.Key, Temp: g.Max(r => r.MaxC)))
+                .OrderByDescending(x => x.Temp)
+                .Take(5)
+                .ToList();
+
+            formsPlotCalientes.Plot.Clear();
+            var barsC = formsPlotCalientes.Plot.Add.Bars(
+                calientes.Select((x, i) => new ScottPlot.Bar
+                {
+                    Position = i,
+                    Value = x.Temp,
+                    FillColor = ScottPlot.Color.FromHex("#E24B4A"),
+                    Label = $"{x.Temp:F1} °C"
+                }).ToArray()
+            );
+
+            formsPlotCalientes.Plot.Axes.Bottom.TickGenerator =
+                new ScottPlot.TickGenerators.NumericManual(
+                    calientes.Select((x, i) => new ScottPlot.Tick(i, x.Estado)).ToArray()
+                );
+            formsPlotCalientes.Plot.Title("Top 5 más calientes");
+            formsPlotCalientes.Plot.Axes.Margins(bottom: 0);
+            formsPlotCalientes.Refresh();
+
+            // ── Top 5 más fríos ──────────────────────────────────────────
+            var frios = registros
+                .GroupBy(r => r.Estado)
+                .Select(g => (Estado: g.Key, Temp: g.Min(r => r.MinC)))
+                .OrderBy(x => x.Temp)
+                .Take(5)
+                .ToList();
+
+            formsPlotFrios.Plot.Clear();
+            formsPlotFrios.Plot.Add.Bars(
+                frios.Select((x, i) => new ScottPlot.Bar
+                {
+                    Position = i,
+                    Value = x.Temp,
+                    FillColor = ScottPlot.Color.FromHex("#378ADD"),
+                    Label = $"{x.Temp:F1} °C"
+                }).ToArray()
+            );
+
+            formsPlotFrios.Plot.Axes.Bottom.TickGenerator =
+                new ScottPlot.TickGenerators.NumericManual(
+                    frios.Select((x, i) => new ScottPlot.Tick(i, x.Estado)).ToArray()
+                );
+            formsPlotFrios.Plot.Title("Top 5 más fríos");
+            formsPlotFrios.Plot.Axes.Margins(bottom: 0);
+            formsPlotFrios.Refresh();
         }
 
-        private void btnLimpiarFiltro_Click(object? sender, EventArgs e)
+        // ══════════════════════════════════════════════════════════════════
+        // 6. PESTAÑA: CONFIGURACIÓN
+        // ══════════════════════════════════════════════════════════════════
+        private void btnProbarConexion_Click(object? sender, EventArgs e)
         {
-            // 1. Regresamos los controles a su estado neutral
-            if (cmbFiltroAnio.Items.Count > 0) cmbFiltroAnio.SelectedIndex = 0;
-            if (cmbFiltroEstacion.Items.Count > 0) cmbFiltroEstacion.SelectedIndex = 0;
-            txtBuscarEstado.Clear();
+            // 1. Cambiamos el estado visual a "procesando"
+            lblEstadoConexion.Text = "Estado: Probando conexión...";
+            lblEstadoConexion.ForeColor = Color.FromArgb(186, 117, 23); // Amarillo/Naranja
+            Application.DoEvents(); // Fuerza a la interfaz a dibujar el texto de inmediato
 
-            // 2. Volvemos a cargar la tabla completa sin filtros
-            CargarDatosAnalisis();
+            // 2. Instanciamos nuestra capa de servicios
+            var dbService = new DatabaseService();
+            string resultado = "";
+
+            // 3. Verificamos qué motor seleccionó el usuario en el ComboBox
+            if (cmbMotorBD.SelectedItem != null && cmbMotorBD.SelectedItem.ToString() == "SQLite")
+            {
+                resultado = dbService.ProbarConexionSQLite(txtSQLitePath.Text);
+            }
+            else
+            {
+                resultado = dbService.ProbarConexionMariaDB(
+                    txtMariaServidor.Text,
+                    txtMariaPuerto.Text,
+                    txtMariaBD.Text,
+                    txtMariaUsuario.Text,
+                    txtMariaPassword.Text
+                );
+            }
+
+            // 4. Evaluamos el resultado y actualizamos la interfaz
+            if (resultado == "OK")
+            {
+                lblEstadoConexion.Text = "Estado: Conectado ✓";
+                lblEstadoConexion.ForeColor = Color.FromArgb(99, 153, 34); // Verde éxito
+
+                MessageBox.Show("¡La conexión a la base de datos fue exitosa!",
+                    "Prueba superada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                lblEstadoConexion.Text = "Estado: Error de conexión ✗";
+                lblEstadoConexion.ForeColor = Color.FromArgb(163, 45, 45); // Rojo error
+
+                MessageBox.Show($"No se pudo establecer la conexión. Detalles del error:\n\n{resultado}",
+                    "Fallo de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        private async void btnExportarRanking_Click(object? sender, EventArgs e)
+
+        private void btnGuardarConfig_Click(object? sender, EventArgs e)
         {
             try
             {
-                // Obtenemos los datos actuales que ya están filtrados en la pantalla
-                var datosActuales = dgvHistorico.DataSource as List<RegistroClimatico>;
-                if (datosActuales == null || !datosActuales.Any())
+                // 1. Recolectar datos de la interfaz
+                var configuracion = new
                 {
-                    MessageBox.Show("No hay datos filtrados para exportar.");
-                    return;
-                }
+                    Motor = cmbMotorBD.SelectedItem?.ToString() ?? "SQLite",
+                    Umbral = (double)nudUmbral.Value,
+                    RutaCSV = txtRutaCSV.Text,
+                    RutaJSON = txtRutaJSON.Text
+                };
 
-                var topCalientes = datosActuales.OrderByDescending(r => r.MaxC).Take(5).ToList();
-                var topFrios = datosActuales.OrderBy(r => r.MinC).Take(5).ToList();
+                // 2. Aquí llamarías a tu DatabaseService para hacer el UPDATE en SQLite
 
-                var dbService = new DatabaseService();
-                dbService.GuardarRankingMariaDB(
-                    txtMariaServidor.Text, txtMariaPuerto.Text, txtMariaBD.Text,
-                    txtMariaUsuario.Text, txtMariaPassword.Text,
-                    topFrios, topCalientes
-                );
+                ActualizarEstadoSQLite("SQLite: OK (Configurada)");
 
-                btnExportarRanking.Text = "¡Ranking Enviado!";
-                btnExportarRanking.BackColor = Color.Green;
-                await Task.Delay(2000);
-                btnExportarRanking.Text = "Exportar Ranking a MariaDB";
-                btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163); // Tu azul original
+                MessageBox.Show("Configuración guardada correctamente en el entorno local.",
+                    "Sistema Actualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al exportar: " + ex.Message);
+                MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        // ══════════════════════════════════════════════════════════════════
+        // 7. HELPERS GENERALES (ESTADO Y UI)
+        // ══════════════════════════════════════════════════════════════════
+        private void ActualizarEstadoAPI(string texto)
+        {
+            tssAPI.Text = texto;
+            bool activo = texto.Contains("línea") || texto.Contains("conectado");
+            lblSidebarStatusAPI.Text = $"● {texto}";
+            lblSidebarStatusAPI.ForeColor = activo
+                ? Color.FromArgb(99, 153, 34)
+                : Color.FromArgb(163, 45, 45);
+        }
+        // hola
+
+        private void ActualizarEstadoSQLite(string texto)
+        {
+            tssSQLite.Text = texto;
+            lblSidebarStatusSQLite.Text = $"● {texto}";
+            lblSidebarStatusSQLite.ForeColor = texto.Contains("OK") || texto.Contains("activo")
+                ? Color.FromArgb(99, 153, 34)
+                : Color.FromArgb(186, 117, 23);
+        }
+
+        private void ActualizarRegistros(int cantidad)
+        {
+            tssRegistros.Text = $"Registros cargados: {cantidad:N0}";
+            lblSidebarStatusRegs.Text = $"{cantidad:N0} registros cargados";
+        }
     }
-    
 }

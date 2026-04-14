@@ -26,6 +26,7 @@ namespace InteligenciaClimatica
         private Label lblTopBarTitle;
         private Label lblTopBarCrumb;
 
+
         // ── TabControl (pestañas ocultas — controladas por sidebar) ────────
         private TabControl tabControl;
         private TabPage tabConsulta;
@@ -93,7 +94,12 @@ namespace InteligenciaClimatica
         private TextBox txtBuscarEstado;
         private Button btnFiltrar;
         private Button btnLimpiarFiltro;
-        private DataGridView dgvHistorico;
+        //private DataGridView dgvHistorico;
+        private ScottPlot.WinForms.FormsPlot formsPlotCalientes;
+        private ScottPlot.WinForms.FormsPlot formsPlotFrios;
+        private Panel pnlCharts;
+        private Panel pnlIzq;  
+        private Panel pnlDer;
         private GroupBox grpRanking;
         private Label lblRankingCaliente;
         private ListBox lstCalientes;
@@ -246,7 +252,10 @@ namespace InteligenciaClimatica
             txtBuscarEstado = new TextBox();
             btnFiltrar = new Button();
             btnLimpiarFiltro = new Button();
-            dgvHistorico = new DataGridView();
+            //dgvHistorico = new DataGridView();
+            formsPlotCalientes = new ScottPlot.WinForms.FormsPlot();
+            formsPlotFrios = new ScottPlot.WinForms.FormsPlot();
+            pnlCharts = new Panel();
             grpRanking = new GroupBox();
             lblRankingCaliente = new Label();
             lstCalientes = new ListBox();
@@ -319,7 +328,7 @@ namespace InteligenciaClimatica
             grpAnomalia.SuspendLayout();
             grpBusqueda.SuspendLayout();
             tabAnalisis.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvHistorico).BeginInit();
+            //((System.ComponentModel.ISupportInitialize)dgvHistorico).BeginInit();
             grpRanking.SuspendLayout();
             grpFiltrosGlobal.SuspendLayout();
             tabFavoritos.SuspendLayout();
@@ -331,6 +340,7 @@ namespace InteligenciaClimatica
             grpPreferencias.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudUmbral).BeginInit();
             statusStrip.SuspendLayout();
+
 
             // ══════════════════════════════════════════════════════════════
             // SIDEBAR
@@ -385,7 +395,7 @@ namespace InteligenciaClimatica
 
             // ── Botones de navegación ──────────────────────────────────────
             EstiloNavBtn(btnNavConsulta, "    Consulta", 112, activo: true);
-            EstiloNavBtn(btnNavAnalisis, "    Análisis global", 152, activo: false);
+            EstiloNavBtn(btnNavAnalisis, "    Análisis general", 152, activo: false);
             EstiloNavBtn(btnNavFavoritos, "    Favoritos", 192, activo: false);
 
             btnNavConsulta.Click += btnNavConsulta_Click;
@@ -765,9 +775,29 @@ namespace InteligenciaClimatica
             grpFiltrosGlobal.Controls.Add(btnFiltrar);
             grpFiltrosGlobal.Controls.Add(btnLimpiarFiltro);
 
-            // DataGrid histórico
-            EstiloDataGrid(dgvHistorico);
-            dgvHistorico.Dock = DockStyle.Fill;
+            //// DataGrid histórico
+            //EstiloDataGrid(dgvHistorico);
+            //dgvHistorico.Dock = DockStyle.Fill;
+            // AGREGAR:
+            formsPlotCalientes.Dock = DockStyle.Fill;
+            formsPlotFrios.Dock = DockStyle.Fill;
+
+            pnlCharts.Dock = DockStyle.Fill;
+            pnlCharts.Padding = new Padding(0);
+
+            // Panel izquierdo (calientes)
+            pnlIzq = new Panel();
+            pnlIzq.Dock = DockStyle.Left;
+            pnlIzq.Width = 0; // se ajusta por porcentaje abajo
+            pnlIzq.Controls.Add(formsPlotCalientes);
+
+            // Panel derecho (fríos)
+            pnlDer = new Panel();
+            pnlDer.Dock = DockStyle.Fill;
+            pnlDer.Controls.Add(formsPlotFrios);
+
+            pnlCharts.Controls.Add(pnlDer);
+            pnlCharts.Controls.Add(pnlIzq);
 
             // Ranking
             lblRankingCaliente.Text = "Top 5 más calientes";
@@ -819,7 +849,8 @@ namespace InteligenciaClimatica
             // Agregar el botón al contenedor grpRanking
             grpRanking.Controls.Add(btnExportarRanking);
 
-            tabAnalisis.Controls.Add(dgvHistorico);
+            //tabAnalisis.Controls.Add(dgvHistorico);
+            tabAnalisis.Controls.Add(pnlCharts);
             tabAnalisis.Controls.Add(grpRanking);
             tabAnalisis.Controls.Add(grpFiltrosGlobal);
 
@@ -1110,7 +1141,7 @@ namespace InteligenciaClimatica
             tabConsulta.ResumeLayout(false);
             grpFiltrosGlobal.ResumeLayout(false);
             grpFiltrosGlobal.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvHistorico).EndInit();
+            //((System.ComponentModel.ISupportInitialize)dgvHistorico).EndInit();
             grpRanking.ResumeLayout(false);
             grpRanking.PerformLayout();
             tabAnalisis.ResumeLayout(false);
