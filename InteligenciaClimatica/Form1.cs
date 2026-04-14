@@ -110,7 +110,7 @@ namespace InteligenciaClimatica
         private void SuscribirEventos()
         {
             // Tab Consulta
-            btnConsultar.Click += btnConsultar_Click_1;  // ← este no estaba en el constructor
+            btnConsultar.Click += btnConsultar_Click_1;
             btnLimpiar.Click += btnLimpiar_Click;
             btnGuardarAlerta.Click += btnGuardarAlerta_Click;
 
@@ -118,6 +118,11 @@ namespace InteligenciaClimatica
             btnFiltrar.Click += btnFiltrar_Click;
             btnLimpiarFiltro.Click += btnLimpiarFiltro_Click;
             btnExportarRanking.Click += btnExportarRanking_Click;
+
+            // Tab Favoritos (NUEVO)
+            cmbNuevoFavEstado.SelectedIndexChanged += cmbNuevoFavEstado_SelectedIndexChanged;
+            btnAgregarFav.Click += btnAgregarFav_Click;
+            btnEliminarFav.Click += btnEliminarFav_Click;
 
             // Tab Configuración
             btnProbarConexion.Click += btnProbarConexion_Click;
@@ -146,10 +151,14 @@ namespace InteligenciaClimatica
                 "Análisis general",
                 "Explora el histórico completo con filtros de año y estación");
 
-        private void btnNavFavoritos_Click(object sender, EventArgs e)
-            => NavHacia(btnNavFavoritos, tabFavoritos,
+        private async void btnNavFavoritos_Click(object sender, EventArgs e)
+        {
+            NavHacia(btnNavFavoritos, tabFavoritos,
                 "Municipios favoritos",
                 "Accede rápidamente a tus ubicaciones guardadas");
+
+            await CargarFavoritosAsync(); // ← carga los datos al entrar
+        }
 
         private void btnNavConfig_Click(object sender, EventArgs e)
             => NavHacia(btnNavConfig, tabConfig,
@@ -747,6 +756,89 @@ namespace InteligenciaClimatica
         {
             tssRegistros.Text = $"Registros cargados: {cantidad:N0}";
             lblSidebarStatusRegs.Text = $"{cantidad:N0} registros cargados";
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // 8. PESTAÑA: FAVORITOS
+        // ══════════════════════════════════════════════════════════════════
+        private void cmbNuevoFavEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbNuevoFavEstado.SelectedItem == null) return;
+
+            string estado = cmbNuevoFavEstado.SelectedItem.ToString()!;
+            var municipios = _dataService.ObtenerMunicipiosPorEstado(estado);
+
+            cmbNuevoFavMun.Items.Clear();
+            cmbNuevoFavMun.Items.AddRange(municipios.ToArray<object>());
+            cmbNuevoFavMun.Enabled = municipios.Count > 0;
+
+            if (municipios.Count > 0)
+                cmbNuevoFavMun.SelectedIndex = 0;
+        }
+
+        private async void btnAgregarFav_Click(object? sender, EventArgs e)
+        {
+            if (cmbNuevoFavEstado.SelectedItem == null || cmbNuevoFavMun.SelectedItem == null)
+            {
+                MessageBox.Show("Selecciona un estado y un municipio.", "Datos incompletos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string estado = cmbNuevoFavEstado.SelectedItem.ToString()!;
+            string municipio = cmbNuevoFavMun.SelectedItem.ToString()!;
+            string rutaBD = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+
+            var dbService = new DatabaseService();
+            await dbService.AgregarFavoritoAsync(rutaBD, estado, municipio);
+
+            await CargarFavoritosAsync();
+        }
+
+        private async void btnEliminarFav_Click(object? sender, EventArgs e)
+        {
+            if (dgvFavoritos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un favorito para eliminar.", "Sin selección",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var fila = dgvFavoritos.SelectedRows[0];
+            string estado = fila.Cells["Estado"].Value.ToString()!;
+            string municipio = fila.Cells["Municipio"].Value.ToString()!;
+            string rutaBD = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+
+            var confirmacion = MessageBox.Show(
+                $"¿Eliminar {municipio}, {estado} de favoritos?",
+                "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirmacion == DialogResult.Yes)
+            {
+                var dbService = new DatabaseService();
+                await dbService.EliminarFavoritoAsync(rutaBD, estado, municipio);
+                await CargarFavoritosAsync();
+            }
+        }
+
+        private async Task CargarFavoritosAsync()
+        {
+            string rutaBD = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+            var dbService = new DatabaseService();
+            var favoritos = await dbService.ObtenerFavoritosAsync(rutaBD);
+
+            dgvFavoritos.Columns.Clear();
+            dgvFavoritos.Columns.Add("Municipio", "Municipio");
+            dgvFavoritos.Columns.Add("Estado", "Estado");
+            dgvFavoritos.Rows.Clear();
+
+            foreach (var fav in favoritos)
+            {
+                // El formato guardado es "Municipio, Estado"
+                var partes = fav.Split(", ", 2);
+                if (partes.Length == 2)
+                    dgvFavoritos.Rows.Add(partes[0], partes[1]);
+            }
         }
     }
 }
