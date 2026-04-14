@@ -1,7 +1,7 @@
 ﻿using InteligenciaClimatica.Models;
 using MySqlConnector;
 using System;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace InteligenciaClimatica.Services
 {
@@ -13,10 +13,10 @@ namespace InteligenciaClimatica.Services
             try
             {
                 // En System.Data.SQLite armamos la cadena directamente
-                string cadenaConexion = $"Data Source={rutaArchivo};Version=3;";
+                string cadenaConexion = $"Data Source={rutaArchivo};";
 
                 // Si el archivo no existe, la librería lo creará automáticamente al intentar conectar
-                using var conexion = new SQLiteConnection(cadenaConexion);
+                using var conexion = new SqliteConnection(cadenaConexion);
                 conexion.Open();
 
                 return "OK";
@@ -51,8 +51,9 @@ namespace InteligenciaClimatica.Services
                 return ex.Message;
             }
         }
+
         // ── Guardar Alerta en Servidor (MariaDB) ──
-        public void GuardarAlertaMariaDB(string servidor, string puerto, string bd, string usuario, string password,
+        public async Task GuardarAlertaMariaDB(string servidor, string puerto, string bd, string usuario, string password,
                                          string municipio, string estado, double tempActual, double tempHistorica, double anomalia)
         {
             var builder = new MySqlConnectionStringBuilder
@@ -65,9 +66,8 @@ namespace InteligenciaClimatica.Services
             };
 
             using var conexion = new MySqlConnection(builder.ConnectionString);
-            conexion.Open();
+            await conexion.OpenAsync();
 
-            // 1. Asegurarnos de que la tabla exista (Se ejecuta rápido y no sobreescribe si ya existe)
             string queryCreacion = @"
         CREATE TABLE IF NOT EXISTS AlertasClimaticas (
             Id INT AUTO_INCREMENT PRIMARY KEY,
@@ -82,7 +82,6 @@ namespace InteligenciaClimatica.Services
             using var cmdCreacion = new MySqlCommand(queryCreacion, conexion);
             cmdCreacion.ExecuteNonQuery();
 
-            // 2. Insertar el nuevo registro de alerta
             string queryInsert = @"
         INSERT INTO AlertasClimaticas 
         (FechaRegistro, Municipio, Estado, TemperaturaActual, PromedioHistorico, Anomalia) 
@@ -90,7 +89,6 @@ namespace InteligenciaClimatica.Services
 
             using var cmdInsert = new MySqlCommand(queryInsert, conexion);
 
-            // Pasamos los valores como parámetros seguros para evitar inyecciones SQL
             cmdInsert.Parameters.AddWithValue("@fecha", DateTime.Now);
             cmdInsert.Parameters.AddWithValue("@mun", municipio);
             cmdInsert.Parameters.AddWithValue("@est", estado);
@@ -98,7 +96,7 @@ namespace InteligenciaClimatica.Services
             cmdInsert.Parameters.AddWithValue("@hist", tempHistorica);
             cmdInsert.Parameters.AddWithValue("@anom", anomalia);
 
-            cmdInsert.ExecuteNonQuery();
+            await cmdInsert.ExecuteNonQueryAsync();
         }
 
         public void GuardarRankingMariaDB(string host, string puerto, string bd, string usuario, string pass,
@@ -108,7 +106,6 @@ namespace InteligenciaClimatica.Services
             using var conn = new MySqlConnection(connString);
             conn.Open();
 
-            // ── Crear tablas si no existen ────────────────────────────────────────
             string crearCalientes = @"
     CREATE TABLE IF NOT EXISTS ranking_mas_calientes (
         id              INT AUTO_INCREMENT PRIMARY KEY,
@@ -133,7 +130,6 @@ namespace InteligenciaClimatica.Services
     );";
             new MySqlCommand(crearFrios, conn).ExecuteNonQuery();
 
-            // ── Agregar exportacion_id si la tabla ya existía sin esa columna ─────
             string agregarColumnaCalientes = @"
     ALTER TABLE ranking_mas_calientes 
     ADD COLUMN IF NOT EXISTS exportacion_id INT NOT NULL DEFAULT 0;";
@@ -144,8 +140,6 @@ namespace InteligenciaClimatica.Services
     ADD COLUMN IF NOT EXISTS exportacion_id INT NOT NULL DEFAULT 0;";
             new MySqlCommand(agregarColumnaFrios, conn).ExecuteNonQuery();
 
-            // ── Calcular el siguiente exportacion_id ──────────────────────────────
-            // Tomamos el máximo actual de ambas tablas y sumamos 1
             string queryMaxId = @"
         SELECT COALESCE(MAX(exportacion_id), 0) 
         FROM (
@@ -155,7 +149,6 @@ namespace InteligenciaClimatica.Services
         ) AS combinado;";
             int nuevoId = Convert.ToInt32(new MySqlCommand(queryMaxId, conn).ExecuteScalar()) + 1;
 
-            // ── Insertar top calientes ────────────────────────────────────────────
             for (int i = 0; i < topCalientes.Count; i++)
             {
                 var r = topCalientes[i];
@@ -171,7 +164,6 @@ namespace InteligenciaClimatica.Services
                 cmd.ExecuteNonQuery();
             }
 
-            // ── Insertar top fríos ────────────────────────────────────────────────
             for (int i = 0; i < topFrios.Count; i++)
             {
                 var r = topFrios[i];
@@ -187,6 +179,100 @@ namespace InteligenciaClimatica.Services
                 cmd.ExecuteNonQuery();
             }
         }
-    }
 
+        // ══════════════════════════════════════════════════════════════════
+        // SQLITE: INICIALIZACIÓN
+        // ══════════════════════════════════════════════════════════════════
+
+        public async Task InicializarBaseDatosLocalAsync(string rutaArchivo)
+        {
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+            using var conexion = new SqliteConnection(cadenaConexion);
+            await conexion.OpenAsync();
+
+            string queryTablas = @"
+                CREATE TABLE IF NOT EXISTS Configuracion (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Umbral REAL,
+                    RutaCSV TEXT,
+                    RutaJSON TEXT
+                );
+
+                CREATE TABLE IF NOT EXISTS Favoritos (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Estado TEXT NOT NULL,
+                    Municipio TEXT NOT NULL,
+                    FechaAgregado DATETIME NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS HistorialConsultas (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Estado TEXT,
+                    Municipio TEXT,
+                    FechaConsulta DATETIME NOT NULL
+                );";
+
+            using var cmd = new SqliteCommand(queryTablas, conexion);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // SQLITE: CRUD DE FAVORITOS
+        // ══════════════════════════════════════════════════════════════════
+
+        public async Task AgregarFavoritoAsync(string rutaArchivo, string estado, string municipio)
+        {
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+            using var conexion = new SqliteConnection(cadenaConexion);
+            await conexion.OpenAsync();
+
+            string query = @"
+                INSERT INTO Favoritos (Estado, Municipio, FechaAgregado) 
+                VALUES (@est, @mun, @fecha);";
+
+            using var cmd = new SqliteCommand(query, conexion);
+            cmd.Parameters.AddWithValue("@est", estado);
+            cmd.Parameters.AddWithValue("@mun", municipio);
+            // Sqlite prefiere las fechas en formato texto ISO 8601
+            cmd.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        public async Task<List<string>> ObtenerFavoritosAsync(string rutaArchivo)
+        {
+            var listaFavoritos = new List<string>();
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+
+            using var conexion = new SqliteConnection(cadenaConexion);
+            await conexion.OpenAsync();
+
+            string query = "SELECT Estado, Municipio FROM Favoritos ORDER BY FechaAgregado DESC;";
+            using var cmd = new SqliteCommand(query, conexion);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                string estado = reader.GetString(0);
+                string municipio = reader.GetString(1);
+                listaFavoritos.Add($"{municipio}, {estado}");
+            }
+
+            return listaFavoritos;
+        }
+
+        public async Task EliminarFavoritoAsync(string rutaArchivo, string estado, string municipio)
+        {
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+            using var conexion = new SqliteConnection(cadenaConexion);
+            await conexion.OpenAsync();
+
+            string query = "DELETE FROM Favoritos WHERE Estado = @est AND Municipio = @mun;";
+            using var cmd = new SqliteCommand(query, conexion);
+            cmd.Parameters.AddWithValue("@est", estado);
+            cmd.Parameters.AddWithValue("@mun", municipio);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+    }
 }

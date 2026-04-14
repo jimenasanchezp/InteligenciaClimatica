@@ -28,7 +28,7 @@ namespace InteligenciaClimatica
         // ══════════════════════════════════════════════════════════════════
         // 2. INICIALIZACIÓN Y CARGA
         // ══════════════════════════════════════════════════════════════════
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             string csvPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "data.csv");
             string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "municipios_mx.json");
@@ -98,6 +98,13 @@ namespace InteligenciaClimatica
             {
                 pnlIzq.Width = pnlCharts.Width / 2;
             };
+
+            string rutaBDLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+
+            var dbService = new DatabaseService();
+            await dbService.InicializarBaseDatosLocalAsync(rutaBDLocal);
+
+            ActualizarEstadoSQLite("SQLite: OK (Lista para usar)");
         }
 
         private void SuscribirEventos()
@@ -185,7 +192,7 @@ namespace InteligenciaClimatica
         // ══════════════════════════════════════════════════════════════════
         private void cmbEstado_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-
+            
             if (cmbEstado.SelectedItem == null) return;
 
             // 1. PRIMERO limpiamos la pantalla de cualquier consulta anterior
@@ -210,7 +217,7 @@ namespace InteligenciaClimatica
 
         private void cmbMunicipio_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-
+            
             if (cmbMunicipio.SelectedItem == null || cmbEstado.SelectedItem == null) return;
 
             // 1. PRIMERO limpiamos cualquier cálculo, semáforo o temperatura de la consulta anterior
@@ -359,7 +366,7 @@ namespace InteligenciaClimatica
                 // 2. Llamamos a nuestro servicio
                 var dbService = new DatabaseService();
 
-                dbService.GuardarAlertaMariaDB(
+                await dbService.GuardarAlertaMariaDB(
                     txtMariaServidor.Text,
                     txtMariaPuerto.Text,
                     txtMariaBD.Text,
@@ -701,7 +708,7 @@ namespace InteligenciaClimatica
                 };
 
                 // 2. Aquí llamarías a tu DatabaseService para hacer el UPDATE en SQLite
-
+                
                 ActualizarEstadoSQLite("SQLite: OK (Configurada)");
 
                 MessageBox.Show("Configuración guardada correctamente en el entorno local.",
