@@ -274,5 +274,37 @@ namespace InteligenciaClimatica.Services
 
             await cmd.ExecuteNonQueryAsync();
         }
+        public async Task MigrarFavoritosASQLiteAsync(string rutaArchivo, List<(string Estado, string Municipio)> nuevosFavoritos)
+        {
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+            using var conexion = new SqliteConnection(cadenaConexion);
+            await conexion.OpenAsync();
+
+            // Iniciamos una transacción para que la inserción masiva sea instantánea
+            using var transaccion = conexion.BeginTransaction();
+
+            string query = @"
+        INSERT INTO Favoritos (Estado, Municipio, FechaAgregado) 
+        VALUES (@est, @mun, @fecha);";
+
+            using var cmd = new SqliteCommand(query, conexion, transaccion);
+
+            // Declaramos los parámetros una sola vez por eficiencia
+            cmd.Parameters.Add("@est", SqliteType.Text);
+            cmd.Parameters.Add("@mun", SqliteType.Text);
+            cmd.Parameters.Add("@fecha", SqliteType.Text);
+
+            foreach (var fav in nuevosFavoritos)
+            {
+                cmd.Parameters["@est"].Value = fav.Estado;
+                cmd.Parameters["@mun"].Value = fav.Municipio;
+                cmd.Parameters["@fecha"].Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // Confirmamos todos los cambios de golpe
+            await transaccion.CommitAsync();
+        }
     }
 }

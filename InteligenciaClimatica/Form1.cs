@@ -123,6 +123,7 @@ namespace InteligenciaClimatica
             cmbNuevoFavEstado.SelectedIndexChanged += cmbNuevoFavEstado_SelectedIndexChanged;
             btnAgregarFav.Click += btnAgregarFav_Click;
             btnEliminarFav.Click += btnEliminarFav_Click;
+            btnMigrar.Click += btnMigrar_Click;
 
             // Tab Configuración
             btnProbarConexion.Click += btnProbarConexion_Click;
@@ -838,6 +839,63 @@ namespace InteligenciaClimatica
                 var partes = fav.Split(", ", 2);
                 if (partes.Length == 2)
                     dgvFavoritos.Rows.Add(partes[0], partes[1]);
+            }
+        }
+        private async void btnMigrar_Click(object? sender, EventArgs e)
+        {
+            if (dgvFavoritos.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos en la tabla para migrar.", "Sin datos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                btnMigrar.Enabled = false;
+                btnMigrar.Text = "Migrando...";
+
+                // 1. Extraemos los datos actuales que queremos migrar
+                var listaAMigrar = new List<(string Estado, string Municipio)>();
+                foreach (DataGridViewRow row in dgvFavoritos.Rows)
+                {
+                    if (row.Cells["Estado"].Value != null && row.Cells["Municipio"].Value != null)
+                    {
+                        string estado = row.Cells["Estado"].Value.ToString()!;
+                        string municipio = row.Cells["Municipio"].Value.ToString()!;
+                        listaAMigrar.Add((estado, municipio));
+                    }
+                }
+
+                // 2. Ejecutamos la migración
+                string rutaBDLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+                var dbService = new DatabaseService();
+                await dbService.MigrarFavoritosASQLiteAsync(rutaBDLocal, listaAMigrar);
+
+                // 3. Recargamos la vista
+                await CargarFavoritosAsync();
+
+                btnMigrar.Text = "¡Migrados! ✓";
+                btnMigrar.BackColor = Color.FromArgb(59, 130, 55); // Verde éxito
+
+                MessageBox.Show("Los registros se han migrado exitosamente a la base de datos local SQLite.",
+                    "Migración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                await Task.Delay(2000);
+
+                // Restaurar estado del botón
+                btnMigrar.Text = "Migrar a SQLite";
+                btnMigrar.BackColor = Color.FromArgb(45, 100, 163);
+                btnMigrar.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                btnMigrar.Text = "Migrar a SQLite";
+                btnMigrar.BackColor = Color.FromArgb(45, 100, 163);
+                btnMigrar.Enabled = true;
+
+                MessageBox.Show($"Error durante la migración local:\n\n{ex.Message}",
+                    "Error de escritura", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

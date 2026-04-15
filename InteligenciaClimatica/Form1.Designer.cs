@@ -117,6 +117,7 @@ namespace InteligenciaClimatica
         private ComboBox cmbNuevoFavMun;
         private Button btnAgregarFav;
         private Button btnEliminarFav;
+        private Button btnMigrar;
 
         // ── Tab: Configuración ─────────────────────────────────────────────
         private GroupBox grpBaseDatos;
@@ -272,6 +273,21 @@ namespace InteligenciaClimatica
             cmbNuevoFavMun = new ComboBox();
             btnAgregarFav = new Button();
             btnEliminarFav = new Button();
+            btnMigrar = new Button();
+
+            // Configuración visual del botón (ubicado en X=956 para que quede al lado de Eliminar)
+            btnMigrar.Text = "Migrar";
+            btnMigrar.Location = new Point(956, 30);
+            btnMigrar.Size = new Size(70, 34);
+            btnMigrar.BackColor = Color.FromArgb(45, 100, 163); // Azul profesional
+            btnMigrar.ForeColor = Color.White;
+            btnMigrar.FlatStyle = FlatStyle.Flat;
+            btnMigrar.FlatAppearance.BorderSize = 0;
+            btnMigrar.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnMigrar.Cursor = Cursors.Hand;
+
+            // Agregarlo al contenedor
+            grpAgregarFav.Controls.Add(btnMigrar);
 
             // Tab Configuración
             grpBaseDatos = new GroupBox();
