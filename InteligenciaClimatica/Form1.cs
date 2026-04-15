@@ -16,11 +16,17 @@ namespace InteligenciaClimatica
         // Rastrea el botón de navegación activo
         private Button _activeNavBtn;
         private List<RegistroClimatico> _datosFiltradosActuales = new();
+        private ScottPlot.WinForms.FormsPlot formsPlotEvolucion;
 
         public Form1()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;
+            formsPlotEvolucion = new ScottPlot.WinForms.FormsPlot();
+            formsPlotEvolucion.Dock = DockStyle.Bottom;
+            formsPlotEvolucion.Height = 280;
+            formsPlotEvolucion.Visible = false;
+            pnlCharts.Controls.Add(formsPlotEvolucion);
             SuscribirEventos();
             DibujarSeparadorTopBar();
         }
@@ -62,6 +68,7 @@ namespace InteligenciaClimatica
                 var anios = _dataService.RegistrosHistoricos
                     .Select(r => r.Periodo.Year)
                     .Distinct()
+                    .Where(a => a <= 2025)
                     .OrderByDescending(a => a)
                     .Select(a => a.ToString())
                     .ToArray();
@@ -98,6 +105,23 @@ namespace InteligenciaClimatica
             {
                 pnlIzq.Width = pnlCharts.Width / 2;
             };
+
+            pnlIzq.Width = pnlCharts.Width / 2;
+
+            pnlCharts.SizeChanged += (s, ev) =>
+            {
+                pnlIzq.Width = pnlCharts.Width / 2;
+            };
+
+            // 👉 AGREGA ESTE BLOQUE AQUÍ:
+            formsPlotEvolucion = new ScottPlot.WinForms.FormsPlot();
+            formsPlotEvolucion.Dock = DockStyle.Bottom;
+            formsPlotEvolucion.Height = 280;
+            formsPlotEvolucion.Visible = false;
+            pnlCharts.Controls.Add(formsPlotEvolucion);
+            // ----------------------------------------
+
+
 
             string rutaBDLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
 
@@ -469,9 +493,13 @@ namespace InteligenciaClimatica
         // ══════════════════════════════════════════════════════════════════
         private void CargarDatosAnalisis()
         {
+        
             if (_dataService == null || !_dataService.RegistrosHistoricos.Any()) return;
 
             var query = _dataService.RegistrosHistoricos.AsEnumerable();
+
+            // 👉 AQUÍ ESTÁ LA SOLUCIÓN: Declaramos la variable desde el principio
+            string estadoBuscado = "";
 
             if (cmbFiltroAnio.SelectedItem != null && cmbFiltroAnio.SelectedItem.ToString() != "Todos")
             {
@@ -485,18 +513,21 @@ namespace InteligenciaClimatica
                 query = query.Where(r => r.Estacion.Equals(estacionSel, StringComparison.OrdinalIgnoreCase));
             }
 
+            // Dejamos un solo bloque para el buscador
             if (!string.IsNullOrWhiteSpace(txtBuscarEstado.Text))
             {
-                string busqueda = txtBuscarEstado.Text.Trim().ToLower();
-                query = query.Where(r => r.Estado.ToLower().Contains(busqueda));
+                estadoBuscado = txtBuscarEstado.Text.Trim().ToLower();
+                query = query.Where(r => r.Estado.ToLower().Contains(estadoBuscado));
             }
 
             _datosFiltradosActuales = query.ToList();
 
-            // YA NO usamos dgvHistorico — graficamos directamente
             ActualizarRankings(_datosFiltradosActuales);
-            ActualizarGraficas(_datosFiltradosActuales);
+
+            // Ya no marcará error porque la variable sí existe arriba
+            ActualizarGraficas(_datosFiltradosActuales, estadoBuscado);
         }
+        
 
         private void btnFiltrar_Click(object? sender, EventArgs e)
         {
@@ -598,7 +629,7 @@ namespace InteligenciaClimatica
             }
         }
 
-        private void ActualizarGraficas(List<RegistroClimatico> registros)
+        private void ActualizarGraficas(List<RegistroClimatico> registros, string estadoBuscado)
         {
             // ── Top 5 más calientes ──────────────────────────────────────
             var calientes = registros
@@ -653,6 +684,59 @@ namespace InteligenciaClimatica
             formsPlotFrios.Plot.Title("Top 5 más fríos");
             formsPlotFrios.Plot.Axes.Margins(bottom: 0);
             formsPlotFrios.Refresh();
+
+            // ── Gráfica de Dispersión (Evolución) ────────────────────────
+            if (!string.IsNullOrEmpty(estadoBuscado) && registros.Any())
+            {
+                formsPlotEvolucion.Visible = true;
+                formsPlotEvolucion.Plot.Clear();
+
+                var estaciones = new[] { "Primavera", "Verano", "Otoño", "Invierno" };
+                var colores = new[] {
+                    ScottPlot.Color.FromHex("#2E8B57"), // Verde
+                    ScottPlot.Color.FromHex("#E24B4A"), // Rojo
+                    ScottPlot.Color.FromHex("#D2691E"), // Naranja
+                    ScottPlot.Color.FromHex("#378ADD")  // Azul
+                };
+
+                for (int i = 0; i < estaciones.Length; i++)
+                {
+                    var est = estaciones[i];
+                    var datosEstacion = registros
+                        .Where(r => r.Estacion.Equals(est, StringComparison.OrdinalIgnoreCase))
+                        .GroupBy(r => r.Periodo.Year)
+                        .Select(g => new { Anio = (double)g.Key, Temp = g.Average(r => r.PromedioC) })
+                        .OrderBy(x => x.Anio)
+                        .ToList();
+
+                    if (datosEstacion.Any())
+                    {
+                        double[] xs = datosEstacion.Select(d => d.Anio).ToArray();
+                        double[] ys = datosEstacion.Select(d => d.Temp).ToArray();
+
+                        var scatter = formsPlotEvolucion.Plot.Add.Scatter(xs, ys);
+                        scatter.Label = est;
+                        scatter.Color = colores[i];
+                        scatter.MarkerSize = 8;
+                        scatter.LineWidth = 2;
+                    }
+                }
+
+                formsPlotEvolucion.Plot.Title($"Evolución Climática: {txtBuscarEstado.Text.ToUpper()}");
+                formsPlotEvolucion.Plot.XLabel("Año");
+                formsPlotEvolucion.Plot.YLabel("Temperatura Promedio (°C)");
+                formsPlotEvolucion.Plot.ShowLegend();
+
+                formsPlotEvolucion.Plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(
+                    registros.Select(r => r.Periodo.Year).Distinct().Select(a => new ScottPlot.Tick(a, a.ToString())).ToArray()
+                );
+
+                formsPlotEvolucion.Refresh();
+            }
+            else
+            {
+                formsPlotEvolucion.Visible = false;
+            }
         }
 
         // ══════════════════════════════════════════════════════════════════
