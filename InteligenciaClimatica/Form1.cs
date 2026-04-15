@@ -123,6 +123,7 @@ namespace InteligenciaClimatica
             cmbNuevoFavEstado.SelectedIndexChanged += cmbNuevoFavEstado_SelectedIndexChanged;
             btnAgregarFav.Click += btnAgregarFav_Click;
             btnEliminarFav.Click += btnEliminarFav_Click;
+            btnMigrar.Click += btnMigrar_Click;
 
             // Tab Configuración
             btnProbarConexion.Click += btnProbarConexion_Click;
@@ -142,14 +143,22 @@ namespace InteligenciaClimatica
         // 3. NAVEGACIÓN LATERAL Y TOPBAR
         // ══════════════════════════════════════════════════════════════════
         private void btnNavConsulta_Click(object sender, EventArgs e)
-            => NavHacia(btnNavConsulta, tabConsulta,
+        {
+            NavHacia(btnNavConsulta, tabConsulta,
                 "Consulta climática",
                 "Compara temperatura actual vs. promedio histórico por municipio");
 
+            btnMigrar.Visible = false; // 👈 Lo apagamos
+        }
+
         private void btnNavAnalisis_Click(object sender, EventArgs e)
-            => NavHacia(btnNavAnalisis, tabAnalisis,
-                "Análisis general",
+        {
+            NavHacia(btnNavAnalisis, tabAnalisis,
+                "Análisis global",
                 "Explora el histórico completo con filtros de año y estación");
+
+            btnMigrar.Visible = false; // 👈 Lo apagamos
+        }
 
         private async void btnNavFavoritos_Click(object sender, EventArgs e)
         {
@@ -157,14 +166,19 @@ namespace InteligenciaClimatica
                 "Municipios favoritos",
                 "Accede rápidamente a tus ubicaciones guardadas");
 
-            await CargarFavoritosAsync(); // ← carga los datos al entrar
+            btnMigrar.Visible = true;  // 👈 ¡AQUÍ LO ENCENDEMOS!
+
+            await CargarFavoritosAsync(); // carga los datos al entrar
         }
 
         private void btnNavConfig_Click(object sender, EventArgs e)
-            => NavHacia(btnNavConfig, tabConfig,
+        {
+            NavHacia(btnNavConfig, tabConfig,
                 "Configuración",
                 "Base de datos, archivos de datos y preferencias del sistema");
 
+            btnMigrar.Visible = false; // 👈 Lo apagamos
+        }
         /// Cambia la pestaña activa y actualiza el estado visual del sidebar.
         private void NavHacia(Button btnDestino, TabPage tabDestino,
                               string titulo, string descripcion)
@@ -839,6 +853,59 @@ namespace InteligenciaClimatica
                 if (partes.Length == 2)
                     dgvFavoritos.Rows.Add(partes[0], partes[1]);
             }
+        }
+        private async void btnMigrar_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                // 1. ¿Hay algo en el Grid?
+                if (dgvFavoritos.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay datos en la tabla para migrar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // 2. Convertir las filas del DataGridView a una lista para el servicio
+                var listaDePantalla = new List<dynamic>();
+                foreach (DataGridViewRow row in dgvFavoritos.Rows)
+                {
+                    if (row.Cells["Estado"].Value != null && row.Cells["Municipio"].Value != null)
+                    {
+                        listaDePantalla.Add(new
+                        {
+                            Estado = row.Cells["Estado"].Value.ToString(),
+                            Municipio = row.Cells["Municipio"].Value.ToString()
+                        });
+                    }
+                }
+
+                // 3. Ejecutar Migración
+                var db = new DatabaseService();
+                db.MigrarFavoritosASQLite(txtSQLitePath.Text, listaDePantalla);
+
+                // 4. Feedback visual (Cambio de color)
+                btnMigrar.Enabled = false;
+                btnMigrar.Text = "¡Sincronizado! ✓";
+                btnMigrar.BackColor = Color.FromArgb(99, 153, 34); // Verde éxito
+
+                await Task.Delay(2000); // Pausa de 2 segundos
+
+                btnMigrar.Text = "Migrar Favoritos";
+                btnMigrar.BackColor = Color.FromArgb(186, 117, 23); // Ámbar original
+                btnMigrar.Enabled = true;
+
+                // 5. Refrescar la tabla para que lea los IDs reales de SQLite
+                CargarFavoritosGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al migrar a SQLite: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async Task CargarFavoritosGrid()
+        {
+            // Reutilizamos la lógica que ya tienes en CargarFavoritosAsync para no repetir código
+            await CargarFavoritosAsync();
         }
     }
 }

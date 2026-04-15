@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="11.0.0-preview.3.26207.106" />
     <PackageReference Include="MySqlConnector" Version="2.5.0" />
     <PackageReference Include="System.Text.Json" Version="11.0.0-preview.2.26159.112" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.1.58" />
   </ItemGroup>
 
   <ItemGroup>

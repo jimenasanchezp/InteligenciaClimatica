@@ -2,6 +2,7 @@
 using MySqlConnector;
 using System;
 using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace InteligenciaClimatica.Services
 {
@@ -274,5 +275,49 @@ namespace InteligenciaClimatica.Services
 
             await cmd.ExecuteNonQueryAsync();
         }
+        public void MigrarFavoritosASQLite(string rutaArchivo, List<dynamic> listaFavoritos)
+        {
+            string cadenaConexion = $"Data Source={rutaArchivo};";
+
+            using (var conexion = new SqliteConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                // 1. Aseguramos que la creación coincida exactamente con tu tabla (incluyendo FechaAgregado)
+                string sqlCrear = @"CREATE TABLE IF NOT EXISTS Favoritos (
+                                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        Estado TEXT NOT NULL,
+                                        Municipio TEXT NOT NULL,
+                                        FechaAgregado DATETIME NOT NULL
+                                    );";
+                using (var cmd = new SqliteCommand(sqlCrear, conexion)) { cmd.ExecuteNonQuery(); }
+
+                // 2. Insertar cada uno verificando duplicados
+                foreach (var fav in listaFavoritos)
+                {
+                    string sqlCheck = "SELECT COUNT(*) FROM Favoritos WHERE Estado = @est AND Municipio = @mun";
+                    using (var cmdCheck = new SqliteCommand(sqlCheck, conexion))
+                    {
+                        cmdCheck.Parameters.AddWithValue("@est", fav.Estado);
+                        cmdCheck.Parameters.AddWithValue("@mun", fav.Municipio);
+                        long existe = (long)(cmdCheck.ExecuteScalar() ?? 0L);
+
+                        if (existe == 0)
+                        {
+                            // 3. Enviamos la fecha actual para que SQLite no marque error de "NOT NULL"
+                            string sqlIns = "INSERT INTO Favoritos (Estado, Municipio, FechaAgregado) VALUES (@est, @mun, @fecha)";
+                            using (var cmdIns = new SqliteCommand(sqlIns, conexion))
+                            {
+                                cmdIns.Parameters.AddWithValue("@est", fav.Estado);
+                                cmdIns.Parameters.AddWithValue("@mun", fav.Municipio);
+                                cmdIns.Parameters.AddWithValue("@fecha", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                cmdIns.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+    
 }

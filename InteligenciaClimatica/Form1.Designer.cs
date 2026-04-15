@@ -1,4 +1,5 @@
 ﻿
+
 namespace InteligenciaClimatica
 {
     partial class Form1
@@ -117,6 +118,7 @@ namespace InteligenciaClimatica
         private ComboBox cmbNuevoFavMun;
         private Button btnAgregarFav;
         private Button btnEliminarFav;
+        private Button btnMigrar;
 
         // ── Tab: Configuración ─────────────────────────────────────────────
         private GroupBox grpBaseDatos;
@@ -168,42 +170,22 @@ namespace InteligenciaClimatica
 
         private void InitializeComponent()
         {
-            // ── Instancias ─────────────────────────────────────────────────
             pnlSidebar = new Panel();
             pnlSidebarBrand = new Panel();
             lblSidebarTitle = new Label();
-            pnlSidebarFooter = new Panel();
-            lblSidebarStatusAPI = new Label();
-            lblSidebarStatusSQLite = new Label();
-            lblSidebarStatusRegs = new Label();
             lblNavLabelPrincipal = new Label();
             btnNavConsulta = new Button();
             btnNavAnalisis = new Button();
             btnNavFavoritos = new Button();
             lblNavLabelSistema = new Label();
             btnNavConfig = new Button();
+            pnlSidebarFooter = new Panel();
+            lblSidebarStatusAPI = new Label();
+            lblSidebarStatusSQLite = new Label();
+            lblSidebarStatusRegs = new Label();
             pnlMainContent = new Panel();
-            pnlTopBar = new Panel();
-            lblTopBarTitle = new Label();
-            lblTopBarCrumb = new Label();
             tabControl = new TabControl();
             tabConsulta = new TabPage();
-            tabAnalisis = new TabPage();
-            tabFavoritos = new TabPage();
-            tabConfig = new TabPage();
-
-            // Tab Consulta
-            grpBusqueda = new GroupBox();
-            lblEstado = new Label();
-            cmbEstado = new ComboBox();
-            lblMunicipio = new Label();
-            cmbMunicipio = new ComboBox();
-            lblAnio = new Label();
-            cmbAnio = new ComboBox();
-            lblEstacion = new Label();
-            cmbEstacion = new ComboBox();
-            btnConsultar = new Button();
-            btnLimpiar = new Button();
             tblTarjetas = new TableLayoutPanel();
             grpDatosActuales = new GroupBox();
             lblFuenteAPI = new Label();
@@ -241,8 +223,29 @@ namespace InteligenciaClimatica
             pnlSemaforoRojo = new Panel();
             lblSemaforoTexto = new Label();
             btnGuardarAlerta = new Button();
-
-            // Tab Análisis
+            grpBusqueda = new GroupBox();
+            lblEstado = new Label();
+            cmbEstado = new ComboBox();
+            lblMunicipio = new Label();
+            cmbMunicipio = new ComboBox();
+            lblAnio = new Label();
+            cmbAnio = new ComboBox();
+            lblEstacion = new Label();
+            cmbEstacion = new ComboBox();
+            btnConsultar = new Button();
+            btnLimpiar = new Button();
+            tabAnalisis = new TabPage();
+            pnlCharts = new Panel();
+            pnlDer = new Panel();
+            formsPlotFrios = new ScottPlot.WinForms.FormsPlot();
+            pnlIzq = new Panel();
+            formsPlotCalientes = new ScottPlot.WinForms.FormsPlot();
+            grpRanking = new GroupBox();
+            lblRankingCaliente = new Label();
+            lstCalientes = new ListBox();
+            lblRankingFrio = new Label();
+            lstFrios = new ListBox();
+            btnExportarRanking = new Button();
             grpFiltrosGlobal = new GroupBox();
             lblFiltroAnio = new Label();
             cmbFiltroAnio = new ComboBox();
@@ -252,18 +255,7 @@ namespace InteligenciaClimatica
             txtBuscarEstado = new TextBox();
             btnFiltrar = new Button();
             btnLimpiarFiltro = new Button();
-            //dgvHistorico = new DataGridView();
-            formsPlotCalientes = new ScottPlot.WinForms.FormsPlot();
-            formsPlotFrios = new ScottPlot.WinForms.FormsPlot();
-            pnlCharts = new Panel();
-            grpRanking = new GroupBox();
-            lblRankingCaliente = new Label();
-            lstCalientes = new ListBox();
-            lblRankingFrio = new Label();
-            lstFrios = new ListBox();
-            btnExportarRanking = new Button();
-
-            // Tab Favoritos
+            tabFavoritos = new TabPage();
             dgvFavoritos = new DataGridView();
             grpAgregarFav = new GroupBox();
             lblNuevoFavEstado = new Label();
@@ -272,8 +264,23 @@ namespace InteligenciaClimatica
             cmbNuevoFavMun = new ComboBox();
             btnAgregarFav = new Button();
             btnEliminarFav = new Button();
-
-            // Tab Configuración
+            btnMigrar = new Button();
+            tabConfig = new TabPage();
+            btnGuardarConfig = new Button();
+            grpPreferencias = new GroupBox();
+            lblUmbral = new Label();
+            nudUmbral = new NumericUpDown();
+            lblUmbralSufijo = new Label();
+            lblUnidades = new Label();
+            rbCelsius = new RadioButton();
+            rbFahrenheit = new RadioButton();
+            grpArchivos = new GroupBox();
+            lblRutaCSV = new Label();
+            txtRutaCSV = new TextBox();
+            btnExplorarCSV = new Button();
+            lblRutaJSON = new Label();
+            txtRutaJSON = new TextBox();
+            btnExplorarJSON = new Button();
             grpBaseDatos = new GroupBox();
             lblMotorBD = new Label();
             cmbMotorBD = new ComboBox();
@@ -292,34 +299,18 @@ namespace InteligenciaClimatica
             txtMariaPassword = new TextBox();
             btnProbarConexion = new Button();
             lblEstadoConexion = new Label();
-            grpArchivos = new GroupBox();
-            lblRutaCSV = new Label();
-            txtRutaCSV = new TextBox();
-            btnExplorarCSV = new Button();
-            lblRutaJSON = new Label();
-            txtRutaJSON = new TextBox();
-            btnExplorarJSON = new Button();
-            grpPreferencias = new GroupBox();
-            lblUmbral = new Label();
-            nudUmbral = new NumericUpDown();
-            lblUmbralSufijo = new Label();
-            lblUnidades = new Label();
-            rbCelsius = new RadioButton();
-            rbFahrenheit = new RadioButton();
-            btnGuardarConfig = new Button();
+            pnlTopBar = new Panel();
+            lblTopBarTitle = new Label();
+            lblTopBarCrumb = new Label();
             statusStrip = new StatusStrip();
             tssSQLite = new ToolStripStatusLabel();
             tssMariaDB = new ToolStripStatusLabel();
             tssAPI = new ToolStripStatusLabel();
             tssRegistros = new ToolStripStatusLabel();
-
-            // Suspender layout
-            SuspendLayout();
             pnlSidebar.SuspendLayout();
             pnlSidebarBrand.SuspendLayout();
             pnlSidebarFooter.SuspendLayout();
             pnlMainContent.SuspendLayout();
-            pnlTopBar.SuspendLayout();
             tabControl.SuspendLayout();
             tabConsulta.SuspendLayout();
             tblTarjetas.SuspendLayout();
@@ -328,95 +319,26 @@ namespace InteligenciaClimatica
             grpAnomalia.SuspendLayout();
             grpBusqueda.SuspendLayout();
             tabAnalisis.SuspendLayout();
-            //((System.ComponentModel.ISupportInitialize)dgvHistorico).BeginInit();
+            pnlCharts.SuspendLayout();
+            pnlDer.SuspendLayout();
+            pnlIzq.SuspendLayout();
             grpRanking.SuspendLayout();
             grpFiltrosGlobal.SuspendLayout();
             tabFavoritos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvFavoritos).BeginInit();
             grpAgregarFav.SuspendLayout();
             tabConfig.SuspendLayout();
-            grpBaseDatos.SuspendLayout();
-            grpArchivos.SuspendLayout();
             grpPreferencias.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudUmbral).BeginInit();
+            grpArchivos.SuspendLayout();
+            grpBaseDatos.SuspendLayout();
+            pnlTopBar.SuspendLayout();
             statusStrip.SuspendLayout();
-
-
-            // ══════════════════════════════════════════════════════════════
-            // SIDEBAR
-            // ══════════════════════════════════════════════════════════════
-
-            // ── Marca (brand) ──────────────────────────────────────────────
-            lblSidebarTitle.Text = "Inteligencia\nClimática MX";
-            lblSidebarTitle.Font = new Font("Segoe UI", 11.5F, FontStyle.Bold);
-            lblSidebarTitle.ForeColor = Color.White;
-            lblSidebarTitle.Location = new Point(18, 18);
-            lblSidebarTitle.Size = new Size(174, 46);
-            lblSidebarTitle.AutoSize = false;
-
-            pnlSidebarBrand.BackColor = Color.FromArgb(15, 27, 45);
-            pnlSidebarBrand.Location = new Point(0, 0);
-            pnlSidebarBrand.Size = new Size(210, 78);
-            pnlSidebarBrand.Controls.Add(lblSidebarTitle);
-
-            // ── Footer de estado ───────────────────────────────────────────
-            lblSidebarStatusAPI.Text = "● Open-Meteo: —";
-            lblSidebarStatusAPI.Font = new Font("Segoe UI", 8.5F);
-            lblSidebarStatusAPI.ForeColor = Color.FromArgb(99, 153, 34);
-            lblSidebarStatusAPI.Location = new Point(18, 12);
-            lblSidebarStatusAPI.AutoSize = true;
-
-            lblSidebarStatusSQLite.Text = "● SQLite: pendiente";
-            lblSidebarStatusSQLite.Font = new Font("Segoe UI", 8.5F);
-            lblSidebarStatusSQLite.ForeColor = Color.FromArgb(186, 117, 23);
-            lblSidebarStatusSQLite.Location = new Point(18, 32);
-            lblSidebarStatusSQLite.AutoSize = true;
-
-            lblSidebarStatusRegs.Text = "— registros cargados";
-            lblSidebarStatusRegs.Font = new Font("Segoe UI", 8F);
-            lblSidebarStatusRegs.ForeColor = Color.FromArgb(70, 95, 130);
-            lblSidebarStatusRegs.Location = new Point(18, 56);
-            lblSidebarStatusRegs.AutoSize = true;
-
-            pnlSidebarFooter.BackColor = Color.FromArgb(10, 20, 35);
-            pnlSidebarFooter.Dock = DockStyle.Bottom;
-            pnlSidebarFooter.Height = 80;
-            pnlSidebarFooter.Controls.Add(lblSidebarStatusAPI);
-            pnlSidebarFooter.Controls.Add(lblSidebarStatusSQLite);
-            pnlSidebarFooter.Controls.Add(lblSidebarStatusRegs);
-
-            // ── Etiqueta sección "PRINCIPAL" ───────────────────────────────
-            lblNavLabelPrincipal.Text = "PRINCIPAL";
-            lblNavLabelPrincipal.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
-            lblNavLabelPrincipal.ForeColor = Color.FromArgb(65, 90, 125);
-            lblNavLabelPrincipal.Location = new Point(18, 90);
-            lblNavLabelPrincipal.Size = new Size(174, 18);
-            lblNavLabelPrincipal.AutoSize = false;
-
-            // ── Botones de navegación ──────────────────────────────────────
-            EstiloNavBtn(btnNavConsulta, "    Consulta", 112, activo: true);
-            EstiloNavBtn(btnNavAnalisis, "    Análisis general", 152, activo: false);
-            EstiloNavBtn(btnNavFavoritos, "    Favoritos", 192, activo: false);
-
-            btnNavConsulta.Click += btnNavConsulta_Click;
-            btnNavAnalisis.Click += btnNavAnalisis_Click;
-            btnNavFavoritos.Click += btnNavFavoritos_Click;
-
-            // ── Separador + sección "SISTEMA" ─────────────────────────────
-            lblNavLabelSistema.Text = "SISTEMA";
-            lblNavLabelSistema.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
-            lblNavLabelSistema.ForeColor = Color.FromArgb(65, 90, 125);
-            lblNavLabelSistema.Location = new Point(18, 244);
-            lblNavLabelSistema.Size = new Size(174, 18);
-            lblNavLabelSistema.AutoSize = false;
-
-            EstiloNavBtn(btnNavConfig, "    Configuración", 264, activo: false);
-            btnNavConfig.Click += btnNavConfig_Click;
-
-            // ── Panel sidebar ──────────────────────────────────────────────
+            SuspendLayout();
+            // 
+            // pnlSidebar
+            // 
             pnlSidebar.BackColor = Color.FromArgb(15, 27, 45);
-            pnlSidebar.Dock = DockStyle.Left;
-            pnlSidebar.Width = 210;
             pnlSidebar.Controls.Add(pnlSidebarBrand);
             pnlSidebar.Controls.Add(lblNavLabelPrincipal);
             pnlSidebar.Controls.Add(btnNavConsulta);
@@ -425,171 +347,189 @@ namespace InteligenciaClimatica
             pnlSidebar.Controls.Add(lblNavLabelSistema);
             pnlSidebar.Controls.Add(btnNavConfig);
             pnlSidebar.Controls.Add(pnlSidebarFooter);
-
-            // ══════════════════════════════════════════════════════════════
-            // TOP BAR
-            // ══════════════════════════════════════════════════════════════
-            lblTopBarTitle.Text = "Consulta climática";
-            lblTopBarTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
-            lblTopBarTitle.ForeColor = Color.FromArgb(30, 40, 55);
-            lblTopBarTitle.AutoSize = true;
-            lblTopBarTitle.Location = new Point(20, 10);
-
-            lblTopBarCrumb.Text = "Compara temperatura actual vs. promedio histórico por municipio";
-            lblTopBarCrumb.Font = new Font("Segoe UI", 9F);
-            lblTopBarCrumb.ForeColor = Color.FromArgb(120, 135, 155);
-            lblTopBarCrumb.AutoSize = true;
-            lblTopBarCrumb.Location = new Point(22, 36);
-
-            pnlTopBar.BackColor = Color.White;
-            pnlTopBar.Dock = DockStyle.Top;
-            pnlTopBar.Height = 60;
-            pnlTopBar.Controls.Add(lblTopBarTitle);
-            pnlTopBar.Controls.Add(lblTopBarCrumb);
-
-
-            // ══════════════════════════════════════════════════════════════
-            // TABCONTROL (pestañas ocultas)
-            // ══════════════════════════════════════════════════════════════
+            pnlSidebar.Dock = DockStyle.Left;
+            pnlSidebar.Location = new Point(0, 0);
+            pnlSidebar.Name = "pnlSidebar";
+            pnlSidebar.Size = new Size(210, 774);
+            pnlSidebar.TabIndex = 1;
+            // 
+            // pnlSidebarBrand
+            // 
+            pnlSidebarBrand.BackColor = Color.FromArgb(15, 27, 45);
+            pnlSidebarBrand.Controls.Add(lblSidebarTitle);
+            pnlSidebarBrand.Location = new Point(0, 0);
+            pnlSidebarBrand.Name = "pnlSidebarBrand";
+            pnlSidebarBrand.Size = new Size(210, 78);
+            pnlSidebarBrand.TabIndex = 0;
+            // 
+            // lblSidebarTitle
+            // 
+            lblSidebarTitle.Font = new Font("Segoe UI", 11.5F, FontStyle.Bold);
+            lblSidebarTitle.ForeColor = Color.White;
+            lblSidebarTitle.Location = new Point(18, 18);
+            lblSidebarTitle.Name = "lblSidebarTitle";
+            lblSidebarTitle.Size = new Size(174, 46);
+            lblSidebarTitle.TabIndex = 0;
+            lblSidebarTitle.Text = "Inteligencia\nClimática MX";
+            // 
+            // lblNavLabelPrincipal
+            // 
+            lblNavLabelPrincipal.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
+            lblNavLabelPrincipal.ForeColor = Color.FromArgb(65, 90, 125);
+            lblNavLabelPrincipal.Location = new Point(18, 90);
+            lblNavLabelPrincipal.Name = "lblNavLabelPrincipal";
+            lblNavLabelPrincipal.Size = new Size(174, 18);
+            lblNavLabelPrincipal.TabIndex = 1;
+            lblNavLabelPrincipal.Text = "PRINCIPAL";
+            // 
+            // btnNavConsulta
+            // 
+            btnNavConsulta.Location = new Point(0, 0);
+            btnNavConsulta.Name = "btnNavConsulta";
+            btnNavConsulta.Size = new Size(75, 23);
+            btnNavConsulta.TabIndex = 2;
+            btnNavConsulta.Click += btnNavConsulta_Click;
+            // 
+            // btnNavAnalisis
+            // 
+            btnNavAnalisis.Location = new Point(0, 0);
+            btnNavAnalisis.Name = "btnNavAnalisis";
+            btnNavAnalisis.Size = new Size(75, 23);
+            btnNavAnalisis.TabIndex = 3;
+            btnNavAnalisis.Click += btnNavAnalisis_Click;
+            // 
+            // btnNavFavoritos
+            // 
+            btnNavFavoritos.Location = new Point(0, 0);
+            btnNavFavoritos.Name = "btnNavFavoritos";
+            btnNavFavoritos.Size = new Size(75, 23);
+            btnNavFavoritos.TabIndex = 4;
+            btnNavFavoritos.Click += btnNavFavoritos_Click;
+            // 
+            // lblNavLabelSistema
+            // 
+            lblNavLabelSistema.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
+            lblNavLabelSistema.ForeColor = Color.FromArgb(65, 90, 125);
+            lblNavLabelSistema.Location = new Point(18, 244);
+            lblNavLabelSistema.Name = "lblNavLabelSistema";
+            lblNavLabelSistema.Size = new Size(174, 18);
+            lblNavLabelSistema.TabIndex = 5;
+            lblNavLabelSistema.Text = "SISTEMA";
+            // 
+            // btnNavConfig
+            // 
+            btnNavConfig.Location = new Point(0, 0);
+            btnNavConfig.Name = "btnNavConfig";
+            btnNavConfig.Size = new Size(75, 23);
+            btnNavConfig.TabIndex = 6;
+            btnNavConfig.Click += btnNavConfig_Click;
+            // 
+            // pnlSidebarFooter
+            // 
+            pnlSidebarFooter.BackColor = Color.FromArgb(10, 20, 35);
+            pnlSidebarFooter.Controls.Add(lblSidebarStatusAPI);
+            pnlSidebarFooter.Controls.Add(lblSidebarStatusSQLite);
+            pnlSidebarFooter.Controls.Add(lblSidebarStatusRegs);
+            pnlSidebarFooter.Dock = DockStyle.Bottom;
+            pnlSidebarFooter.Location = new Point(0, 694);
+            pnlSidebarFooter.Name = "pnlSidebarFooter";
+            pnlSidebarFooter.Size = new Size(210, 80);
+            pnlSidebarFooter.TabIndex = 7;
+            // 
+            // lblSidebarStatusAPI
+            // 
+            lblSidebarStatusAPI.AutoSize = true;
+            lblSidebarStatusAPI.Font = new Font("Segoe UI", 8.5F);
+            lblSidebarStatusAPI.ForeColor = Color.FromArgb(99, 153, 34);
+            lblSidebarStatusAPI.Location = new Point(18, 12);
+            lblSidebarStatusAPI.Name = "lblSidebarStatusAPI";
+            lblSidebarStatusAPI.Size = new Size(129, 20);
+            lblSidebarStatusAPI.TabIndex = 0;
+            lblSidebarStatusAPI.Text = "● Open-Meteo: —";
+            // 
+            // lblSidebarStatusSQLite
+            // 
+            lblSidebarStatusSQLite.AutoSize = true;
+            lblSidebarStatusSQLite.Font = new Font("Segoe UI", 8.5F);
+            lblSidebarStatusSQLite.ForeColor = Color.FromArgb(186, 117, 23);
+            lblSidebarStatusSQLite.Location = new Point(18, 32);
+            lblSidebarStatusSQLite.Name = "lblSidebarStatusSQLite";
+            lblSidebarStatusSQLite.Size = new Size(139, 20);
+            lblSidebarStatusSQLite.TabIndex = 1;
+            lblSidebarStatusSQLite.Text = "● SQLite: pendiente";
+            // 
+            // lblSidebarStatusRegs
+            // 
+            lblSidebarStatusRegs.AutoSize = true;
+            lblSidebarStatusRegs.Font = new Font("Segoe UI", 8F);
+            lblSidebarStatusRegs.ForeColor = Color.FromArgb(70, 95, 130);
+            lblSidebarStatusRegs.Location = new Point(18, 56);
+            lblSidebarStatusRegs.Name = "lblSidebarStatusRegs";
+            lblSidebarStatusRegs.Size = new Size(139, 19);
+            lblSidebarStatusRegs.TabIndex = 2;
+            lblSidebarStatusRegs.Text = "— registros cargados";
+            // 
+            // pnlMainContent
+            // 
+            pnlMainContent.Controls.Add(tabControl);
+            pnlMainContent.Controls.Add(pnlTopBar);
+            pnlMainContent.Dock = DockStyle.Fill;
+            pnlMainContent.Location = new Point(210, 0);
+            pnlMainContent.Name = "pnlMainContent";
+            pnlMainContent.Size = new Size(1070, 774);
+            pnlMainContent.TabIndex = 0;
+            // 
+            // tabControl
+            // 
             tabControl.Appearance = TabAppearance.FlatButtons;
-            tabControl.ItemSize = new Size(0, 1);
-            tabControl.SizeMode = TabSizeMode.Fixed;
-            tabControl.Dock = DockStyle.Fill;
-            tabControl.Padding = new Point(0, 0);
-            tabControl.Margin = new Padding(0);
             tabControl.Controls.Add(tabConsulta);
             tabControl.Controls.Add(tabAnalisis);
             tabControl.Controls.Add(tabFavoritos);
             tabControl.Controls.Add(tabConfig);
-
-            // ══════════════════════════════════════════════════════════════
-            // TAB: CONSULTA
-            // ══════════════════════════════════════════════════════════════
+            tabControl.Dock = DockStyle.Fill;
+            tabControl.ItemSize = new Size(0, 1);
+            tabControl.Location = new Point(0, 60);
+            tabControl.Margin = new Padding(0);
+            tabControl.Name = "tabControl";
+            tabControl.Padding = new Point(0, 0);
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new Size(1070, 714);
+            tabControl.SizeMode = TabSizeMode.Fixed;
+            tabControl.TabIndex = 0;
+            // 
+            // tabConsulta
+            // 
             tabConsulta.BackColor = Color.FromArgb(244, 247, 250);
+            tabConsulta.Controls.Add(tblTarjetas);
+            tabConsulta.Controls.Add(grpBusqueda);
+            tabConsulta.Location = new Point(4, 5);
+            tabConsulta.Name = "tabConsulta";
             tabConsulta.Padding = new Padding(16);
+            tabConsulta.Size = new Size(1062, 705);
+            tabConsulta.TabIndex = 0;
             tabConsulta.Text = "Consulta";
-
-            // ── Barra de búsqueda ──────────────────────────────────────────
-            EstiloLabel(lblEstado, "Estado", new Point(16, 28));
-            EstiloLabel(lblMunicipio, "Municipio", new Point(228, 28));
-            EstiloLabel(lblAnio, "Año", new Point(476, 28));
-            EstiloLabel(lblEstacion, "Estación", new Point(584, 28));
-
-            EstiloCombo(cmbEstado, new Point(16, 50), 200);
-            EstiloCombo(cmbMunicipio, new Point(228, 50), 230);
-            EstiloCombo(cmbAnio, new Point(476, 50), 95);
-            EstiloCombo(cmbEstacion, new Point(584, 50), 140);
-            cmbEstacion.Items.AddRange(new object[] { "Primavera", "Verano", "Otoño", "Invierno" });
-
-            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMunicipio.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbAnio.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMunicipio.Enabled = false;
-
-            cmbEstado.SelectedIndexChanged += cmbEstado_SelectedIndexChanged_1;
-            cmbMunicipio.SelectedIndexChanged += cmbMunicipio_SelectedIndexChanged_1;
-
-            // Botón Consultar
-            btnConsultar.Text = "Consultar";
-            btnConsultar.Location = new Point(740, 48);
-            btnConsultar.Size = new Size(120, 34);
-            btnConsultar.BackColor = Color.FromArgb(24, 95, 165);
-            btnConsultar.ForeColor = Color.White;
-            btnConsultar.FlatStyle = FlatStyle.Flat;
-            btnConsultar.FlatAppearance.BorderSize = 0;
-            btnConsultar.FlatAppearance.MouseOverBackColor = Color.FromArgb(18, 77, 138);
-            btnConsultar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnConsultar.Cursor = Cursors.Hand;
-            btnConsultar.Enabled = false;
-            btnConsultar.Click += btnConsultar_Click_1;
-
-            // Botón Limpiar
-            btnLimpiar.Text = "Limpiar";
-            btnLimpiar.Location = new Point(872, 48);
-            btnLimpiar.Size = new Size(100, 34);
-            btnLimpiar.BackColor = Color.FromArgb(244, 247, 250);
-            btnLimpiar.ForeColor = Color.FromArgb(90, 105, 125);
-            btnLimpiar.FlatStyle = FlatStyle.Flat;
-            btnLimpiar.FlatAppearance.BorderColor = Color.FromArgb(210, 218, 230);
-            btnLimpiar.Font = new Font("Segoe UI", 9.5F);
-            btnLimpiar.Cursor = Cursors.Hand;
-
-            grpBusqueda.Text = "Parámetros de consulta";
-            grpBusqueda.BackColor = Color.White;
-            grpBusqueda.ForeColor = Color.FromArgb(90, 105, 125);
-            grpBusqueda.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpBusqueda.Dock = DockStyle.Top;
-            grpBusqueda.Height = 100;
-            grpBusqueda.Padding = new Padding(8);
-            grpBusqueda.Controls.Add(lblEstado);
-            grpBusqueda.Controls.Add(cmbEstado);
-            grpBusqueda.Controls.Add(lblMunicipio);
-            grpBusqueda.Controls.Add(cmbMunicipio);
-            grpBusqueda.Controls.Add(lblAnio);
-            grpBusqueda.Controls.Add(cmbAnio);
-            grpBusqueda.Controls.Add(lblEstacion);
-            grpBusqueda.Controls.Add(cmbEstacion);
-            grpBusqueda.Controls.Add(btnConsultar);
-            grpBusqueda.Controls.Add(btnLimpiar);
-
-            // ── Tarjetas (3 columnas) ──────────────────────────────────────
+            // 
+            // tblTarjetas
+            // 
             tblTarjetas.ColumnCount = 3;
             tblTarjetas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
             tblTarjetas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
             tblTarjetas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34F));
-            tblTarjetas.RowCount = 1;
-            tblTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 305F));
-            tblTarjetas.Dock = DockStyle.Top;
-            tblTarjetas.Height = 310;
-            tblTarjetas.Padding = new Padding(0, 14, 0, 0);
             tblTarjetas.Controls.Add(grpDatosActuales, 0, 0);
             tblTarjetas.Controls.Add(grpHistorico, 1, 0);
             tblTarjetas.Controls.Add(grpAnomalia, 2, 0);
-
-            // ── Tarjeta: Datos actuales (azul) ─────────────────────────────
-            lblFuenteAPI.Text = "Fuente: Open-Meteo";
-            lblFuenteAPI.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-            lblFuenteAPI.ForeColor = Color.FromArgb(24, 95, 165);
-            lblFuenteAPI.BackColor = Color.FromArgb(230, 241, 251);
-            lblFuenteAPI.AutoSize = true;
-            lblFuenteAPI.Location = new Point(16, 30);
-            lblFuenteAPI.Padding = new Padding(6, 2, 6, 2);
-
-            lblTempActualVal.Text = "—";
-            lblTempActualVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
-            lblTempActualVal.ForeColor = Color.FromArgb(24, 95, 165);
-            lblTempActualVal.AutoSize = true;
-            lblTempActualVal.Location = new Point(16, 58);
-
-            lblTempActualSub.Text = "Temperatura actual";
-            lblTempActualSub.Font = new Font("Segoe UI", 8.5F);
-            lblTempActualSub.ForeColor = Color.FromArgb(140, 155, 175);
-            lblTempActualSub.AutoSize = true;
-            lblTempActualSub.Location = new Point(20, 118);
-
-            EstiloInfoRow(lblMunicipioKey, "Municipio:", new Point(20, 152));
-            EstiloInfoRow(lblEstadoActKey, "Estado:", new Point(20, 176));
-            EstiloInfoRow(lblMinActKey, "Sensación:", new Point(20, 200));
-            EstiloInfoRow(lblMaxActKey, "Viento:", new Point(20, 224));
-
-            EstiloInfoVal(lblMunicipioVal, "—", new Point(130, 152));
-            EstiloInfoVal(lblEstadoActVal, "—", new Point(130, 176));
-            EstiloInfoVal(lblMinActVal, "—", new Point(130, 200));
-            EstiloInfoVal(lblMaxActVal, "—", new Point(130, 224));
-
-            lblCoordsVal.Text = "Lat: — · Lon: —";
-            lblCoordsVal.Font = new Font("Segoe UI", 8F);
-            lblCoordsVal.ForeColor = Color.FromArgb(160, 175, 195);
-            lblCoordsVal.AutoSize = true;
-            lblCoordsVal.Location = new Point(20, 252);
-
-            grpDatosActuales.Text = "Temperatura actual";
+            tblTarjetas.Dock = DockStyle.Top;
+            tblTarjetas.Location = new Point(16, 116);
+            tblTarjetas.Name = "tblTarjetas";
+            tblTarjetas.Padding = new Padding(0, 14, 0, 0);
+            tblTarjetas.RowCount = 1;
+            tblTarjetas.RowStyles.Add(new RowStyle(SizeType.Absolute, 305F));
+            tblTarjetas.Size = new Size(1030, 310);
+            tblTarjetas.TabIndex = 0;
+            // 
+            // grpDatosActuales
+            // 
             grpDatosActuales.BackColor = Color.White;
-            grpDatosActuales.ForeColor = Color.FromArgb(24, 95, 165);
-            grpDatosActuales.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            grpDatosActuales.Dock = DockStyle.Fill;
-            grpDatosActuales.Margin = new Padding(0, 0, 8, 0);
             grpDatosActuales.Controls.Add(lblFuenteAPI);
             grpDatosActuales.Controls.Add(lblTempActualVal);
             grpDatosActuales.Controls.Add(lblTempActualSub);
@@ -602,50 +542,122 @@ namespace InteligenciaClimatica
             grpDatosActuales.Controls.Add(lblMaxActKey);
             grpDatosActuales.Controls.Add(lblMaxActVal);
             grpDatosActuales.Controls.Add(lblCoordsVal);
-
-            // ── Tarjeta: Histórico (verde) ─────────────────────────────────
-            lblFuenteCSV.Text = "Fuente: data.csv";
-            lblFuenteCSV.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-            lblFuenteCSV.ForeColor = Color.FromArgb(59, 109, 17);
-            lblFuenteCSV.BackColor = Color.FromArgb(234, 243, 222);
-            lblFuenteCSV.AutoSize = true;
-            lblFuenteCSV.Location = new Point(16, 30);
-            lblFuenteCSV.Padding = new Padding(6, 2, 6, 2);
-
-            lblTempHistVal.Text = "—";
-            lblTempHistVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
-            lblTempHistVal.ForeColor = Color.FromArgb(59, 109, 17);
-            lblTempHistVal.AutoSize = true;
-            lblTempHistVal.Location = new Point(16, 58);
-
-            lblTempHistSub.Text = "Promedio histórico";
-            lblTempHistSub.Font = new Font("Segoe UI", 8.5F);
-            lblTempHistSub.ForeColor = Color.FromArgb(140, 155, 175);
-            lblTempHistSub.AutoSize = true;
-            lblTempHistSub.Location = new Point(20, 118);
-
-            EstiloInfoRow(lblEstadoHistKey, "Estado:", new Point(20, 152));
-            EstiloInfoRow(lblFiltroKey, "Filtro:", new Point(20, 176));
-            EstiloInfoRow(lblMinHistKey, "Mínima:", new Point(20, 200));
-            EstiloInfoRow(lblMaxHistKey, "Máxima:", new Point(20, 224));
-
-            EstiloInfoVal(lblEstadoHistVal, "—", new Point(130, 152));
-            EstiloInfoVal(lblFiltroVal, "—", new Point(130, 176));
-            EstiloInfoVal(lblMinHistVal, "—", new Point(130, 200));
-            EstiloInfoVal(lblMaxHistVal, "—", new Point(130, 224));
-
-            lblRegistrosVal.Text = "Basado en — registros del CSV";
-            lblRegistrosVal.Font = new Font("Segoe UI", 8F);
-            lblRegistrosVal.ForeColor = Color.FromArgb(160, 175, 195);
-            lblRegistrosVal.AutoSize = true;
-            lblRegistrosVal.Location = new Point(20, 252);
-
-            grpHistorico.Text = "Promedio histórico";
+            grpDatosActuales.Dock = DockStyle.Fill;
+            grpDatosActuales.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            grpDatosActuales.ForeColor = Color.FromArgb(24, 95, 165);
+            grpDatosActuales.Location = new Point(0, 14);
+            grpDatosActuales.Margin = new Padding(0, 0, 8, 0);
+            grpDatosActuales.Name = "grpDatosActuales";
+            grpDatosActuales.Size = new Size(335, 305);
+            grpDatosActuales.TabIndex = 0;
+            grpDatosActuales.TabStop = false;
+            grpDatosActuales.Text = "Temperatura actual";
+            // 
+            // lblFuenteAPI
+            // 
+            lblFuenteAPI.AutoSize = true;
+            lblFuenteAPI.BackColor = Color.FromArgb(230, 241, 251);
+            lblFuenteAPI.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblFuenteAPI.ForeColor = Color.FromArgb(24, 95, 165);
+            lblFuenteAPI.Location = new Point(16, 30);
+            lblFuenteAPI.Name = "lblFuenteAPI";
+            lblFuenteAPI.Padding = new Padding(6, 2, 6, 2);
+            lblFuenteAPI.Size = new Size(165, 24);
+            lblFuenteAPI.TabIndex = 0;
+            lblFuenteAPI.Text = "Fuente: Open-Meteo";
+            // 
+            // lblTempActualVal
+            // 
+            lblTempActualVal.AutoSize = true;
+            lblTempActualVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
+            lblTempActualVal.ForeColor = Color.FromArgb(24, 95, 165);
+            lblTempActualVal.Location = new Point(16, 58);
+            lblTempActualVal.Name = "lblTempActualVal";
+            lblTempActualVal.Size = new Size(84, 72);
+            lblTempActualVal.TabIndex = 1;
+            lblTempActualVal.Text = "—";
+            // 
+            // lblTempActualSub
+            // 
+            lblTempActualSub.AutoSize = true;
+            lblTempActualSub.Font = new Font("Segoe UI", 8.5F);
+            lblTempActualSub.ForeColor = Color.FromArgb(140, 155, 175);
+            lblTempActualSub.Location = new Point(20, 118);
+            lblTempActualSub.Name = "lblTempActualSub";
+            lblTempActualSub.Size = new Size(137, 20);
+            lblTempActualSub.TabIndex = 2;
+            lblTempActualSub.Text = "Temperatura actual";
+            // 
+            // lblMunicipioKey
+            // 
+            lblMunicipioKey.Location = new Point(0, 0);
+            lblMunicipioKey.Name = "lblMunicipioKey";
+            lblMunicipioKey.Size = new Size(100, 23);
+            lblMunicipioKey.TabIndex = 3;
+            // 
+            // lblMunicipioVal
+            // 
+            lblMunicipioVal.Location = new Point(0, 0);
+            lblMunicipioVal.Name = "lblMunicipioVal";
+            lblMunicipioVal.Size = new Size(100, 23);
+            lblMunicipioVal.TabIndex = 4;
+            // 
+            // lblEstadoActKey
+            // 
+            lblEstadoActKey.Location = new Point(0, 0);
+            lblEstadoActKey.Name = "lblEstadoActKey";
+            lblEstadoActKey.Size = new Size(100, 23);
+            lblEstadoActKey.TabIndex = 5;
+            // 
+            // lblEstadoActVal
+            // 
+            lblEstadoActVal.Location = new Point(0, 0);
+            lblEstadoActVal.Name = "lblEstadoActVal";
+            lblEstadoActVal.Size = new Size(100, 23);
+            lblEstadoActVal.TabIndex = 6;
+            // 
+            // lblMinActKey
+            // 
+            lblMinActKey.Location = new Point(0, 0);
+            lblMinActKey.Name = "lblMinActKey";
+            lblMinActKey.Size = new Size(100, 23);
+            lblMinActKey.TabIndex = 7;
+            // 
+            // lblMinActVal
+            // 
+            lblMinActVal.Location = new Point(0, 0);
+            lblMinActVal.Name = "lblMinActVal";
+            lblMinActVal.Size = new Size(100, 23);
+            lblMinActVal.TabIndex = 8;
+            // 
+            // lblMaxActKey
+            // 
+            lblMaxActKey.Location = new Point(0, 0);
+            lblMaxActKey.Name = "lblMaxActKey";
+            lblMaxActKey.Size = new Size(100, 23);
+            lblMaxActKey.TabIndex = 9;
+            // 
+            // lblMaxActVal
+            // 
+            lblMaxActVal.Location = new Point(0, 0);
+            lblMaxActVal.Name = "lblMaxActVal";
+            lblMaxActVal.Size = new Size(100, 23);
+            lblMaxActVal.TabIndex = 10;
+            // 
+            // lblCoordsVal
+            // 
+            lblCoordsVal.AutoSize = true;
+            lblCoordsVal.Font = new Font("Segoe UI", 8F);
+            lblCoordsVal.ForeColor = Color.FromArgb(160, 175, 195);
+            lblCoordsVal.Location = new Point(20, 252);
+            lblCoordsVal.Name = "lblCoordsVal";
+            lblCoordsVal.Size = new Size(104, 19);
+            lblCoordsVal.TabIndex = 11;
+            lblCoordsVal.Text = "Lat: — · Lon: —";
+            // 
+            // grpHistorico
+            // 
             grpHistorico.BackColor = Color.White;
-            grpHistorico.ForeColor = Color.FromArgb(59, 109, 17);
-            grpHistorico.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            grpHistorico.Dock = DockStyle.Fill;
-            grpHistorico.Margin = new Padding(4, 0, 4, 0);
             grpHistorico.Controls.Add(lblFuenteCSV);
             grpHistorico.Controls.Add(lblTempHistVal);
             grpHistorico.Controls.Add(lblTempHistSub);
@@ -658,70 +670,122 @@ namespace InteligenciaClimatica
             grpHistorico.Controls.Add(lblMaxHistKey);
             grpHistorico.Controls.Add(lblMaxHistVal);
             grpHistorico.Controls.Add(lblRegistrosVal);
-
-            // ── Tarjeta: Anomalía (ámbar) ──────────────────────────────────
-            lblDesviacionKey.Text = "Desviación detectada";
-            lblDesviacionKey.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
-            lblDesviacionKey.ForeColor = Color.FromArgb(186, 117, 23);
-            lblDesviacionKey.BackColor = Color.FromArgb(250, 238, 218);
-            lblDesviacionKey.AutoSize = true;
-            lblDesviacionKey.Location = new Point(16, 30);
-            lblDesviacionKey.Padding = new Padding(6, 2, 6, 2);
-
-            lblDesviacionVal.Text = "—";
-            lblDesviacionVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
-            lblDesviacionVal.ForeColor = Color.FromArgb(186, 117, 23);
-            lblDesviacionVal.AutoSize = true;
-            lblDesviacionVal.Location = new Point(16, 58);
-
-            lblDescAnomalia.Text = "Realiza una consulta para evaluar el riesgo climático.";
-            lblDescAnomalia.Font = new Font("Segoe UI", 8.5F);
-            lblDescAnomalia.ForeColor = Color.FromArgb(140, 155, 175);
-            lblDescAnomalia.Location = new Point(20, 118);
-            lblDescAnomalia.Size = new Size(320, 38);
-
-            lblNivelKey.Text = "Nivel de alerta";
-            lblNivelKey.Font = new Font("Segoe UI", 8.5F);
-            lblNivelKey.ForeColor = Color.FromArgb(90, 105, 125);
-            lblNivelKey.AutoSize = true;
-            lblNivelKey.Location = new Point(20, 168);
-
-            // Semáforo rediseñado: barras horizontales más modernas
-            pnlSemaforoVerde.BackColor = Color.FromArgb(210, 220, 215);
-            pnlSemaforoVerde.Location = new Point(20, 192);
-            pnlSemaforoVerde.Size = new Size(42, 12);
-
-            pnlSemaforoAmarillo.BackColor = Color.FromArgb(210, 220, 215);
-            pnlSemaforoAmarillo.Location = new Point(68, 192);
-            pnlSemaforoAmarillo.Size = new Size(42, 12);
-
-            pnlSemaforoRojo.BackColor = Color.FromArgb(210, 220, 215);
-            pnlSemaforoRojo.Location = new Point(116, 192);
-            pnlSemaforoRojo.Size = new Size(42, 12);
-
-            lblSemaforoTexto.Text = "—";
-            lblSemaforoTexto.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            lblSemaforoTexto.ForeColor = Color.FromArgb(90, 105, 125);
-            lblSemaforoTexto.AutoSize = true;
-            lblSemaforoTexto.Location = new Point(168, 188);
-
-            btnGuardarAlerta.Text = "Guardar alerta";
-            btnGuardarAlerta.Location = new Point(20, 224);
-            btnGuardarAlerta.Size = new Size(155, 34);
-            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
-            btnGuardarAlerta.ForeColor = Color.White;
-            btnGuardarAlerta.FlatStyle = FlatStyle.Flat;
-            btnGuardarAlerta.FlatAppearance.BorderSize = 0;
-            btnGuardarAlerta.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnGuardarAlerta.Cursor = Cursors.Hand;
-            btnGuardarAlerta.Enabled = false;
-
-            grpAnomalia.Text = "Anomalía detectada";
+            grpHistorico.Dock = DockStyle.Fill;
+            grpHistorico.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            grpHistorico.ForeColor = Color.FromArgb(59, 109, 17);
+            grpHistorico.Location = new Point(347, 14);
+            grpHistorico.Margin = new Padding(4, 0, 4, 0);
+            grpHistorico.Name = "grpHistorico";
+            grpHistorico.Size = new Size(335, 305);
+            grpHistorico.TabIndex = 1;
+            grpHistorico.TabStop = false;
+            grpHistorico.Text = "Promedio histórico";
+            // 
+            // lblFuenteCSV
+            // 
+            lblFuenteCSV.AutoSize = true;
+            lblFuenteCSV.BackColor = Color.FromArgb(234, 243, 222);
+            lblFuenteCSV.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblFuenteCSV.ForeColor = Color.FromArgb(59, 109, 17);
+            lblFuenteCSV.Location = new Point(16, 30);
+            lblFuenteCSV.Name = "lblFuenteCSV";
+            lblFuenteCSV.Padding = new Padding(6, 2, 6, 2);
+            lblFuenteCSV.Size = new Size(134, 24);
+            lblFuenteCSV.TabIndex = 0;
+            lblFuenteCSV.Text = "Fuente: data.csv";
+            // 
+            // lblTempHistVal
+            // 
+            lblTempHistVal.AutoSize = true;
+            lblTempHistVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
+            lblTempHistVal.ForeColor = Color.FromArgb(59, 109, 17);
+            lblTempHistVal.Location = new Point(16, 58);
+            lblTempHistVal.Name = "lblTempHistVal";
+            lblTempHistVal.Size = new Size(84, 72);
+            lblTempHistVal.TabIndex = 1;
+            lblTempHistVal.Text = "—";
+            // 
+            // lblTempHistSub
+            // 
+            lblTempHistSub.AutoSize = true;
+            lblTempHistSub.Font = new Font("Segoe UI", 8.5F);
+            lblTempHistSub.ForeColor = Color.FromArgb(140, 155, 175);
+            lblTempHistSub.Location = new Point(20, 118);
+            lblTempHistSub.Name = "lblTempHistSub";
+            lblTempHistSub.Size = new Size(135, 20);
+            lblTempHistSub.TabIndex = 2;
+            lblTempHistSub.Text = "Promedio histórico";
+            // 
+            // lblEstadoHistKey
+            // 
+            lblEstadoHistKey.Location = new Point(0, 0);
+            lblEstadoHistKey.Name = "lblEstadoHistKey";
+            lblEstadoHistKey.Size = new Size(100, 23);
+            lblEstadoHistKey.TabIndex = 3;
+            // 
+            // lblEstadoHistVal
+            // 
+            lblEstadoHistVal.Location = new Point(0, 0);
+            lblEstadoHistVal.Name = "lblEstadoHistVal";
+            lblEstadoHistVal.Size = new Size(100, 23);
+            lblEstadoHistVal.TabIndex = 4;
+            // 
+            // lblFiltroKey
+            // 
+            lblFiltroKey.Location = new Point(0, 0);
+            lblFiltroKey.Name = "lblFiltroKey";
+            lblFiltroKey.Size = new Size(100, 23);
+            lblFiltroKey.TabIndex = 5;
+            // 
+            // lblFiltroVal
+            // 
+            lblFiltroVal.Location = new Point(0, 0);
+            lblFiltroVal.Name = "lblFiltroVal";
+            lblFiltroVal.Size = new Size(100, 23);
+            lblFiltroVal.TabIndex = 6;
+            // 
+            // lblMinHistKey
+            // 
+            lblMinHistKey.Location = new Point(0, 0);
+            lblMinHistKey.Name = "lblMinHistKey";
+            lblMinHistKey.Size = new Size(100, 23);
+            lblMinHistKey.TabIndex = 7;
+            // 
+            // lblMinHistVal
+            // 
+            lblMinHistVal.Location = new Point(0, 0);
+            lblMinHistVal.Name = "lblMinHistVal";
+            lblMinHistVal.Size = new Size(100, 23);
+            lblMinHistVal.TabIndex = 8;
+            // 
+            // lblMaxHistKey
+            // 
+            lblMaxHistKey.Location = new Point(0, 0);
+            lblMaxHistKey.Name = "lblMaxHistKey";
+            lblMaxHistKey.Size = new Size(100, 23);
+            lblMaxHistKey.TabIndex = 9;
+            // 
+            // lblMaxHistVal
+            // 
+            lblMaxHistVal.Location = new Point(0, 0);
+            lblMaxHistVal.Name = "lblMaxHistVal";
+            lblMaxHistVal.Size = new Size(100, 23);
+            lblMaxHistVal.TabIndex = 10;
+            // 
+            // lblRegistrosVal
+            // 
+            lblRegistrosVal.AutoSize = true;
+            lblRegistrosVal.Font = new Font("Segoe UI", 8F);
+            lblRegistrosVal.ForeColor = Color.FromArgb(160, 175, 195);
+            lblRegistrosVal.Location = new Point(20, 252);
+            lblRegistrosVal.Name = "lblRegistrosVal";
+            lblRegistrosVal.Size = new Size(198, 19);
+            lblRegistrosVal.TabIndex = 11;
+            lblRegistrosVal.Text = "Basado en — registros del CSV";
+            // 
+            // grpAnomalia
+            // 
             grpAnomalia.BackColor = Color.White;
-            grpAnomalia.ForeColor = Color.FromArgb(186, 117, 23);
-            grpAnomalia.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            grpAnomalia.Dock = DockStyle.Fill;
-            grpAnomalia.Margin = new Padding(8, 0, 0, 0);
             grpAnomalia.Controls.Add(lblDesviacionKey);
             grpAnomalia.Controls.Add(lblDesviacionVal);
             grpAnomalia.Controls.Add(lblDescAnomalia);
@@ -731,41 +795,367 @@ namespace InteligenciaClimatica
             grpAnomalia.Controls.Add(pnlSemaforoRojo);
             grpAnomalia.Controls.Add(lblSemaforoTexto);
             grpAnomalia.Controls.Add(btnGuardarAlerta);
-
-            tabConsulta.Controls.Add(tblTarjetas);
-            tabConsulta.Controls.Add(grpBusqueda);
-
-            // ══════════════════════════════════════════════════════════════
-            // TAB: ANÁLISIS
-            // ══════════════════════════════════════════════════════════════
+            grpAnomalia.Dock = DockStyle.Fill;
+            grpAnomalia.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            grpAnomalia.ForeColor = Color.FromArgb(186, 117, 23);
+            grpAnomalia.Location = new Point(694, 14);
+            grpAnomalia.Margin = new Padding(8, 0, 0, 0);
+            grpAnomalia.Name = "grpAnomalia";
+            grpAnomalia.Size = new Size(336, 305);
+            grpAnomalia.TabIndex = 2;
+            grpAnomalia.TabStop = false;
+            grpAnomalia.Text = "Anomalía detectada";
+            // 
+            // lblDesviacionKey
+            // 
+            lblDesviacionKey.AutoSize = true;
+            lblDesviacionKey.BackColor = Color.FromArgb(250, 238, 218);
+            lblDesviacionKey.Font = new Font("Segoe UI", 8.5F, FontStyle.Bold);
+            lblDesviacionKey.ForeColor = Color.FromArgb(186, 117, 23);
+            lblDesviacionKey.Location = new Point(16, 30);
+            lblDesviacionKey.Name = "lblDesviacionKey";
+            lblDesviacionKey.Padding = new Padding(6, 2, 6, 2);
+            lblDesviacionKey.Size = new Size(169, 24);
+            lblDesviacionKey.TabIndex = 0;
+            lblDesviacionKey.Text = "Desviación detectada";
+            // 
+            // lblDesviacionVal
+            // 
+            lblDesviacionVal.AutoSize = true;
+            lblDesviacionVal.Font = new Font("Segoe UI", 32F, FontStyle.Bold);
+            lblDesviacionVal.ForeColor = Color.FromArgb(186, 117, 23);
+            lblDesviacionVal.Location = new Point(16, 58);
+            lblDesviacionVal.Name = "lblDesviacionVal";
+            lblDesviacionVal.Size = new Size(84, 72);
+            lblDesviacionVal.TabIndex = 1;
+            lblDesviacionVal.Text = "—";
+            // 
+            // lblDescAnomalia
+            // 
+            lblDescAnomalia.Font = new Font("Segoe UI", 8.5F);
+            lblDescAnomalia.ForeColor = Color.FromArgb(140, 155, 175);
+            lblDescAnomalia.Location = new Point(20, 118);
+            lblDescAnomalia.Name = "lblDescAnomalia";
+            lblDescAnomalia.Size = new Size(320, 38);
+            lblDescAnomalia.TabIndex = 2;
+            lblDescAnomalia.Text = "Realiza una consulta para evaluar el riesgo climático.";
+            // 
+            // lblNivelKey
+            // 
+            lblNivelKey.AutoSize = true;
+            lblNivelKey.Font = new Font("Segoe UI", 8.5F);
+            lblNivelKey.ForeColor = Color.FromArgb(90, 105, 125);
+            lblNivelKey.Location = new Point(20, 168);
+            lblNivelKey.Name = "lblNivelKey";
+            lblNivelKey.Size = new Size(106, 20);
+            lblNivelKey.TabIndex = 3;
+            lblNivelKey.Text = "Nivel de alerta";
+            // 
+            // pnlSemaforoVerde
+            // 
+            pnlSemaforoVerde.BackColor = Color.FromArgb(210, 220, 215);
+            pnlSemaforoVerde.Location = new Point(20, 192);
+            pnlSemaforoVerde.Name = "pnlSemaforoVerde";
+            pnlSemaforoVerde.Size = new Size(42, 12);
+            pnlSemaforoVerde.TabIndex = 4;
+            // 
+            // pnlSemaforoAmarillo
+            // 
+            pnlSemaforoAmarillo.BackColor = Color.FromArgb(210, 220, 215);
+            pnlSemaforoAmarillo.Location = new Point(68, 192);
+            pnlSemaforoAmarillo.Name = "pnlSemaforoAmarillo";
+            pnlSemaforoAmarillo.Size = new Size(42, 12);
+            pnlSemaforoAmarillo.TabIndex = 5;
+            // 
+            // pnlSemaforoRojo
+            // 
+            pnlSemaforoRojo.BackColor = Color.FromArgb(210, 220, 215);
+            pnlSemaforoRojo.Location = new Point(116, 192);
+            pnlSemaforoRojo.Name = "pnlSemaforoRojo";
+            pnlSemaforoRojo.Size = new Size(42, 12);
+            pnlSemaforoRojo.TabIndex = 6;
+            // 
+            // lblSemaforoTexto
+            // 
+            lblSemaforoTexto.AutoSize = true;
+            lblSemaforoTexto.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblSemaforoTexto.ForeColor = Color.FromArgb(90, 105, 125);
+            lblSemaforoTexto.Location = new Point(168, 188);
+            lblSemaforoTexto.Name = "lblSemaforoTexto";
+            lblSemaforoTexto.Size = new Size(24, 20);
+            lblSemaforoTexto.TabIndex = 7;
+            lblSemaforoTexto.Text = "—";
+            // 
+            // btnGuardarAlerta
+            // 
+            btnGuardarAlerta.BackColor = Color.FromArgb(163, 45, 45);
+            btnGuardarAlerta.Cursor = Cursors.Hand;
+            btnGuardarAlerta.Enabled = false;
+            btnGuardarAlerta.FlatAppearance.BorderSize = 0;
+            btnGuardarAlerta.FlatStyle = FlatStyle.Flat;
+            btnGuardarAlerta.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnGuardarAlerta.ForeColor = Color.White;
+            btnGuardarAlerta.Location = new Point(20, 224);
+            btnGuardarAlerta.Name = "btnGuardarAlerta";
+            btnGuardarAlerta.Size = new Size(155, 34);
+            btnGuardarAlerta.TabIndex = 8;
+            btnGuardarAlerta.Text = "Guardar alerta";
+            btnGuardarAlerta.UseVisualStyleBackColor = false;
+            // 
+            // grpBusqueda
+            // 
+            grpBusqueda.BackColor = Color.White;
+            grpBusqueda.Controls.Add(lblEstado);
+            grpBusqueda.Controls.Add(cmbEstado);
+            grpBusqueda.Controls.Add(lblMunicipio);
+            grpBusqueda.Controls.Add(cmbMunicipio);
+            grpBusqueda.Controls.Add(lblAnio);
+            grpBusqueda.Controls.Add(cmbAnio);
+            grpBusqueda.Controls.Add(lblEstacion);
+            grpBusqueda.Controls.Add(cmbEstacion);
+            grpBusqueda.Controls.Add(btnConsultar);
+            grpBusqueda.Controls.Add(btnLimpiar);
+            grpBusqueda.Dock = DockStyle.Top;
+            grpBusqueda.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpBusqueda.ForeColor = Color.FromArgb(90, 105, 125);
+            grpBusqueda.Location = new Point(16, 16);
+            grpBusqueda.Name = "grpBusqueda";
+            grpBusqueda.Padding = new Padding(8);
+            grpBusqueda.Size = new Size(1030, 100);
+            grpBusqueda.TabIndex = 1;
+            grpBusqueda.TabStop = false;
+            grpBusqueda.Text = "Parámetros de consulta";
+            // 
+            // lblEstado
+            // 
+            lblEstado.Location = new Point(0, 0);
+            lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(100, 23);
+            lblEstado.TabIndex = 0;
+            // 
+            // cmbEstado
+            // 
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEstado.Location = new Point(0, 0);
+            cmbEstado.Name = "cmbEstado";
+            cmbEstado.Size = new Size(121, 28);
+            cmbEstado.TabIndex = 1;
+            cmbEstado.SelectedIndexChanged += cmbEstado_SelectedIndexChanged_1;
+            // 
+            // lblMunicipio
+            // 
+            lblMunicipio.Location = new Point(0, 0);
+            lblMunicipio.Name = "lblMunicipio";
+            lblMunicipio.Size = new Size(100, 23);
+            lblMunicipio.TabIndex = 2;
+            // 
+            // cmbMunicipio
+            // 
+            cmbMunicipio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMunicipio.Enabled = false;
+            cmbMunicipio.Location = new Point(0, 0);
+            cmbMunicipio.Name = "cmbMunicipio";
+            cmbMunicipio.Size = new Size(121, 28);
+            cmbMunicipio.TabIndex = 3;
+            cmbMunicipio.SelectedIndexChanged += cmbMunicipio_SelectedIndexChanged_1;
+            // 
+            // lblAnio
+            // 
+            lblAnio.Location = new Point(0, 0);
+            lblAnio.Name = "lblAnio";
+            lblAnio.Size = new Size(100, 23);
+            lblAnio.TabIndex = 4;
+            // 
+            // cmbAnio
+            // 
+            cmbAnio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAnio.Location = new Point(0, 0);
+            cmbAnio.Name = "cmbAnio";
+            cmbAnio.Size = new Size(121, 28);
+            cmbAnio.TabIndex = 5;
+            // 
+            // lblEstacion
+            // 
+            lblEstacion.Location = new Point(0, 0);
+            lblEstacion.Name = "lblEstacion";
+            lblEstacion.Size = new Size(100, 23);
+            lblEstacion.TabIndex = 6;
+            // 
+            // cmbEstacion
+            // 
+            cmbEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEstacion.Items.AddRange(new object[] { "Primavera", "Verano", "Otoño", "Invierno" });
+            cmbEstacion.Location = new Point(0, 0);
+            cmbEstacion.Name = "cmbEstacion";
+            cmbEstacion.Size = new Size(121, 28);
+            cmbEstacion.TabIndex = 7;
+            // 
+            // btnConsultar
+            // 
+            btnConsultar.BackColor = Color.FromArgb(24, 95, 165);
+            btnConsultar.Cursor = Cursors.Hand;
+            btnConsultar.Enabled = false;
+            btnConsultar.FlatAppearance.BorderSize = 0;
+            btnConsultar.FlatAppearance.MouseOverBackColor = Color.FromArgb(18, 77, 138);
+            btnConsultar.FlatStyle = FlatStyle.Flat;
+            btnConsultar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnConsultar.ForeColor = Color.White;
+            btnConsultar.Location = new Point(740, 48);
+            btnConsultar.Name = "btnConsultar";
+            btnConsultar.Size = new Size(120, 34);
+            btnConsultar.TabIndex = 8;
+            btnConsultar.Text = "Consultar";
+            btnConsultar.UseVisualStyleBackColor = false;
+            btnConsultar.Click += btnConsultar_Click_1;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.BackColor = Color.FromArgb(244, 247, 250);
+            btnLimpiar.Cursor = Cursors.Hand;
+            btnLimpiar.FlatAppearance.BorderColor = Color.FromArgb(210, 218, 230);
+            btnLimpiar.FlatStyle = FlatStyle.Flat;
+            btnLimpiar.Font = new Font("Segoe UI", 9.5F);
+            btnLimpiar.ForeColor = Color.FromArgb(90, 105, 125);
+            btnLimpiar.Location = new Point(872, 48);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(100, 34);
+            btnLimpiar.TabIndex = 9;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = false;
+            // 
+            // tabAnalisis
+            // 
             tabAnalisis.BackColor = Color.FromArgb(244, 247, 250);
+            tabAnalisis.Controls.Add(pnlCharts);
+            tabAnalisis.Controls.Add(grpRanking);
+            tabAnalisis.Controls.Add(grpFiltrosGlobal);
+            tabAnalisis.Location = new Point(4, 5);
+            tabAnalisis.Name = "tabAnalisis";
             tabAnalisis.Padding = new Padding(16);
+            tabAnalisis.Size = new Size(192, 31);
+            tabAnalisis.TabIndex = 1;
             tabAnalisis.Text = "Análisis global";
-
-            // Filtros
-            EstiloLabel(lblFiltroAnio, "Año:", new Point(16, 36));
-            EstiloLabel(lblFiltroEstacion, "Estación:", new Point(178, 36));
-            EstiloLabel(lblBuscarEstado, "Estado:", new Point(408, 36));
-
-            EstiloCombo(cmbFiltroAnio, new Point(56, 30), 108);
-            EstiloCombo(cmbFiltroEstacion, new Point(248, 30), 148);
-            cmbFiltroEstacion.Items.AddRange(new object[] { "Todas", "Primavera", "Verano", "Otoño", "Invierno" });
-            cmbFiltroAnio.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFiltroEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            txtBuscarEstado.Location = new Point(468, 30);
-            txtBuscarEstado.Size = new Size(210, 28);
-            txtBuscarEstado.Font = new Font("Segoe UI", 9.5F);
-
-            EstiloBotonSecundario(btnFiltrar, "Filtrar", new Point(696, 28), new Size(90, 34));
-            EstiloBotonSecundario(btnLimpiarFiltro, "Limpiar", new Point(798, 28), new Size(90, 34));
-
-            grpFiltrosGlobal.Text = "Filtros";
+            // 
+            // pnlCharts
+            // 
+            pnlCharts.Controls.Add(pnlDer);
+            pnlCharts.Controls.Add(pnlIzq);
+            pnlCharts.Dock = DockStyle.Fill;
+            pnlCharts.Location = new Point(16, 92);
+            pnlCharts.Name = "pnlCharts";
+            pnlCharts.Size = new Size(160, 0);
+            pnlCharts.TabIndex = 0;
+            // 
+            // pnlDer
+            // 
+            pnlDer.Controls.Add(formsPlotFrios);
+            pnlDer.Dock = DockStyle.Fill;
+            pnlDer.Location = new Point(0, 0);
+            pnlDer.Name = "pnlDer";
+            pnlDer.Size = new Size(160, 0);
+            pnlDer.TabIndex = 0;
+            // 
+            // formsPlotFrios
+            // 
+            formsPlotFrios.Dock = DockStyle.Fill;
+            formsPlotFrios.Location = new Point(0, 0);
+            formsPlotFrios.Name = "formsPlotFrios";
+            formsPlotFrios.Size = new Size(160, 0);
+            formsPlotFrios.TabIndex = 0;
+            // 
+            // pnlIzq
+            // 
+            pnlIzq.Controls.Add(formsPlotCalientes);
+            pnlIzq.Dock = DockStyle.Left;
+            pnlIzq.Location = new Point(0, 0);
+            pnlIzq.Name = "pnlIzq";
+            pnlIzq.Size = new Size(0, 0);
+            pnlIzq.TabIndex = 1;
+            // 
+            // formsPlotCalientes
+            // 
+            formsPlotCalientes.Dock = DockStyle.Fill;
+            formsPlotCalientes.Location = new Point(0, 0);
+            formsPlotCalientes.Name = "formsPlotCalientes";
+            formsPlotCalientes.Size = new Size(0, 0);
+            formsPlotCalientes.TabIndex = 0;
+            // 
+            // grpRanking
+            // 
+            grpRanking.BackColor = Color.White;
+            grpRanking.Controls.Add(lblRankingCaliente);
+            grpRanking.Controls.Add(lstCalientes);
+            grpRanking.Controls.Add(lblRankingFrio);
+            grpRanking.Controls.Add(lstFrios);
+            grpRanking.Controls.Add(btnExportarRanking);
+            grpRanking.Dock = DockStyle.Bottom;
+            grpRanking.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpRanking.ForeColor = Color.FromArgb(90, 105, 125);
+            grpRanking.Location = new Point(16, -137);
+            grpRanking.Name = "grpRanking";
+            grpRanking.Size = new Size(160, 152);
+            grpRanking.TabIndex = 1;
+            grpRanking.TabStop = false;
+            grpRanking.Text = "Ranking climático";
+            // 
+            // lblRankingCaliente
+            // 
+            lblRankingCaliente.AutoSize = true;
+            lblRankingCaliente.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblRankingCaliente.ForeColor = Color.FromArgb(163, 45, 45);
+            lblRankingCaliente.Location = new Point(16, 26);
+            lblRankingCaliente.Name = "lblRankingCaliente";
+            lblRankingCaliente.Size = new Size(158, 21);
+            lblRankingCaliente.TabIndex = 0;
+            lblRankingCaliente.Text = "Top 5 más calientes";
+            // 
+            // lstCalientes
+            // 
+            lstCalientes.BorderStyle = BorderStyle.FixedSingle;
+            lstCalientes.Font = new Font("Segoe UI", 9F);
+            lstCalientes.Location = new Point(16, 52);
+            lstCalientes.Name = "lstCalientes";
+            lstCalientes.Size = new Size(490, 82);
+            lstCalientes.TabIndex = 1;
+            // 
+            // lblRankingFrio
+            // 
+            lblRankingFrio.AutoSize = true;
+            lblRankingFrio.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            lblRankingFrio.ForeColor = Color.FromArgb(24, 95, 165);
+            lblRankingFrio.Location = new Point(550, 26);
+            lblRankingFrio.Name = "lblRankingFrio";
+            lblRankingFrio.Size = new Size(124, 21);
+            lblRankingFrio.TabIndex = 2;
+            lblRankingFrio.Text = "Top 5 más fríos";
+            // 
+            // lstFrios
+            // 
+            lstFrios.BorderStyle = BorderStyle.FixedSingle;
+            lstFrios.Font = new Font("Segoe UI", 9F);
+            lstFrios.Location = new Point(550, 52);
+            lstFrios.Name = "lstFrios";
+            lstFrios.Size = new Size(490, 82);
+            lstFrios.TabIndex = 3;
+            // 
+            // btnExportarRanking
+            // 
+            btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163);
+            btnExportarRanking.Cursor = Cursors.Hand;
+            btnExportarRanking.FlatAppearance.BorderSize = 0;
+            btnExportarRanking.FlatStyle = FlatStyle.Flat;
+            btnExportarRanking.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnExportarRanking.ForeColor = Color.White;
+            btnExportarRanking.Location = new Point(900, 30);
+            btnExportarRanking.Name = "btnExportarRanking";
+            btnExportarRanking.Size = new Size(130, 34);
+            btnExportarRanking.TabIndex = 4;
+            btnExportarRanking.Text = "Exportar Ranking ";
+            btnExportarRanking.UseVisualStyleBackColor = false;
+            // 
+            // grpFiltrosGlobal
+            // 
             grpFiltrosGlobal.BackColor = Color.White;
-            grpFiltrosGlobal.ForeColor = Color.FromArgb(90, 105, 125);
-            grpFiltrosGlobal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpFiltrosGlobal.Dock = DockStyle.Top;
-            grpFiltrosGlobal.Height = 76;
             grpFiltrosGlobal.Controls.Add(lblFiltroAnio);
             grpFiltrosGlobal.Controls.Add(cmbFiltroAnio);
             grpFiltrosGlobal.Controls.Add(lblFiltroEstacion);
@@ -774,206 +1164,368 @@ namespace InteligenciaClimatica
             grpFiltrosGlobal.Controls.Add(txtBuscarEstado);
             grpFiltrosGlobal.Controls.Add(btnFiltrar);
             grpFiltrosGlobal.Controls.Add(btnLimpiarFiltro);
-
-            //// DataGrid histórico
-            //EstiloDataGrid(dgvHistorico);
-            //dgvHistorico.Dock = DockStyle.Fill;
-            // AGREGAR:
-            formsPlotCalientes.Dock = DockStyle.Fill;
-            formsPlotFrios.Dock = DockStyle.Fill;
-
-            pnlCharts.Dock = DockStyle.Fill;
-            pnlCharts.Padding = new Padding(0);
-
-            // Panel izquierdo (calientes)
-            pnlIzq = new Panel();
-            pnlIzq.Dock = DockStyle.Left;
-            pnlIzq.Width = 0; // se ajusta por porcentaje abajo
-            pnlIzq.Controls.Add(formsPlotCalientes);
-
-            // Panel derecho (fríos)
-            pnlDer = new Panel();
-            pnlDer.Dock = DockStyle.Fill;
-            pnlDer.Controls.Add(formsPlotFrios);
-
-            pnlCharts.Controls.Add(pnlDer);
-            pnlCharts.Controls.Add(pnlIzq);
-
-            // Ranking
-            lblRankingCaliente.Text = "Top 5 más calientes";
-            lblRankingCaliente.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblRankingCaliente.ForeColor = Color.FromArgb(163, 45, 45);
-            lblRankingCaliente.AutoSize = true;
-            lblRankingCaliente.Location = new Point(16, 26);
-
-            lstCalientes.Location = new Point(16, 52);
-            lstCalientes.Size = new Size(490, 88);
-            lstCalientes.Font = new Font("Segoe UI", 9F);
-            lstCalientes.BorderStyle = BorderStyle.FixedSingle;
-
-            lblRankingFrio.Text = "Top 5 más fríos";
-            lblRankingFrio.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblRankingFrio.ForeColor = Color.FromArgb(24, 95, 165);
-            lblRankingFrio.AutoSize = true;
-            lblRankingFrio.Location = new Point(550, 26);
-
-            lstFrios.Location = new Point(550, 52);
-            lstFrios.Size = new Size(490, 88);
-            lstFrios.Font = new Font("Segoe UI", 9F);
-            lstFrios.BorderStyle = BorderStyle.FixedSingle;
-
-            grpRanking.Text = "Ranking climático";
-            grpRanking.BackColor = Color.White;
-            grpRanking.ForeColor = Color.FromArgb(90, 105, 125);
-            grpRanking.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpRanking.Dock = DockStyle.Bottom;
-            grpRanking.Height = 152;
-            grpRanking.Controls.Add(lblRankingCaliente);
-            grpRanking.Controls.Add(lstCalientes);
-            grpRanking.Controls.Add(lblRankingFrio);
-            grpRanking.Controls.Add(lstFrios);
-
+            grpFiltrosGlobal.Dock = DockStyle.Top;
+            grpFiltrosGlobal.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpFiltrosGlobal.ForeColor = Color.FromArgb(90, 105, 125);
+            grpFiltrosGlobal.Location = new Point(16, 16);
+            grpFiltrosGlobal.Name = "grpFiltrosGlobal";
+            grpFiltrosGlobal.Size = new Size(160, 76);
+            grpFiltrosGlobal.TabIndex = 2;
+            grpFiltrosGlobal.TabStop = false;
+            grpFiltrosGlobal.Text = "Filtros";
             // 
-            // btnExportarRanking
+            // lblFiltroAnio
             // 
-            btnExportarRanking.Text = "Exportar Ranking ";
-            btnExportarRanking.Location = new Point(900, 30); // A la derecha del botón Limpiar
-            btnExportarRanking.Size = new Size(130, 34);
-            btnExportarRanking.BackColor = Color.FromArgb(45, 100, 163); // Azul profesional
-            btnExportarRanking.ForeColor = Color.White;
-            btnExportarRanking.FlatStyle = FlatStyle.Flat;
-            btnExportarRanking.FlatAppearance.BorderSize = 0;
-            btnExportarRanking.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnExportarRanking.Cursor = Cursors.Hand;
-
-            // Agregar el botón al contenedor grpRanking
-            grpRanking.Controls.Add(btnExportarRanking);
-
-            //tabAnalisis.Controls.Add(dgvHistorico);
-            tabAnalisis.Controls.Add(pnlCharts);
-            tabAnalisis.Controls.Add(grpRanking);
-            tabAnalisis.Controls.Add(grpFiltrosGlobal);
-
-            // ══════════════════════════════════════════════════════════════
-            // TAB: FAVORITOS
-            // ══════════════════════════════════════════════════════════════
+            lblFiltroAnio.Location = new Point(0, 0);
+            lblFiltroAnio.Name = "lblFiltroAnio";
+            lblFiltroAnio.Size = new Size(100, 23);
+            lblFiltroAnio.TabIndex = 0;
+            // 
+            // cmbFiltroAnio
+            // 
+            cmbFiltroAnio.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroAnio.Location = new Point(0, 0);
+            cmbFiltroAnio.Name = "cmbFiltroAnio";
+            cmbFiltroAnio.Size = new Size(121, 28);
+            cmbFiltroAnio.TabIndex = 1;
+            // 
+            // lblFiltroEstacion
+            // 
+            lblFiltroEstacion.Location = new Point(0, 0);
+            lblFiltroEstacion.Name = "lblFiltroEstacion";
+            lblFiltroEstacion.Size = new Size(100, 23);
+            lblFiltroEstacion.TabIndex = 2;
+            // 
+            // cmbFiltroEstacion
+            // 
+            cmbFiltroEstacion.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltroEstacion.Items.AddRange(new object[] { "Todas", "Primavera", "Verano", "Otoño", "Invierno" });
+            cmbFiltroEstacion.Location = new Point(0, 0);
+            cmbFiltroEstacion.Name = "cmbFiltroEstacion";
+            cmbFiltroEstacion.Size = new Size(121, 28);
+            cmbFiltroEstacion.TabIndex = 3;
+            // 
+            // lblBuscarEstado
+            // 
+            lblBuscarEstado.Location = new Point(0, 0);
+            lblBuscarEstado.Name = "lblBuscarEstado";
+            lblBuscarEstado.Size = new Size(100, 23);
+            lblBuscarEstado.TabIndex = 4;
+            // 
+            // txtBuscarEstado
+            // 
+            txtBuscarEstado.Font = new Font("Segoe UI", 9.5F);
+            txtBuscarEstado.Location = new Point(468, 30);
+            txtBuscarEstado.Name = "txtBuscarEstado";
+            txtBuscarEstado.Size = new Size(210, 29);
+            txtBuscarEstado.TabIndex = 5;
+            // 
+            // btnFiltrar
+            // 
+            btnFiltrar.Location = new Point(0, 0);
+            btnFiltrar.Name = "btnFiltrar";
+            btnFiltrar.Size = new Size(75, 23);
+            btnFiltrar.TabIndex = 6;
+            // 
+            // btnLimpiarFiltro
+            // 
+            btnLimpiarFiltro.Location = new Point(0, 0);
+            btnLimpiarFiltro.Name = "btnLimpiarFiltro";
+            btnLimpiarFiltro.Size = new Size(75, 23);
+            btnLimpiarFiltro.TabIndex = 7;
+            // 
+            // tabFavoritos
+            // 
             tabFavoritos.BackColor = Color.FromArgb(244, 247, 250);
+            tabFavoritos.Controls.Add(dgvFavoritos);
+            tabFavoritos.Controls.Add(grpAgregarFav);
+            tabFavoritos.Location = new Point(4, 5);
+            tabFavoritos.Name = "tabFavoritos";
             tabFavoritos.Padding = new Padding(16);
+            tabFavoritos.Size = new Size(1062, 705);
+            tabFavoritos.TabIndex = 2;
             tabFavoritos.Text = "Favoritos";
-
-            EstiloDataGrid(dgvFavoritos);
+            // 
+            // dgvFavoritos
+            // 
+            dgvFavoritos.ColumnHeadersHeight = 29;
             dgvFavoritos.Dock = DockStyle.Fill;
-
-            EstiloLabel(lblNuevoFavEstado, "Estado:", new Point(16, 38));
-            EstiloLabel(lblNuevoFavMun, "Municipio:", new Point(316, 38));
-
-            EstiloCombo(cmbNuevoFavEstado, new Point(78, 32), 225);
-            EstiloCombo(cmbNuevoFavMun, new Point(400, 32), 245);
-            cmbNuevoFavEstado.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbNuevoFavMun.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbNuevoFavMun.Enabled = false;
-
-            btnAgregarFav.Text = "Agregar";
-            btnAgregarFav.Location = new Point(660, 30);
-            btnAgregarFav.Size = new Size(100, 34);
-            btnAgregarFav.BackColor = Color.FromArgb(24, 95, 165);
-            btnAgregarFav.ForeColor = Color.White;
-            btnAgregarFav.FlatStyle = FlatStyle.Flat;
-            btnAgregarFav.FlatAppearance.BorderSize = 0;
-            btnAgregarFav.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnAgregarFav.Cursor = Cursors.Hand;
-
-            EstiloBotonSecundario(btnEliminarFav, "Eliminar seleccionado", new Point(776, 30), new Size(170, 34));
-
-            grpAgregarFav.Text = "Agregar municipio favorito";
+            dgvFavoritos.Location = new Point(16, 16);
+            dgvFavoritos.Name = "dgvFavoritos";
+            dgvFavoritos.RowHeadersWidth = 51;
+            dgvFavoritos.Size = new Size(1030, 593);
+            dgvFavoritos.TabIndex = 0;
+            // 
+            // grpAgregarFav
+            // 
             grpAgregarFav.BackColor = Color.White;
-            grpAgregarFav.ForeColor = Color.FromArgb(90, 105, 125);
-            grpAgregarFav.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpAgregarFav.Dock = DockStyle.Bottom;
-            grpAgregarFav.Height = 80;
             grpAgregarFav.Controls.Add(lblNuevoFavEstado);
             grpAgregarFav.Controls.Add(cmbNuevoFavEstado);
             grpAgregarFav.Controls.Add(lblNuevoFavMun);
             grpAgregarFav.Controls.Add(cmbNuevoFavMun);
             grpAgregarFav.Controls.Add(btnAgregarFav);
             grpAgregarFav.Controls.Add(btnEliminarFav);
-
-            tabFavoritos.Controls.Add(dgvFavoritos);
-            tabFavoritos.Controls.Add(grpAgregarFav);
-
-            // ══════════════════════════════════════════════════════════════
-            // TAB: CONFIGURACIÓN
-            // ══════════════════════════════════════════════════════════════
+            grpAgregarFav.Controls.Add(btnMigrar);
+            grpAgregarFav.Dock = DockStyle.Bottom;
+            grpAgregarFav.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpAgregarFav.ForeColor = Color.FromArgb(90, 105, 125);
+            grpAgregarFav.Location = new Point(16, 609);
+            grpAgregarFav.Name = "grpAgregarFav";
+            grpAgregarFav.Size = new Size(1030, 80);
+            grpAgregarFav.TabIndex = 1;
+            grpAgregarFav.TabStop = false;
+            grpAgregarFav.Text = "Agregar municipio favorito";
+            // 
+            // lblNuevoFavEstado
+            // 
+            lblNuevoFavEstado.Location = new Point(0, 0);
+            lblNuevoFavEstado.Name = "lblNuevoFavEstado";
+            lblNuevoFavEstado.Size = new Size(100, 23);
+            lblNuevoFavEstado.TabIndex = 0;
+            // 
+            // cmbNuevoFavEstado
+            // 
+            cmbNuevoFavEstado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbNuevoFavEstado.Location = new Point(0, 0);
+            cmbNuevoFavEstado.Name = "cmbNuevoFavEstado";
+            cmbNuevoFavEstado.Size = new Size(121, 28);
+            cmbNuevoFavEstado.TabIndex = 1;
+            // 
+            // lblNuevoFavMun
+            // 
+            lblNuevoFavMun.Location = new Point(0, 0);
+            lblNuevoFavMun.Name = "lblNuevoFavMun";
+            lblNuevoFavMun.Size = new Size(100, 23);
+            lblNuevoFavMun.TabIndex = 2;
+            // 
+            // cmbNuevoFavMun
+            // 
+            cmbNuevoFavMun.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbNuevoFavMun.Enabled = false;
+            cmbNuevoFavMun.Location = new Point(0, 0);
+            cmbNuevoFavMun.Name = "cmbNuevoFavMun";
+            cmbNuevoFavMun.Size = new Size(121, 28);
+            cmbNuevoFavMun.TabIndex = 3;
+            // 
+            // btnAgregarFav
+            // 
+            btnAgregarFav.BackColor = Color.FromArgb(24, 95, 165);
+            btnAgregarFav.Cursor = Cursors.Hand;
+            btnAgregarFav.FlatAppearance.BorderSize = 0;
+            btnAgregarFav.FlatStyle = FlatStyle.Flat;
+            btnAgregarFav.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnAgregarFav.ForeColor = Color.White;
+            btnAgregarFav.Location = new Point(660, 30);
+            btnAgregarFav.Name = "btnAgregarFav";
+            btnAgregarFav.Size = new Size(100, 34);
+            btnAgregarFav.TabIndex = 4;
+            btnAgregarFav.Text = "Agregar";
+            btnAgregarFav.UseVisualStyleBackColor = false;
+            // 
+            // btnEliminarFav
+            // 
+            btnEliminarFav.Location = new Point(0, 0);
+            btnEliminarFav.Name = "btnEliminarFav";
+            btnEliminarFav.Size = new Size(75, 23);
+            btnEliminarFav.TabIndex = 5;
+            // 
+            // btnMigrar
+            // 
+            btnMigrar.BackColor = Color.FromArgb(186, 117, 23);
+            btnMigrar.Cursor = Cursors.Hand;
+            btnMigrar.FlatAppearance.BorderSize = 0;
+            btnMigrar.FlatStyle = FlatStyle.Flat;
+            btnMigrar.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnMigrar.ForeColor = Color.White;
+            btnMigrar.Location = new Point(960, 30);
+            btnMigrar.Name = "btnMigrar";
+            btnMigrar.Size = new Size(160, 34);
+            btnMigrar.TabIndex = 6;
+            btnMigrar.Text = "Migrar Favoritos";
+            btnMigrar.UseVisualStyleBackColor = false;
+            btnMigrar.Visible = false;
+            // 
+            // tabConfig
+            // 
             tabConfig.BackColor = Color.FromArgb(244, 247, 250);
+            tabConfig.Controls.Add(btnGuardarConfig);
+            tabConfig.Controls.Add(grpPreferencias);
+            tabConfig.Controls.Add(grpArchivos);
+            tabConfig.Controls.Add(grpBaseDatos);
+            tabConfig.Location = new Point(4, 5);
+            tabConfig.Name = "tabConfig";
             tabConfig.Padding = new Padding(16);
+            tabConfig.Size = new Size(192, 31);
+            tabConfig.TabIndex = 3;
             tabConfig.Text = "Configuración";
-
-            // Base de datos
-            EstiloLabel(lblMotorBD, "Motor:", new Point(16, 32));
-            EstiloLabel(lblSQLitePath, "Archivo SQLite:", new Point(16, 72));
-            EstiloLabel(lblMariaServidor, "Servidor:", new Point(16, 118));
-            EstiloLabel(lblMariaPuerto, "Puerto:", new Point(288, 118));
-            EstiloLabel(lblMariaBD, "Base:", new Point(446, 118));
-            EstiloLabel(lblMariaUsuario, "Usuario:", new Point(16, 158));
-            EstiloLabel(lblMariaPassword, "Contraseña:", new Point(288, 158));
-
-            cmbMotorBD.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMotorBD.Items.AddRange(new object[] { "SQLite", "MariaDB" });
-            EstiloCombo(cmbMotorBD, new Point(88, 28), 165);
-
-            txtSQLitePath.Text = "Data\\inteligencia_climatica.db";
-            txtSQLitePath.Location = new Point(138, 68);
-            txtSQLitePath.Size = new Size(650, 28);
-            txtSQLitePath.Font = new Font("Segoe UI", 9.5F);
-
-            EstiloBotonSecundario(btnExplorarSQLite, "Explorar", new Point(800, 66), new Size(100, 32));
-
-            txtMariaServidor.Text = "localhost";
-            txtMariaServidor.Location = new Point(88, 114);
-            txtMariaServidor.Size = new Size(180, 28);
-            txtMariaServidor.Font = new Font("Segoe UI", 9.5F);
-
-            txtMariaPuerto.Text = "3306";
-            txtMariaPuerto.Location = new Point(344, 114);
-            txtMariaPuerto.Size = new Size(80, 28);
-            txtMariaPuerto.Font = new Font("Segoe UI", 9.5F);
-
-            txtMariaBD.Text = "inteligencia_climatica";
-            txtMariaBD.Location = new Point(494, 114);
-            txtMariaBD.Size = new Size(220, 28);
-            txtMariaBD.Font = new Font("Segoe UI", 9.5F);
-
-            txtMariaUsuario.Location = new Point(88, 154);
-            txtMariaUsuario.Size = new Size(180, 28);
-            txtMariaUsuario.Font = new Font("Segoe UI", 9.5F);
-
-            txtMariaPassword.Location = new Point(386, 154);
-            txtMariaPassword.Size = new Size(180, 28);
-            txtMariaPassword.Font = new Font("Segoe UI", 9.5F);
-            txtMariaPassword.UseSystemPasswordChar = true;
-
-            btnProbarConexion.Text = "Probar conexión";
-            btnProbarConexion.Location = new Point(586, 152);
-            btnProbarConexion.Size = new Size(140, 34);
-            btnProbarConexion.BackColor = Color.FromArgb(24, 95, 165);
-            btnProbarConexion.ForeColor = Color.White;
-            btnProbarConexion.FlatStyle = FlatStyle.Flat;
-            btnProbarConexion.FlatAppearance.BorderSize = 0;
-            btnProbarConexion.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnProbarConexion.Cursor = Cursors.Hand;
-
-            lblEstadoConexion.Text = "Estado: sin probar";
-            lblEstadoConexion.Font = new Font("Segoe UI", 8.5F);
-            lblEstadoConexion.ForeColor = Color.FromArgb(140, 155, 175);
-            lblEstadoConexion.AutoSize = true;
-            lblEstadoConexion.Location = new Point(742, 160);
-
-            grpBaseDatos.Text = "Base de datos";
+            // 
+            // btnGuardarConfig
+            // 
+            btnGuardarConfig.BackColor = Color.FromArgb(24, 95, 165);
+            btnGuardarConfig.Cursor = Cursors.Hand;
+            btnGuardarConfig.Dock = DockStyle.Top;
+            btnGuardarConfig.FlatAppearance.BorderSize = 0;
+            btnGuardarConfig.FlatAppearance.MouseOverBackColor = Color.FromArgb(18, 77, 138);
+            btnGuardarConfig.FlatStyle = FlatStyle.Flat;
+            btnGuardarConfig.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnGuardarConfig.ForeColor = Color.White;
+            btnGuardarConfig.Location = new Point(16, 410);
+            btnGuardarConfig.Name = "btnGuardarConfig";
+            btnGuardarConfig.Size = new Size(160, 44);
+            btnGuardarConfig.TabIndex = 0;
+            btnGuardarConfig.Text = "Guardar configuración";
+            btnGuardarConfig.UseVisualStyleBackColor = false;
+            // 
+            // grpPreferencias
+            // 
+            grpPreferencias.BackColor = Color.White;
+            grpPreferencias.Controls.Add(lblUmbral);
+            grpPreferencias.Controls.Add(nudUmbral);
+            grpPreferencias.Controls.Add(lblUmbralSufijo);
+            grpPreferencias.Controls.Add(lblUnidades);
+            grpPreferencias.Controls.Add(rbCelsius);
+            grpPreferencias.Controls.Add(rbFahrenheit);
+            grpPreferencias.Dock = DockStyle.Top;
+            grpPreferencias.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpPreferencias.ForeColor = Color.FromArgb(90, 105, 125);
+            grpPreferencias.Location = new Point(16, 332);
+            grpPreferencias.Name = "grpPreferencias";
+            grpPreferencias.Size = new Size(160, 78);
+            grpPreferencias.TabIndex = 1;
+            grpPreferencias.TabStop = false;
+            grpPreferencias.Text = "Preferencias";
+            // 
+            // lblUmbral
+            // 
+            lblUmbral.Location = new Point(0, 0);
+            lblUmbral.Name = "lblUmbral";
+            lblUmbral.Size = new Size(100, 23);
+            lblUmbral.TabIndex = 0;
+            // 
+            // nudUmbral
+            // 
+            nudUmbral.DecimalPlaces = 1;
+            nudUmbral.Font = new Font("Segoe UI", 9.5F);
+            nudUmbral.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            nudUmbral.Location = new Point(142, 34);
+            nudUmbral.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            nudUmbral.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudUmbral.Name = "nudUmbral";
+            nudUmbral.Size = new Size(80, 29);
+            nudUmbral.TabIndex = 1;
+            nudUmbral.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            // 
+            // lblUmbralSufijo
+            // 
+            lblUmbralSufijo.AutoSize = true;
+            lblUmbralSufijo.Font = new Font("Segoe UI", 9.5F);
+            lblUmbralSufijo.ForeColor = Color.FromArgb(90, 105, 125);
+            lblUmbralSufijo.Location = new Point(232, 38);
+            lblUmbralSufijo.Name = "lblUmbralSufijo";
+            lblUmbralSufijo.Size = new Size(26, 21);
+            lblUmbralSufijo.TabIndex = 2;
+            lblUmbralSufijo.Text = "°C";
+            // 
+            // lblUnidades
+            // 
+            lblUnidades.Location = new Point(0, 0);
+            lblUnidades.Name = "lblUnidades";
+            lblUnidades.Size = new Size(100, 23);
+            lblUnidades.TabIndex = 3;
+            // 
+            // rbCelsius
+            // 
+            rbCelsius.AutoSize = true;
+            rbCelsius.Checked = true;
+            rbCelsius.Font = new Font("Segoe UI", 9.5F);
+            rbCelsius.ForeColor = Color.FromArgb(30, 40, 55);
+            rbCelsius.Location = new Point(386, 35);
+            rbCelsius.Name = "rbCelsius";
+            rbCelsius.Size = new Size(80, 25);
+            rbCelsius.TabIndex = 4;
+            rbCelsius.TabStop = true;
+            rbCelsius.Text = "Celsius";
+            // 
+            // rbFahrenheit
+            // 
+            rbFahrenheit.AutoSize = true;
+            rbFahrenheit.Font = new Font("Segoe UI", 9.5F);
+            rbFahrenheit.ForeColor = Color.FromArgb(30, 40, 55);
+            rbFahrenheit.Location = new Point(472, 35);
+            rbFahrenheit.Name = "rbFahrenheit";
+            rbFahrenheit.Size = new Size(104, 25);
+            rbFahrenheit.TabIndex = 5;
+            rbFahrenheit.Text = "Fahrenheit";
+            // 
+            // grpArchivos
+            // 
+            grpArchivos.BackColor = Color.White;
+            grpArchivos.Controls.Add(lblRutaCSV);
+            grpArchivos.Controls.Add(txtRutaCSV);
+            grpArchivos.Controls.Add(btnExplorarCSV);
+            grpArchivos.Controls.Add(lblRutaJSON);
+            grpArchivos.Controls.Add(txtRutaJSON);
+            grpArchivos.Controls.Add(btnExplorarJSON);
+            grpArchivos.Dock = DockStyle.Top;
+            grpArchivos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpArchivos.ForeColor = Color.FromArgb(90, 105, 125);
+            grpArchivos.Location = new Point(16, 216);
+            grpArchivos.Name = "grpArchivos";
+            grpArchivos.Padding = new Padding(4);
+            grpArchivos.Size = new Size(160, 116);
+            grpArchivos.TabIndex = 2;
+            grpArchivos.TabStop = false;
+            grpArchivos.Text = "Archivos de datos";
+            // 
+            // lblRutaCSV
+            // 
+            lblRutaCSV.Location = new Point(0, 0);
+            lblRutaCSV.Name = "lblRutaCSV";
+            lblRutaCSV.Size = new Size(100, 23);
+            lblRutaCSV.TabIndex = 0;
+            // 
+            // txtRutaCSV
+            // 
+            txtRutaCSV.Font = new Font("Segoe UI", 9.5F);
+            txtRutaCSV.Location = new Point(88, 32);
+            txtRutaCSV.Name = "txtRutaCSV";
+            txtRutaCSV.Size = new Size(700, 29);
+            txtRutaCSV.TabIndex = 1;
+            txtRutaCSV.Text = "Data\\data.csv";
+            // 
+            // btnExplorarCSV
+            // 
+            btnExplorarCSV.Location = new Point(0, 0);
+            btnExplorarCSV.Name = "btnExplorarCSV";
+            btnExplorarCSV.Size = new Size(75, 23);
+            btnExplorarCSV.TabIndex = 2;
+            // 
+            // lblRutaJSON
+            // 
+            lblRutaJSON.Location = new Point(0, 0);
+            lblRutaJSON.Name = "lblRutaJSON";
+            lblRutaJSON.Size = new Size(100, 23);
+            lblRutaJSON.TabIndex = 3;
+            // 
+            // txtRutaJSON
+            // 
+            txtRutaJSON.Font = new Font("Segoe UI", 9.5F);
+            txtRutaJSON.Location = new Point(88, 72);
+            txtRutaJSON.Name = "txtRutaJSON";
+            txtRutaJSON.Size = new Size(700, 29);
+            txtRutaJSON.TabIndex = 4;
+            txtRutaJSON.Text = "Data\\municipios_mx.json";
+            // 
+            // btnExplorarJSON
+            // 
+            btnExplorarJSON.Location = new Point(0, 0);
+            btnExplorarJSON.Name = "btnExplorarJSON";
+            btnExplorarJSON.Size = new Size(75, 23);
+            btnExplorarJSON.TabIndex = 5;
+            // 
+            // grpBaseDatos
+            // 
             grpBaseDatos.BackColor = Color.White;
-            grpBaseDatos.ForeColor = Color.FromArgb(90, 105, 125);
-            grpBaseDatos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpBaseDatos.Dock = DockStyle.Top;
-            grpBaseDatos.Height = 200;
             grpBaseDatos.Controls.Add(lblMotorBD);
             grpBaseDatos.Controls.Add(cmbMotorBD);
             grpBaseDatos.Controls.Add(lblSQLitePath);
@@ -991,146 +1543,250 @@ namespace InteligenciaClimatica
             grpBaseDatos.Controls.Add(txtMariaPassword);
             grpBaseDatos.Controls.Add(btnProbarConexion);
             grpBaseDatos.Controls.Add(lblEstadoConexion);
-
-            // Archivos
-            EstiloLabel(lblRutaCSV, "CSV:", new Point(16, 36));
-            EstiloLabel(lblRutaJSON, "JSON:", new Point(16, 76));
-
-            txtRutaCSV.Text = "Data\\data.csv";
-            txtRutaCSV.Location = new Point(88, 32);
-            txtRutaCSV.Size = new Size(700, 28);
-            txtRutaCSV.Font = new Font("Segoe UI", 9.5F);
-
-            txtRutaJSON.Text = "Data\\municipios_mx.json";
-            txtRutaJSON.Location = new Point(88, 72);
-            txtRutaJSON.Size = new Size(700, 28);
-            txtRutaJSON.Font = new Font("Segoe UI", 9.5F);
-
-            EstiloBotonSecundario(btnExplorarCSV, "Explorar", new Point(800, 30), new Size(100, 32));
-            EstiloBotonSecundario(btnExplorarJSON, "Explorar", new Point(800, 70), new Size(100, 32));
-
-            grpArchivos.Text = "Archivos de datos";
-            grpArchivos.BackColor = Color.White;
-            grpArchivos.ForeColor = Color.FromArgb(90, 105, 125);
-            grpArchivos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpArchivos.Dock = DockStyle.Top;
-            grpArchivos.Height = 116;
-            grpArchivos.Padding = new Padding(4);
-            grpArchivos.Controls.Add(lblRutaCSV);
-            grpArchivos.Controls.Add(txtRutaCSV);
-            grpArchivos.Controls.Add(btnExplorarCSV);
-            grpArchivos.Controls.Add(lblRutaJSON);
-            grpArchivos.Controls.Add(txtRutaJSON);
-            grpArchivos.Controls.Add(btnExplorarJSON);
-
-            // Preferencias
-            EstiloLabel(lblUmbral, "Umbral de alerta:", new Point(16, 38));
-            EstiloLabel(lblUnidades, "Unidades:", new Point(308, 38));
-
-            nudUmbral.Location = new Point(142, 34);
-            nudUmbral.Size = new Size(80, 28);
-            nudUmbral.Font = new Font("Segoe UI", 9.5F);
-            nudUmbral.DecimalPlaces = 1;
-            nudUmbral.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-            nudUmbral.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            nudUmbral.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
-            nudUmbral.Value = new decimal(new int[] { 3, 0, 0, 0 });
-
-            lblUmbralSufijo.Text = "°C";
-            lblUmbralSufijo.AutoSize = true;
-            lblUmbralSufijo.Location = new Point(232, 38);
-            lblUmbralSufijo.Font = new Font("Segoe UI", 9.5F);
-            lblUmbralSufijo.ForeColor = Color.FromArgb(90, 105, 125);
-
-            rbCelsius.Text = "Celsius";
-            rbCelsius.Checked = true;
-            rbCelsius.Location = new Point(386, 35);
-            rbCelsius.AutoSize = true;
-            rbCelsius.Font = new Font("Segoe UI", 9.5F);
-            rbCelsius.ForeColor = Color.FromArgb(30, 40, 55);
-
-            rbFahrenheit.Text = "Fahrenheit";
-            rbFahrenheit.Location = new Point(472, 35);
-            rbFahrenheit.AutoSize = true;
-            rbFahrenheit.Font = new Font("Segoe UI", 9.5F);
-            rbFahrenheit.ForeColor = Color.FromArgb(30, 40, 55);
-
-            grpPreferencias.Text = "Preferencias";
-            grpPreferencias.BackColor = Color.White;
-            grpPreferencias.ForeColor = Color.FromArgb(90, 105, 125);
-            grpPreferencias.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            grpPreferencias.Dock = DockStyle.Top;
-            grpPreferencias.Height = 78;
-            grpPreferencias.Controls.Add(lblUmbral);
-            grpPreferencias.Controls.Add(nudUmbral);
-            grpPreferencias.Controls.Add(lblUmbralSufijo);
-            grpPreferencias.Controls.Add(lblUnidades);
-            grpPreferencias.Controls.Add(rbCelsius);
-            grpPreferencias.Controls.Add(rbFahrenheit);
-
-            btnGuardarConfig.Text = "Guardar configuración";
-            btnGuardarConfig.Dock = DockStyle.Top;
-            btnGuardarConfig.Height = 44;
-            btnGuardarConfig.BackColor = Color.FromArgb(24, 95, 165);
-            btnGuardarConfig.ForeColor = Color.White;
-            btnGuardarConfig.FlatStyle = FlatStyle.Flat;
-            btnGuardarConfig.FlatAppearance.BorderSize = 0;
-            btnGuardarConfig.FlatAppearance.MouseOverBackColor = Color.FromArgb(18, 77, 138);
-            btnGuardarConfig.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnGuardarConfig.Cursor = Cursors.Hand;
-
-            tabConfig.Controls.Add(btnGuardarConfig);
-            tabConfig.Controls.Add(grpPreferencias);
-            tabConfig.Controls.Add(grpArchivos);
-            tabConfig.Controls.Add(grpBaseDatos);
-
-            // ══════════════════════════════════════════════════════════════
-            // ÁREA PRINCIPAL
-            // ══════════════════════════════════════════════════════════════
-            pnlMainContent.Dock = DockStyle.Fill;
-            pnlMainContent.Controls.Add(tabControl);
-            pnlMainContent.Controls.Add(pnlTopBar);
-
-            // ══════════════════════════════════════════════════════════════
-            // STATUS STRIP
-            // ══════════════════════════════════════════════════════════════
-            tssSQLite.Text = "SQLite: —";
-            tssMariaDB.Text = "MariaDB: —";
-            tssAPI.Text = "Open-Meteo: —";
-            tssRegistros.Text = "Registros cargados: —";
-            tssRegistros.Spring = true;
-            tssRegistros.TextAlign = ContentAlignment.MiddleRight;
-
-            statusStrip.Font = new Font("Segoe UI", 8.5F);
+            grpBaseDatos.Dock = DockStyle.Top;
+            grpBaseDatos.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            grpBaseDatos.ForeColor = Color.FromArgb(90, 105, 125);
+            grpBaseDatos.Location = new Point(16, 16);
+            grpBaseDatos.Name = "grpBaseDatos";
+            grpBaseDatos.Size = new Size(160, 200);
+            grpBaseDatos.TabIndex = 3;
+            grpBaseDatos.TabStop = false;
+            grpBaseDatos.Text = "Base de datos";
+            // 
+            // lblMotorBD
+            // 
+            lblMotorBD.Location = new Point(0, 0);
+            lblMotorBD.Name = "lblMotorBD";
+            lblMotorBD.Size = new Size(100, 23);
+            lblMotorBD.TabIndex = 0;
+            // 
+            // cmbMotorBD
+            // 
+            cmbMotorBD.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMotorBD.Items.AddRange(new object[] { "SQLite", "MariaDB" });
+            cmbMotorBD.Location = new Point(0, 0);
+            cmbMotorBD.Name = "cmbMotorBD";
+            cmbMotorBD.Size = new Size(121, 28);
+            cmbMotorBD.TabIndex = 1;
+            // 
+            // lblSQLitePath
+            // 
+            lblSQLitePath.Location = new Point(0, 0);
+            lblSQLitePath.Name = "lblSQLitePath";
+            lblSQLitePath.Size = new Size(100, 23);
+            lblSQLitePath.TabIndex = 2;
+            // 
+            // txtSQLitePath
+            // 
+            txtSQLitePath.Font = new Font("Segoe UI", 9.5F);
+            txtSQLitePath.Location = new Point(138, 68);
+            txtSQLitePath.Name = "txtSQLitePath";
+            txtSQLitePath.Size = new Size(650, 29);
+            txtSQLitePath.TabIndex = 3;
+            txtSQLitePath.Text = "Data\\inteligencia_climatica.db";
+            // 
+            // btnExplorarSQLite
+            // 
+            btnExplorarSQLite.Location = new Point(0, 0);
+            btnExplorarSQLite.Name = "btnExplorarSQLite";
+            btnExplorarSQLite.Size = new Size(75, 23);
+            btnExplorarSQLite.TabIndex = 4;
+            // 
+            // lblMariaServidor
+            // 
+            lblMariaServidor.Location = new Point(0, 0);
+            lblMariaServidor.Name = "lblMariaServidor";
+            lblMariaServidor.Size = new Size(100, 23);
+            lblMariaServidor.TabIndex = 5;
+            // 
+            // txtMariaServidor
+            // 
+            txtMariaServidor.Font = new Font("Segoe UI", 9.5F);
+            txtMariaServidor.Location = new Point(88, 114);
+            txtMariaServidor.Name = "txtMariaServidor";
+            txtMariaServidor.Size = new Size(180, 29);
+            txtMariaServidor.TabIndex = 6;
+            txtMariaServidor.Text = "localhost";
+            // 
+            // lblMariaPuerto
+            // 
+            lblMariaPuerto.Location = new Point(0, 0);
+            lblMariaPuerto.Name = "lblMariaPuerto";
+            lblMariaPuerto.Size = new Size(100, 23);
+            lblMariaPuerto.TabIndex = 7;
+            // 
+            // txtMariaPuerto
+            // 
+            txtMariaPuerto.Font = new Font("Segoe UI", 9.5F);
+            txtMariaPuerto.Location = new Point(344, 114);
+            txtMariaPuerto.Name = "txtMariaPuerto";
+            txtMariaPuerto.Size = new Size(80, 29);
+            txtMariaPuerto.TabIndex = 8;
+            txtMariaPuerto.Text = "3306";
+            // 
+            // lblMariaBD
+            // 
+            lblMariaBD.Location = new Point(0, 0);
+            lblMariaBD.Name = "lblMariaBD";
+            lblMariaBD.Size = new Size(100, 23);
+            lblMariaBD.TabIndex = 9;
+            // 
+            // txtMariaBD
+            // 
+            txtMariaBD.Font = new Font("Segoe UI", 9.5F);
+            txtMariaBD.Location = new Point(494, 114);
+            txtMariaBD.Name = "txtMariaBD";
+            txtMariaBD.Size = new Size(220, 29);
+            txtMariaBD.TabIndex = 10;
+            txtMariaBD.Text = "inteligencia_climatica";
+            // 
+            // lblMariaUsuario
+            // 
+            lblMariaUsuario.Location = new Point(0, 0);
+            lblMariaUsuario.Name = "lblMariaUsuario";
+            lblMariaUsuario.Size = new Size(100, 23);
+            lblMariaUsuario.TabIndex = 11;
+            // 
+            // txtMariaUsuario
+            // 
+            txtMariaUsuario.Font = new Font("Segoe UI", 9.5F);
+            txtMariaUsuario.Location = new Point(88, 154);
+            txtMariaUsuario.Name = "txtMariaUsuario";
+            txtMariaUsuario.Size = new Size(180, 29);
+            txtMariaUsuario.TabIndex = 12;
+            // 
+            // lblMariaPassword
+            // 
+            lblMariaPassword.Location = new Point(0, 0);
+            lblMariaPassword.Name = "lblMariaPassword";
+            lblMariaPassword.Size = new Size(100, 23);
+            lblMariaPassword.TabIndex = 13;
+            // 
+            // txtMariaPassword
+            // 
+            txtMariaPassword.Font = new Font("Segoe UI", 9.5F);
+            txtMariaPassword.Location = new Point(386, 154);
+            txtMariaPassword.Name = "txtMariaPassword";
+            txtMariaPassword.Size = new Size(180, 29);
+            txtMariaPassword.TabIndex = 14;
+            txtMariaPassword.UseSystemPasswordChar = true;
+            // 
+            // btnProbarConexion
+            // 
+            btnProbarConexion.BackColor = Color.FromArgb(24, 95, 165);
+            btnProbarConexion.Cursor = Cursors.Hand;
+            btnProbarConexion.FlatAppearance.BorderSize = 0;
+            btnProbarConexion.FlatStyle = FlatStyle.Flat;
+            btnProbarConexion.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnProbarConexion.ForeColor = Color.White;
+            btnProbarConexion.Location = new Point(586, 152);
+            btnProbarConexion.Name = "btnProbarConexion";
+            btnProbarConexion.Size = new Size(140, 34);
+            btnProbarConexion.TabIndex = 15;
+            btnProbarConexion.Text = "Probar conexión";
+            btnProbarConexion.UseVisualStyleBackColor = false;
+            // 
+            // lblEstadoConexion
+            // 
+            lblEstadoConexion.AutoSize = true;
+            lblEstadoConexion.Font = new Font("Segoe UI", 8.5F);
+            lblEstadoConexion.ForeColor = Color.FromArgb(140, 155, 175);
+            lblEstadoConexion.Location = new Point(742, 160);
+            lblEstadoConexion.Name = "lblEstadoConexion";
+            lblEstadoConexion.Size = new Size(128, 20);
+            lblEstadoConexion.TabIndex = 16;
+            lblEstadoConexion.Text = "Estado: sin probar";
+            // 
+            // pnlTopBar
+            // 
+            pnlTopBar.BackColor = Color.White;
+            pnlTopBar.Controls.Add(lblTopBarTitle);
+            pnlTopBar.Controls.Add(lblTopBarCrumb);
+            pnlTopBar.Dock = DockStyle.Top;
+            pnlTopBar.Location = new Point(0, 0);
+            pnlTopBar.Name = "pnlTopBar";
+            pnlTopBar.Size = new Size(1070, 60);
+            pnlTopBar.TabIndex = 1;
+            // 
+            // lblTopBarTitle
+            // 
+            lblTopBarTitle.AutoSize = true;
+            lblTopBarTitle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblTopBarTitle.ForeColor = Color.FromArgb(30, 40, 55);
+            lblTopBarTitle.Location = new Point(20, 10);
+            lblTopBarTitle.Name = "lblTopBarTitle";
+            lblTopBarTitle.Size = new Size(202, 30);
+            lblTopBarTitle.TabIndex = 0;
+            lblTopBarTitle.Text = "Consulta climática";
+            // 
+            // lblTopBarCrumb
+            // 
+            lblTopBarCrumb.AutoSize = true;
+            lblTopBarCrumb.Font = new Font("Segoe UI", 9F);
+            lblTopBarCrumb.ForeColor = Color.FromArgb(120, 135, 155);
+            lblTopBarCrumb.Location = new Point(22, 36);
+            lblTopBarCrumb.Name = "lblTopBarCrumb";
+            lblTopBarCrumb.Size = new Size(448, 20);
+            lblTopBarCrumb.TabIndex = 1;
+            lblTopBarCrumb.Text = "Compara temperatura actual vs. promedio histórico por municipio";
+            // 
+            // statusStrip
+            // 
             statusStrip.BackColor = Color.FromArgb(235, 238, 244);
+            statusStrip.Font = new Font("Segoe UI", 8.5F);
+            statusStrip.ImageScalingSize = new Size(20, 20);
             statusStrip.Items.AddRange(new ToolStripItem[] { tssSQLite, tssMariaDB, tssAPI, tssRegistros });
-
-            // ══════════════════════════════════════════════════════════════
-            // FORM
-            // ══════════════════════════════════════════════════════════════
+            statusStrip.Location = new Point(0, 774);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1280, 26);
+            statusStrip.TabIndex = 2;
+            // 
+            // tssSQLite
+            // 
+            tssSQLite.Name = "tssSQLite";
+            tssSQLite.Size = new Size(74, 20);
+            tssSQLite.Text = "SQLite: —";
+            // 
+            // tssMariaDB
+            // 
+            tssMariaDB.Name = "tssMariaDB";
+            tssMariaDB.Size = new Size(89, 20);
+            tssMariaDB.Text = "MariaDB: —";
+            // 
+            // tssAPI
+            // 
+            tssAPI.Name = "tssAPI";
+            tssAPI.Size = new Size(116, 20);
+            tssAPI.Text = "Open-Meteo: —";
+            // 
+            // tssRegistros
+            // 
+            tssRegistros.Name = "tssRegistros";
+            tssRegistros.Size = new Size(986, 20);
+            tssRegistros.Spring = true;
+            tssRegistros.Text = "Registros cargados: —";
+            tssRegistros.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // Form1
+            // 
             BackColor = Color.FromArgb(244, 247, 250);
             ClientSize = new Size(1280, 800);
-            Font = new Font("Segoe UI", 9.5F);
-            MinimumSize = new Size(1100, 760);
-            Text = "Sistema de Inteligencia Climática — México";
-            StartPosition = FormStartPosition.CenterScreen;
-            Name = "Form1";
-            Load += Form1_Load;
-
             Controls.Add(pnlMainContent);
             Controls.Add(pnlSidebar);
             Controls.Add(statusStrip);
-
-            // ══════════════════════════════════════════════════════════════
-            // RESUME LAYOUT
-            // ══════════════════════════════════════════════════════════════
+            Font = new Font("Segoe UI", 9.5F);
+            MinimumSize = new Size(1100, 760);
+            Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Sistema de Inteligencia Climática — México";
+            Load += Form1_Load;
+            pnlSidebar.ResumeLayout(false);
             pnlSidebarBrand.ResumeLayout(false);
             pnlSidebarFooter.ResumeLayout(false);
-            pnlSidebar.ResumeLayout(false);
-            pnlTopBar.ResumeLayout(false);
-            pnlTopBar.PerformLayout();
-            grpBusqueda.ResumeLayout(false);
-            grpBusqueda.PerformLayout();
+            pnlSidebarFooter.PerformLayout();
+            pnlMainContent.ResumeLayout(false);
+            tabControl.ResumeLayout(false);
+            tabConsulta.ResumeLayout(false);
             tblTarjetas.ResumeLayout(false);
             grpDatosActuales.ResumeLayout(false);
             grpDatosActuales.PerformLayout();
@@ -1138,27 +1794,28 @@ namespace InteligenciaClimatica
             grpHistorico.PerformLayout();
             grpAnomalia.ResumeLayout(false);
             grpAnomalia.PerformLayout();
-            tabConsulta.ResumeLayout(false);
-            grpFiltrosGlobal.ResumeLayout(false);
-            grpFiltrosGlobal.PerformLayout();
-            //((System.ComponentModel.ISupportInitialize)dgvHistorico).EndInit();
+            grpBusqueda.ResumeLayout(false);
+            tabAnalisis.ResumeLayout(false);
+            pnlCharts.ResumeLayout(false);
+            pnlDer.ResumeLayout(false);
+            pnlIzq.ResumeLayout(false);
             grpRanking.ResumeLayout(false);
             grpRanking.PerformLayout();
-            tabAnalisis.ResumeLayout(false);
+            grpFiltrosGlobal.ResumeLayout(false);
+            grpFiltrosGlobal.PerformLayout();
+            tabFavoritos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvFavoritos).EndInit();
             grpAgregarFav.ResumeLayout(false);
-            grpAgregarFav.PerformLayout();
-            tabFavoritos.ResumeLayout(false);
-            grpBaseDatos.ResumeLayout(false);
-            grpBaseDatos.PerformLayout();
-            grpArchivos.ResumeLayout(false);
-            grpArchivos.PerformLayout();
+            tabConfig.ResumeLayout(false);
             grpPreferencias.ResumeLayout(false);
             grpPreferencias.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudUmbral).EndInit();
-            tabConfig.ResumeLayout(false);
-            tabControl.ResumeLayout(false);
-            pnlMainContent.ResumeLayout(false);
+            grpArchivos.ResumeLayout(false);
+            grpArchivos.PerformLayout();
+            grpBaseDatos.ResumeLayout(false);
+            grpBaseDatos.PerformLayout();
+            pnlTopBar.ResumeLayout(false);
+            pnlTopBar.PerformLayout();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
             ResumeLayout(false);
