@@ -843,6 +843,16 @@ namespace InteligenciaClimatica
         }
         private async void btnMigrar_Click(object? sender, EventArgs e)
         {
+            // 1. REQUISITO: Leer la ruta desde la pestaña de Configuración
+            string rutaConfigurada = txtSQLitePath.Text.Trim();
+
+            if (string.IsNullOrEmpty(rutaConfigurada) || !File.Exists(rutaConfigurada))
+            {
+                MessageBox.Show("Por favor, ve a la pestaña de 'Configuración', asegúrate de tener una ruta válida para SQLite y guarda la configuración primero.",
+                    "Configuración requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Detiene la migración si no hay conexión configurada
+            }
+
             if (dgvFavoritos.Rows.Count == 0)
             {
                 MessageBox.Show("No hay datos en la tabla para migrar.", "Sin datos",
@@ -855,7 +865,7 @@ namespace InteligenciaClimatica
                 btnMigrar.Enabled = false;
                 btnMigrar.Text = "Migrando...";
 
-                // 1. Extraemos los datos actuales que queremos migrar
+                // 2. Extraemos los datos actuales
                 var listaAMigrar = new List<(string Estado, string Municipio)>();
                 foreach (DataGridViewRow row in dgvFavoritos.Rows)
                 {
@@ -867,19 +877,15 @@ namespace InteligenciaClimatica
                     }
                 }
 
-                // 2. Ejecutamos la migración
-                string rutaBDLocal = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "favoritos.sqlite");
+                // 3. Ejecutamos la migración apuntando a la ruta de la Configuración
                 var dbService = new DatabaseService();
-                await dbService.MigrarFavoritosASQLiteAsync(rutaBDLocal, listaAMigrar);
+                await dbService.MigrarFavoritosASQLiteAsync(rutaConfigurada, listaAMigrar);
 
-                // 3. Recargamos la vista
-                await CargarFavoritosAsync();
-
-                btnMigrar.Text = "¡Migrados! ✓";
+                btnMigrar.Text = "¡Sincronizado! ✓";
                 btnMigrar.BackColor = Color.FromArgb(59, 130, 55); // Verde éxito
 
-                MessageBox.Show("Los registros se han migrado exitosamente a la base de datos local SQLite.",
-                    "Migración Completa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Migración inteligente completada. Se añadieron los nuevos registros manteniendo la secuencia y omitiendo los duplicados.",
+                    "Sincronización Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 await Task.Delay(2000);
 

@@ -280,16 +280,34 @@ namespace InteligenciaClimatica.Services
             using var conexion = new SqliteConnection(cadenaConexion);
             await conexion.OpenAsync();
 
-            // Iniciamos una transacción para que la inserción masiva sea instantánea
+            // ════════════════════════════════════════════════════════════════════
+            // BLOQUE AUTO-REPARADOR: Fuerza la creación de la columna si falta
+            // ════════════════════════════════════════════════════════════════════
+            try
+            {
+                string fixQuery = "ALTER TABLE Favoritos ADD COLUMN FechaAgregado DATETIME;";
+                using var cmdFix = new SqliteCommand(fixQuery, conexion);
+                await cmdFix.ExecuteNonQueryAsync();
+            }
+            catch
+            {
+                // Si entra aquí, significa que la columna ya existía o la tabla es nueva.
+                // Lo ignoramos silenciosamente para que el programa no se detenga.
+            }
+            // ════════════════════════════════════════════════════════════════════
+
+            // Iniciamos la transacción para la migración
             using var transaccion = conexion.BeginTransaction();
 
             string query = @"
         INSERT INTO Favoritos (Estado, Municipio, FechaAgregado) 
-        VALUES (@est, @mun, @fecha);";
+        SELECT @est, @mun, @fecha
+        WHERE NOT EXISTS (
+            SELECT 1 FROM Favoritos WHERE Estado = @est AND Municipio = @mun
+        );";
 
             using var cmd = new SqliteCommand(query, conexion, transaccion);
 
-            // Declaramos los parámetros una sola vez por eficiencia
             cmd.Parameters.Add("@est", SqliteType.Text);
             cmd.Parameters.Add("@mun", SqliteType.Text);
             cmd.Parameters.Add("@fecha", SqliteType.Text);
@@ -303,7 +321,6 @@ namespace InteligenciaClimatica.Services
                 await cmd.ExecuteNonQueryAsync();
             }
 
-            // Confirmamos todos los cambios de golpe
             await transaccion.CommitAsync();
         }
     }
